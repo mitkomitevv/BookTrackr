@@ -1,4 +1,12 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
+
+const navLinkClass = ({ isActive }) =>
+    [
+        "pb-1 text-sm transition border-b-2", // base styles
+        isActive
+            ? "text-slate-100 border-emerald-500"
+            : "text-slate-300 border-transparent hover:text-emerald-400 hover:border-emerald-500/60",
+    ].join(" ");
 
 export default function Header() {
     return (
@@ -21,21 +29,21 @@ export default function Header() {
 
                 {/* Nav links */}
                 <nav className="hidden md:flex items-center gap-6 text-sm">
-                    <Link
+                    <NavLink
                         to="/"
-                        className="text-slate-100 font-medium border-b-2 border-emerald-500 pb-1"
+                        className={navLinkClass}
                     >
                         Home
-                    </Link>
-                    <Link to="/catalog" className="text-slate-300 hover:text-emerald-400">
+                    </NavLink>
+                    <NavLink to="/catalog" className={navLinkClass}>
                         Browse
-                    </Link>
-                    <a href="#" className="text-slate-300 hover:text-emerald-400">
+                    </NavLink>
+                    <NavLink to="/library" className={navLinkClass}>
                         My Library
-                    </a>
-                    <a href="#" className="text-slate-300 hover:text-emerald-400">
-                        Community
-                    </a>
+                    </NavLink>
+                    <NavLink to="/catalog/add-book" className={navLinkClass}>
+                        Add Book
+                    </NavLink>
                 </nav>
 
                 {/* Auth actions */}

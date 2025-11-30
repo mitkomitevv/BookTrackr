@@ -1,4 +1,7 @@
+import { Link } from "react-router";
+
 export default function BookCard({
+    _id,
     title,
     author,
     coverUrl,
@@ -6,16 +9,15 @@ export default function BookCard({
     tags = [],
     rating = null,
     ratingsCount = null,
-    href = "#",
     showDescription = true,
-    compact = false,
+    compact = true,
 }) {
     return (
         <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-4 hover:border-emerald-500/70 transition group">
             <div className="flex gap-4">
                 {/* Cover */}
-                <a
-                    href={href}
+                <Link
+                    to={`/catalog/${_id}/details`}
                     className="w-20 h-32 rounded-lg bg-slate-800 overflow-hidden flex-shrink-0 group-hover:ring-2 group-hover:ring-emerald-500/60 transition"
                 >
                     {coverUrl ? (
@@ -29,16 +31,16 @@ export default function BookCard({
                             No cover
                         </div>
                     )}
-                </a>
+                </Link>
 
                 {/* Content */}
                 <div className="flex-1 flex flex-col">
                     <header className="space-y-1">
-                        <a href={href}>
+                        <Link to={`/catalog/${_id}/details`}>
                             <h3 className="text-sm font-semibold text-slate-100 line-clamp-2 group-hover:text-emerald-300">
                                 {title}
                             </h3>
-                        </a>
+                        </Link>
                         <p className="text-xs text-slate-400">{author}</p>
 
                         {/* Tags */}
@@ -76,12 +78,12 @@ export default function BookCard({
                             <div className="text-slate-500 italic">Not yet rated</div>
                         )}
 
-                        <a
-                            href={href}
+                        <Link
+                            to={`/catalog/${_id}/details`}
                             className="text-emerald-400 hover:text-emerald-300 font-medium"
                         >
                             Details
-                        </a>
+                        </Link>
                     </footer>
                 </div>
             </div>

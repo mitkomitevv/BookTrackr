@@ -1,12 +1,22 @@
 // src/components/details/BookHeaderSection.jsx
-export default function BookHeaderSection() {
+export default function BookHeaderSection({
+    title,
+    coverUrl,
+    author,
+    tags,
+    description,
+    pages,
+    year,
+    genre
+
+}) {
     return (
         <section className="flex flex-col lg:flex-row gap-8">
             {/* Left: cover + shelf actions + status */}
             <div className="w-full lg:w-64 flex flex-col items-center gap-4">
                 {/* Cover */}
                 <div className="w-48 h-72 rounded-2xl bg-slate-800 overflow-hidden shadow-2xl shadow-emerald-500/20">
-                    <div className="w-full h-full bg-[url('https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg')] bg-cover bg-center" />
+                    <img className="w-full h-full bg-cover bg-center" src={coverUrl} alt={title} />
                 </div>
 
                 {/* Shelf buttons */}
@@ -45,18 +55,18 @@ export default function BookHeaderSection() {
                 {/* Title & meta */}
                 <div className="space-y-2">
                     <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-                        The House Between Seasons
+                        {title}
                     </h1>
                     <p className="text-sm text-slate-300">
                         by{" "}
-                        <span className="text-slate-100 font-medium">Aya Morrow</span>
+                        <span className="text-slate-100 font-medium">{author}</span>
                     </p>
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                        <span>Fantasy · Cozy · Standalone</span>
+                        <span>{tags}</span>
                         <span className="h-3 w-px bg-slate-700" />
-                        <span>384 pages</span>
+                        <span>{pages} pages</span>
                         <span className="h-3 w-px bg-slate-700" />
-                        <span>Published 2024</span>
+                        <span>Published {year}</span>
                     </div>
                 </div>
 
@@ -69,17 +79,7 @@ export default function BookHeaderSection() {
                         Description
                     </h2>
                     <p className="text-slate-300 leading-relaxed">
-                        On the border where autumn tips into winter, there is a house that
-                        only appears between seasons. Travelers who find their way there
-                        remember different things: a roaring fireplace, a bowl of out-of-
-                        season cherries, a letter they forgot to send. For Elin, it&apos;s the
-                        place she last saw her brother before he disappeared.
-                    </p>
-                    <p className="text-slate-300 leading-relaxed">
-                        Now, years later, the house has returned — and so has the door that
-                        shouldn&apos;t exist. To step through it is to step sideways in time,
-                        into the stories of everyone who ever crossed the threshold. But the
-                        house is keeping something for itself, and it&apos;s not ready to let go.
+                        {description}
                     </p>
                 </section>
 
@@ -90,13 +90,7 @@ export default function BookHeaderSection() {
                     </h2>
                     <div className="flex flex-wrap gap-2">
                         <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] text-slate-300">
-                            Genre: Fantasy
-                        </span>
-                        <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] text-slate-300">
-                            Mood: Cozy · Bittersweet
-                        </span>
-                        <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] text-slate-300">
-                            POV: 3rd person, limited
+                            Genre: {genre}
                         </span>
                         <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] text-slate-300">
                             Standalone novel

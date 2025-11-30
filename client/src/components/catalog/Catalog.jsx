@@ -1,43 +1,10 @@
+import { useFetch } from "../../hooks/useRequest";
 import BookCard from "../book-card/BookCard";
 import Pagination from "./Pagination";
 
-const CATALOG_BOOKS = [
-    {
-        id: 1,
-        title: "A Song for Distant Suns",
-        author: "Marcos Ibarra",
-        tags: ["Sci-Fi", "Space Opera"],
-        description:
-            "A sweeping, character-driven space epic about the last signal from a dying star — and the people obsessed with decoding it.",
-        rating: "4.48",
-        ratingsCount: "12.1k",
-        coverUrl: "/images/books/distant-suns.jpg",
-    },
-    {
-        id: 2,
-        title: "The House Between Seasons",
-        author: "Aya Morrow",
-        tags: ["Fantasy", "Cozy"],
-        description:
-            "A quiet, atmospheric fantasy set in an inn that only appears on the border of seasons, hosting travelers out of time.",
-        rating: "4.35",
-        ratingsCount: "6.4k",
-        coverUrl: "/images/books/house-between-seasons.jpg",
-    },
-    {
-        id: 3,
-        title: "Margins of the Map",
-        author: "Noah Clarke",
-        tags: ["Literary", "Contemporary"],
-        description:
-            "A cartographer returns to his hometown to redraw the coastline and confront the fault lines of his past.",
-        rating: "4.02",
-        ratingsCount: "3.9k",
-        coverUrl: "/images/books/margins-of-the-map.jpg",
-    },
-];
-
 export default function Catalog() {
+    const { data: books, loading, error } = useFetch("/data/books");
+
     return (
         <main className="flex-1">
             <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
@@ -67,23 +34,28 @@ export default function Catalog() {
                     </div>
                 </div>
 
+                {/* Loading / Error states */}
+                {loading && (
+                    <p className="text-sm text-slate-400">Loading books…</p>
+                )}
+                {error && (
+                    <p className="text-sm text-red-400">
+                        {error.payload?.message || "Failed to load books."}
+                    </p>
+                )}
+
                 {/* Grid */}
-                <div className="grid gap-4 sm:gap-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
-                    {CATALOG_BOOKS.map((book) => (
-                        <BookCard
-                            key={book.id}
-                            title={book.title}
-                            author={book.author}
-                            description={book.description}
-                            tags={book.tags}
-                            rating={book.rating}
-                            ratingsCount={book.ratingsCount}
-                            coverUrl={book.coverUrl}
-                            href="#"
-                        // you could set compact={true} to hide tags/description if you want
-                        />
-                    ))}
-                </div>
+                {books && books.length > 0 && (
+                    <div className="grid gap-4 sm:gap-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
+                        {books.map((book) => (
+                            <BookCard key={book._id} {...book}/>
+                        ))}
+                    </div>
+                )}
+
+                {books && books.length === 0 && (
+                    <p className="text-sm text-slate-400">No books found.</p>
+                )}
 
                 {/* Pagination – just styling for now */}
                 <Pagination />

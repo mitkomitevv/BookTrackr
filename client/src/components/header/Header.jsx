@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import UserContext from "../../contexts/UserContext";
 
 const navLinkClass = ({ isActive }) =>
     [
@@ -9,6 +11,8 @@ const navLinkClass = ({ isActive }) =>
     ].join(" ");
 
 export default function Header() {
+    const { isAuthenticated } = useContext(UserContext);
+
     return (
         <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-20">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
@@ -35,7 +39,7 @@ export default function Header() {
                     >
                         Home
                     </NavLink>
-                    <NavLink to="/catalog" className={navLinkClass}>
+                    <NavLink to="/catalog" end className={navLinkClass}>
                         Browse
                     </NavLink>
                     <NavLink to="/library" className={navLinkClass}>
@@ -48,12 +52,22 @@ export default function Header() {
 
                 {/* Auth actions */}
                 <div className="flex items-center gap-3 text-sm">
-                    <button className="hidden sm:inline-flex px-3 py-1.5 rounded-xl border border-slate-700 text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition">
-                        Log in
-                    </button>
-                    <button className="px-3 sm:px-4 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 transition shadow-md">
-                        Sign up
-                    </button>
+                    {!isAuthenticated
+                        ? (
+                            <div>
+                                <Link to="/login" className="hidden sm:inline-flex px-3 py-1.5 rounded-xl border border-slate-700 text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition mr-2">
+                                    Log in
+                                </Link>
+                                <Link to="/register" className="px-3 sm:px-4 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 transition shadow-md">
+                                    Sign up
+                                </Link>
+                            </div>
+                        )
+                        : (
+                            <Link className="px-3 sm:px-4 py-1.5 rounded-xl bg-red-400 text-slate-950 font-semibold hover:bg-emerald-400 transition shadow-md">
+                                Sign out
+                            </Link>
+                        )}
                 </div>
             </div>
         </header>

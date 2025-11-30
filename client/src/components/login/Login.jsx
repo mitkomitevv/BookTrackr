@@ -1,0 +1,120 @@
+// pages/Login.jsx
+import { useNavigate, Link } from "react-router";
+import { useForm } from "../../hooks/useForm";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
+
+const initialValues = {
+    email: "",
+    password: "",
+};
+
+export default function Login() {
+    const navigate = useNavigate();
+    const { loginHandler } = useContext(UserContext);
+
+    const { registerInput, formProps } = useForm({
+        initialValues,
+        onSubmit: async ({ email, password }) => {
+            await loginHandler(email, password);
+            navigate("/"); // or "/books"
+        },
+    });
+
+    return (
+        <main className="flex-1 flex items-center justify-center">
+            <div className="w-full max-w-md px-4 py-10">
+                <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 shadow-xl space-y-6">
+                    <header className="space-y-2 text-center">
+                        <p className="text-xs uppercase tracking-[0.25em] text-emerald-300">
+                            Welcome back
+                        </p>
+                        <h1 className="text-2xl font-semibold text-slate-50">Log in</h1>
+                        <p className="text-sm text-slate-400">
+                            Continue tracking your reading and discover new favorites.
+                        </p>
+                    </header>
+
+                    <form {...formProps} className="space-y-4">
+                        {/* Email */}
+                        <div className="space-y-1 text-sm">
+                            <label htmlFor="email" className="block text-slate-200 text-left">
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                required
+                                autoComplete="email"
+                                placeholder="you@example.com"
+                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                {...registerInput("email")}
+                            />
+                        </div>
+
+                        {/* Password */}
+                        <div className="space-y-1 text-sm">
+                            <div className="flex items-center justify-between">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-slate-200 text-left"
+                                >
+                                    Password
+                                </label>
+                                <button
+                                    type="button"
+                                    className="text-[11px] text-emerald-400 hover:text-emerald-300"
+                                >
+                                    Forgot password?
+                                </button>
+                            </div>
+                            <input
+                                id="password"
+                                type="password"
+                                required
+                                autoComplete="current-password"
+                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                {...registerInput("password")}
+                            />
+                        </div>
+
+                        {/* Remember me – still visual */}
+                        <div className="flex items-center justify-between text-xs">
+                            <label className="flex items-center gap-2 text-slate-300">
+                                <input
+                                    type="checkbox"
+                                    name="remember"
+                                    className="h-3.5 w-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
+                                />
+                                <span>Keep me logged in</span>
+                            </label>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-md hover:bg-emerald-400 transition"
+                        >
+                            Log in
+                        </button>
+                    </form>
+
+                    <div className="flex items-center gap-3 text-[11px] text-slate-500">
+                        <div className="h-px flex-1 bg-slate-800" />
+                        <span>or</span>
+                        <div className="h-px flex-1 bg-slate-800" />
+                    </div>
+
+                    <p className="text-xs text-slate-400 text-center">
+                        Don&apos;t have an account yet?{" "}
+                        <Link
+                            to="/register"
+                            className="text-emerald-400 hover:text-emerald-300 font-medium"
+                        >
+                            Create one
+                        </Link>
+                    </p>
+                </div>
+            </div>
+        </main>
+    );
+}

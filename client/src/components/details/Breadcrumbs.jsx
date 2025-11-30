@@ -1,16 +1,16 @@
+import { Link } from "react-router";
+
 // src/components/details/Breadcrumbs.jsx
-export default function Breadcrumbs() {
+export default function Breadcrumbs({
+    title
+}) {
     return (
         <nav className="text-xs text-slate-400 flex items-center gap-1">
-            <a href="#" className="hover:text-emerald-400">
-                Browse
-            </a>
+            <Link to='/catalog' className="hover:text-emerald-400">
+                Catalog
+            </Link>
             <span>/</span>
-            <a href="#" className="hover:text-emerald-400">
-                Fantasy
-            </a>
-            <span>/</span>
-            <span className="text-slate-500">The House Between Seasons</span>
+            <span className="text-slate-500">{title}</span>
         </nav>
     );
 }

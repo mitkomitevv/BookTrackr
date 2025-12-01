@@ -66,9 +66,6 @@ function SimilarBooksSection() {
                     </div>
                 ))}
             </div>
-            <button className="mt-1 inline-flex items-center rounded-2xl text-[11px] font-medium text-emerald-400 hover:text-emerald-300">
-                See more similar books →
-            </button>
         </section>
     );
 }

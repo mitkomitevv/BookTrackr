@@ -26,14 +26,15 @@ export default function BookCreateForm() {
         path: "/data/books",
         method: "POST",
         initialValues,
-        withAuth: true,           // 🔐 require auth, adds token header
+        withAuth: true,
         mapValues: (values) => ({
             ...values,
             pages: values.pages ? Number(values.pages) : undefined,
             year: values.year ? Number(values.year) : undefined,
-            // tags: values.tags
-            //   ? values.tags.split(",").map(t => t.trim()).filter(Boolean)
-            //   : [],
+            numberInSeries: values.numberInSeries ? Number(values.numberInSeries) : undefined,
+            tags: values.tags
+              ? values.tags.split(",").map(t => t.trim()).filter(Boolean)
+              : [],
         }),
         onSuccess: (data, reset) => {
             reset();
@@ -91,12 +92,40 @@ export default function BookCreateForm() {
                                     <input
                                         type="text"
                                         required
-                                        placeholder="The House Between Seasons"
+                                        placeholder="Empire of Silence"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                         {...registerInput("title")}
                                     />
                                 </label>
                             </div>
+
+                            {/* Series */}
+                            <div>
+                                <label className="flex flex-col gap-1 text-sm">
+                                    <span className="text-slate-200">Series</span>
+                                    <input
+                                        type="text"
+                                        placeholder="The Sun Eater"
+                                        className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                        {...registerInput("series")}
+                                    />
+                                </label>
+                            </div>
+
+                            {/* Number in series */}
+                            <div>
+                                <label className="flex flex-col gap-1 text-sm">
+                                    <span className="text-slate-200">Number in series</span>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        placeholder="1"
+                                        className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                        {...registerInput("numberInSeries")}
+                                    />
+                                </label>
+                            </div>
+
 
                             {/* Author */}
                             <div>
@@ -130,22 +159,6 @@ export default function BookCreateForm() {
                                         <option>Thriller</option>
                                         <option>Non-fiction</option>
                                     </select>
-                                </label>
-                            </div>
-
-                            {/* ISBN */}
-                            <div>
-                                <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">ISBN</span>
-                                    <input
-                                        type="text"
-                                        placeholder="978-1-234567-89-7"
-                                        className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("isbn")}
-                                    />
-                                    <span className="text-[11px] text-slate-500">
-                                        Optional for older editions, but helps avoid duplicates.
-                                    </span>
                                 </label>
                             </div>
 

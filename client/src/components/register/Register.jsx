@@ -17,14 +17,14 @@ export default function Register() {
 
     const { registerInput, formProps } = useForm({
         initialValues,
-        onSubmit: async ({ email, password, confirmPassword }) => {
+        onSubmit: async ({ email, password, confirmPassword, name }) => {
             if (password !== confirmPassword) {
                 // TODO: show some UI error instead
                 alert("Passwords do not match");
                 return;
             }
 
-            await registerHandler(email, password);
+            await registerHandler(email, password, name);
             // You are now logged in (because context setUser) – choose where to go:
             navigate("/"); // or "/books"
         },
@@ -51,16 +51,16 @@ export default function Register() {
                         {/* Name */}
                         <div className="space-y-1 text-sm">
                             <label
-                                htmlFor="displayName"
+                                htmlFor="name"
                                 className="block text-slate-200 text-left"
                             >
                                 Full Name
                             </label>
                             <input
-                                id="displayName"
+                                id="name"
                                 type="text"
                                 required
-                                placeholder="Mitko"
+                                placeholder="First and last name"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                 {...registerInput("name")}
                             />

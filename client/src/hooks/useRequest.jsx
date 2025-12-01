@@ -2,9 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 const BASE_URL = "http://localhost:3030";
 
-/**
- * Core request function - JSON only
- */
 async function jsonRequest(path, method = "GET", body = null, headers = {}) {
     const options = {
         method,
@@ -32,17 +29,21 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}) {
         throw err;
     }
 
-    // Handle 204 No Content
     if (response.status === 204) {
         return null;
     }
 
-    return response.json();
+    const text = await response.text();
+    if (!text) {
+        return null;
+    }
+
+    return JSON.parse(text);
 }
 
-/**
- * Imperative request hook - for actions (login, submit, etc.)
- */
+
+// Imperative request hook - for actions (login, submit, etc.)
+
 export function useRequest() {
     const request = useCallback(
         (path, method = "GET", body = null, headers = {}) =>
@@ -53,9 +54,8 @@ export function useRequest() {
     return { request };
 }
 
-/**
- * Declarative fetch hook - for loading data on mount/dependency change
- */
+// Declarative fetch hook - for loading data on mount/dependency change
+
 export function useFetch(path, { immediate = true, headers = {} } = {}) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(immediate);

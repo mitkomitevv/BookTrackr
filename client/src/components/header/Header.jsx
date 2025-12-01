@@ -11,7 +11,7 @@ const navLinkClass = ({ isActive }) =>
     ].join(" ");
 
 export default function Header() {
-    const { isAuthenticated } = useContext(UserContext);
+    const { isAuthenticated, isAdmin } = useContext(UserContext);
 
     return (
         <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-20">
@@ -42,16 +42,25 @@ export default function Header() {
                     <NavLink to="/catalog" end className={navLinkClass}>
                         Browse
                     </NavLink>
-                    <NavLink to="/library" className={navLinkClass}>
-                        My Library
-                    </NavLink>
-                    <NavLink to="/catalog/add-book" className={navLinkClass}>
-                        Add Book
-                    </NavLink>
+                    {isAuthenticated && (
+                        <>
+                            <NavLink to="/library" className={navLinkClass}>
+                                My Library
+                            </NavLink>
+                            <NavLink to="/catalog/add-book" className={navLinkClass}>
+                                Add Book
+                            </NavLink>
+                        </>
+                    )}
                 </nav>
 
                 {/* Auth actions */}
                 <div className="flex items-center gap-3 text-sm">
+                    {isAdmin && (
+                        <Link to="/admin" className="px-3 sm:px-4 py-1.5 rounded-xl bg-slate-700 text-slate-200 font-semibold hover:bg-slate-600 transition shadow-md">
+                            Admin
+                        </Link>
+                    )}
                     {!isAuthenticated
                         ? (
                             <div>
@@ -64,7 +73,7 @@ export default function Header() {
                             </div>
                         )
                         : (
-                            <Link className="px-3 sm:px-4 py-1.5 rounded-xl bg-red-400 text-slate-950 font-semibold hover:bg-emerald-400 transition shadow-md">
+                            <Link to="/logout" className="px-3 sm:px-4 py-1.5 rounded-xl bg-red-400 text-slate-950 font-semibold hover:bg-emerald-400 transition shadow-md">
                                 Sign out
                             </Link>
                         )}

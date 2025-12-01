@@ -7,7 +7,7 @@ export default function Breadcrumbs({
     return (
         <nav className="text-xs text-slate-400 flex items-center gap-1">
             <Link to='/catalog' className="hover:text-emerald-400">
-                Catalog
+                Browse
             </Link>
             <span>/</span>
             <span className="text-slate-500">{title}</span>

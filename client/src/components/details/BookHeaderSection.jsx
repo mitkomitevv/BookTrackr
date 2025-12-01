@@ -1,6 +1,21 @@
 // src/components/details/BookHeaderSection.jsx
+function gradientClassFor(key) {
+    const gradients = [
+        "bg-gradient-to-br from-emerald-700 via-sky-700 to-violet-800",
+        "bg-gradient-to-br from-pink-700 via-red-700 to-rose-600",
+        "bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-600",
+        "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-700",
+        "bg-gradient-to-br from-emerald-700 via-lime-600 to-amber-600",
+    ];
+    if (!key) return gradients[0];
+    const idx = key.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % gradients.length;
+    return gradients[idx];
+}
+
 export default function BookHeaderSection({
     title,
+    series,
+    numberInSeries,
     coverUrl,
     author,
     tags,
@@ -15,8 +30,20 @@ export default function BookHeaderSection({
             {/* Left: cover + shelf actions + status */}
             <div className="w-full lg:w-64 flex flex-col items-center gap-4">
                 {/* Cover */}
-                <div className="w-48 h-72 rounded-2xl bg-slate-800 overflow-hidden shadow-2xl shadow-emerald-500/20">
-                    <img className="w-full h-full bg-cover bg-center" src={coverUrl} alt={title} />
+                <div className="w-48 h-72 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/20">
+                    {coverUrl ? (
+                        <img className="w-full h-full bg-cover bg-center" src={coverUrl} alt={title} />
+                    ) : (
+                        <div
+                            className={`w-full h-full flex items-center justify-center text-white ${gradientClassFor(title)} text-center relative`}
+                        >
+                            <div className="absolute inset-0 bg-black/25" />
+                            <div className="relative z-10 px-3">
+                                <div className="text-3xl font-semibold tracking-tight drop-shadow-md">{title}</div>
+                                {author && <div className="text-xs text-white/95 mt-1 drop-shadow-sm">by {author}</div>}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Shelf buttons */}
@@ -56,15 +83,20 @@ export default function BookHeaderSection({
                 <div className="space-y-2">
                     <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
                         {title}
+                        {series && (
+                            <span className="text-lg text-slate-400 font-normal ml-2">
+                                ({series}{numberInSeries ? `, #${numberInSeries}` : ""})
+                            </span>
+                        )}
                     </h1>
                     <p className="text-sm text-slate-300">
                         by{" "}
                         <span className="text-slate-100 font-medium">{author}</span>
                     </p>
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                        <span>{tags}</span>
+                        {tags && tags.map(tag => <span key={tag}>{tag}</span>)}
                         <span className="h-3 w-px bg-slate-700" />
-                        <span>{pages} pages</span>
+                        <span>{pages ? `${pages} pages` : "Page count not available"}</span>
                         <span className="h-3 w-px bg-slate-700" />
                         <span>Published {year}</span>
                     </div>
@@ -78,7 +110,7 @@ export default function BookHeaderSection({
                     <h2 className="text-sm font-semibold text-slate-100 tracking-wide uppercase">
                         Description
                     </h2>
-                    <p className="text-slate-300 leading-relaxed">
+                    <p className="text-slate-300 leading-relaxed description">
                         {description}
                     </p>
                 </section>
@@ -93,7 +125,7 @@ export default function BookHeaderSection({
                             Genre: {genre}
                         </span>
                         <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] text-slate-300">
-                            Standalone novel
+                            {numberInSeries ? "Part of a series" : "Standalone novel"}
                         </span>
                     </div>
                 </section>

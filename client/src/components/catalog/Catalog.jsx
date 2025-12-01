@@ -1,9 +1,32 @@
-import { useFetch } from "../../hooks/useRequest";
+import { useFetch, useRequest } from "../../hooks/useRequest";
 import BookCard from "../book-card/BookCard";
 import Pagination from "./Pagination";
+import { useState, useEffect } from "react";
 
 export default function Catalog() {
-    const { data: books, loading, error } = useFetch("/data/books");
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(null);
+
+    const { request } = useRequest();
+
+    const offset = (page - 1) * pageSize;
+    const path = `/data/books?offset=${offset}&pageSize=${pageSize}`;
+    const { data: books, loading, error } = useFetch(path);
+
+    // fetch total count when pageSize changes or on mount
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const count = await request(`/data/books?count=true`);
+                if (!cancelled) setTotal(Number(count));
+            } catch {
+                // ignore count errors silently
+            }
+        })();
+        return () => (cancelled = true);
+    }, [pageSize, request]);
 
     return (
         <main className="flex-1">
@@ -46,9 +69,9 @@ export default function Catalog() {
 
                 {/* Grid */}
                 {books && books.length > 0 && (
-                    <div className="grid gap-4 sm:gap-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
+                    <div className="grid gap-4 sm:gap-5 md:grid-cols-2 grid-cols-1">
                         {books.map((book) => (
-                            <BookCard key={book._id} {...book}/>
+                            <BookCard key={book._id} {...book} />
                         ))}
                     </div>
                 )}
@@ -57,8 +80,19 @@ export default function Catalog() {
                     <p className="text-sm text-slate-400">No books found.</p>
                 )}
 
-                {/* Pagination – just styling for now */}
-                <Pagination />
+                {/* Pagination */}
+                <Pagination
+                    page={page}
+                    pageSize={pageSize}
+                    total={total}
+                    onPageChange={(p) => {
+                        setPage(p);
+                    }}
+                    onPageSizeChange={(s) => {
+                        setPageSize(s);
+                        setPage(1);
+                    }}
+                />
             </div>
         </main>
     );

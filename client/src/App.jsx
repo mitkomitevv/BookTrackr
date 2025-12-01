@@ -9,17 +9,19 @@ import Catalog from "./components/catalog/Catalog";
 import BookCreateForm from "./components/books/BookCreateForm";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
-import { useContext } from "react";
+// import { useContext } from "react";
 import UserContext from "./contexts/UserContext";
+import Logout from "./components/logout/Logout";
 
 export default function App() {
-    const { user } = useContext(UserContext)
+    // const { user } = useContext(UserContext)
 
     return (
         <div className="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
             <Header />
 
             <Routes>
+                {/* <Route path="/admin" element={<Admin />} /> */}
                 <Route path='/' element={<Home />} />
 
                 <Route path="/catalog" element={<CatalogLayout />}>
@@ -29,9 +31,9 @@ export default function App() {
                 </Route>
                 
                 <Route path='/library' element={<MyLibrary />} />
-                <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
-
+                <Route path='/login' element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
             </Routes>
 
             <Footer />

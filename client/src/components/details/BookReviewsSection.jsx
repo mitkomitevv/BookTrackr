@@ -31,7 +31,7 @@ export default function BookReviewsSection() {
             {/* Tabs (visual only) */}
             <div className="flex items-center gap-4 text-xs sm:text-sm border-b border-slate-800">
                 <button className="pb-2 border-b-2 border-emerald-500 text-slate-100 font-medium">
-                    Reviews (1.2k)
+                    Reviews ({REVIEWS.length})
                 </button>
                 <button className="pb-2 border-b-2 border-transparent text-slate-400 hover:text-emerald-300">
                     Highlights

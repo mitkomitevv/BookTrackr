@@ -6,11 +6,13 @@ export default function BookCard({
     author,
     coverUrl,
     description,
+    series,
+    numberInSeries,
     tags = [],
     rating = null,
     ratingsCount = null,
     showDescription = true,
-    compact = true,
+    compact = false,
 }) {
     return (
         <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-4 hover:border-emerald-500/70 transition group">
@@ -18,7 +20,7 @@ export default function BookCard({
                 {/* Cover */}
                 <Link
                     to={`/catalog/${_id}/details`}
-                    className="w-20 h-32 rounded-lg bg-slate-800 overflow-hidden flex-shrink-0 group-hover:ring-2 group-hover:ring-emerald-500/60 transition"
+                    className="w-28 h-44 rounded-lg bg-slate-800 overflow-hidden flex-shrink-0 group-hover:ring-2 group-hover:ring-emerald-500/60 transition"
                 >
                     {coverUrl ? (
                         <img
@@ -39,6 +41,11 @@ export default function BookCard({
                         <Link to={`/catalog/${_id}/details`}>
                             <h3 className="text-sm font-semibold text-slate-100 line-clamp-2 group-hover:text-emerald-300">
                                 {title}
+                                {series && (
+                                    <span className="text-sm text-slate-400 font-normal ml-2">
+                                        ({series}{numberInSeries ? `, #${numberInSeries}` : ""})
+                                    </span>
+                                )}
                             </h3>
                         </Link>
                         <p className="text-xs text-slate-400">{author}</p>

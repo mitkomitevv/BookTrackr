@@ -3,22 +3,29 @@ import { useRequest } from "../hooks/useRequest";
 
 const UserContext = createContext({
     isAuthenticated: false,
-    user: null,
-    registerHandler: () => {},
-    loginHandler: () => {},
-    logoutHandler: () => {},
+    isAdmin: false,
+    user: {
+        email: '',
+        password: '',
+        username: '',
+        _createdOn: 0,
+        _id: '',
+        accessToken: ''
+    },
+    registerHandler: () => { },
+    loginHandler: () => { },
+    logoutHandler: () => { },
 });
 
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
     const { request } = useRequest();
 
-    const registerHandler = async (email, password) => {
-        const newUser = { email, password };
+    const registerHandler = async (email, password, name) => {
+        const newUser = { email, password, name };
 
         const result = await request("/users/register", "POST", newUser);
 
-        // auto-login after register (if your API returns token)
         setUser(result);
         return result;
     };
@@ -35,9 +42,13 @@ export function UserProvider({ children }) {
             return;
         }
 
-        await request("/users/logout", "GET", null, {
-            "X-Authorization": user.accessToken,
-        });
+        try {
+            await request("/users/logout", "GET", null, {
+                "X-Authorization": user.accessToken,
+            });
+        } catch {
+            // Ignore logout errors - token may already be invalid
+        }
 
         setUser(null);
     };
@@ -45,6 +56,7 @@ export function UserProvider({ children }) {
     const userContextValues = {
         user,
         isAuthenticated: !!user?.accessToken,
+        isAdmin: user?.isAdmin || (Array.isArray(user?.roles) && user.roles.includes('Admin')),
         registerHandler,
         loginHandler,
         logoutHandler,

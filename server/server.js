@@ -1,10 +1,11 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('http'), require('fs'), require('crypto')) :
-    typeof define === 'function' && define.amd ? define(['http', 'fs', 'crypto'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Server = factory(global.http, global.fs, global.crypto));
-}(this, (function (http, fs, crypto) { 'use strict';
+        typeof define === 'function' && define.amd ? define(['http', 'fs', 'crypto'], factory) :
+            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Server = factory(global.http, global.fs, global.crypto));
+}(this, (function (http, fs, crypto) {
+    'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+    function _interopDefaultLegacy(e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var http__default = /*#__PURE__*/_interopDefaultLegacy(http);
     var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
@@ -13,14 +14,14 @@
     class ServiceError extends Error {
         constructor(message = 'Service Error') {
             super(message);
-            this.name = 'ServiceError'; 
+            this.name = 'ServiceError';
         }
     }
 
     class NotFoundError extends ServiceError {
         constructor(message = 'Resource not found') {
             super(message);
-            this.name = 'NotFoundError'; 
+            this.name = 'NotFoundError';
             this.status = 404;
         }
     }
@@ -28,7 +29,7 @@
     class RequestError extends ServiceError {
         constructor(message = 'Request error') {
             super(message);
-            this.name = 'RequestError'; 
+            this.name = 'RequestError';
             this.status = 400;
         }
     }
@@ -36,7 +37,7 @@
     class ConflictError extends ServiceError {
         constructor(message = 'Resource conflict') {
             super(message);
-            this.name = 'ConflictError'; 
+            this.name = 'ConflictError';
             this.status = 409;
         }
     }
@@ -44,7 +45,7 @@
     class AuthorizationError extends ServiceError {
         constructor(message = 'Unauthorized') {
             super(message);
-            this.name = 'AuthorizationError'; 
+            this.name = 'AuthorizationError';
             this.status = 401;
         }
     }
@@ -52,7 +53,7 @@
     class CredentialError extends ServiceError {
         constructor(message = 'Forbidden') {
             super(message);
-            this.name = 'CredentialError'; 
+            this.name = 'CredentialError';
             this.status = 403;
         }
     }
@@ -563,8 +564,8 @@
             if (query.pageSize) {
                 responseData = responseData.slice(0, pageSize);
             }
-    		
-    		if (query.distinct) {
+
+            if (query.distinct) {
                 const props = query.distinct.split(',').filter(p => p != '');
                 responseData = Object.values(responseData.reduce((distinct, c) => {
                     const key = props.map(p => c[p]).join('::');
@@ -800,7 +801,7 @@
     }
 
     function onRequest(context, tokens, query, body) {
-        Object.entries(body).forEach(([k,v]) => {
+        Object.entries(body).forEach(([k, v]) => {
             console.log(`${k} ${v ? 'enabled' : 'disabled'}`);
             context.util[k] = v;
         });
@@ -938,7 +939,7 @@
          * @param {Object} data Value to store. Shallow merge will be performed!
          * @return {Object} Updated entry.
          */
-         function merge(collection, id, data) {
+        function merge(collection, id, data) {
             if (!collections.has(collection)) {
                 throw new ReferenceError('Collection does not exist: ' + collection);
             }
@@ -1224,7 +1225,14 @@
                 get,
                 isOwner
             };
-            const isAdmin = request.headers.hasOwnProperty('x-admin');
+
+            // const isAdmin = request.headers.hasOwnProperty('x-admin');
+            const isAdmin = request.headers.hasOwnProperty('x-admin') ||
+                (context.user && (
+                    context.user.isAdmin === true ||
+                    (Array.isArray(context.user.roles) && context.user.roles.includes('Admin')) ||
+                    context.user.role === 'Admin'
+                ));
 
             context.canAccess = canAccess;
 
@@ -1325,359 +1333,1343 @@
 
     var identity = "email";
     var protectedData = {
-    	users: {
-    		"35c62d76-8152-4626-8712-eeb96381bea8": {
-    			email: "peter@abv.bg",
-    			username: "Peter",
-    			hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1"
-    		},
-    		"847ec027-f659-4086-8032-5173e2f9c93a": {
-    			email: "george@abv.bg",
-    			username: "George",
-    			hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1"
-    		},
-    		"60f0cf0b-34b0-4abd-9769-8c42f830dffc": {
-    			email: "admin@abv.bg",
-    			username: "Admin",
-    			hashedPassword: "fac7060c3e17e6f151f247eacb2cd5ae80b8c36aedb8764e18a41bbdc16aa302"
-    		}
-    	},
-    	sessions: {
-    	}
+        users: {
+            "35c62d76-8152-4626-8712-eeb96381bea8": {
+                email: "admin@abv.bg",
+                name: "Admin Adminov",
+                hashedPassword: "fac7060c3e17e6f151f247eacb2cd5ae80b8c36aedb8764e18a41bbdc16aa302",
+                _createdOn: 1764517832604,
+                _id: "35c62d76-8152-4626-8712-eeb96381bea8",
+                accessToken: "85b6184e7373cd81c5eefcd45f4c751ef77f68a107e3c1dcac421e7be0ef8d52",
+                isAdmin: true,
+            },
+            "847ec027-f659-4086-8032-5173e2f9c93a": {
+                email: "user@abv.bg",
+                username: "User Userov",
+                hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1",
+                _createdOn: 1764518035123,
+                _id: "847ec027-f659-4086-8032-5173e2f9c93a",
+                accessToken: "d6f3e5b8f4f0e1e4f3e6e8f7c9d8b7a6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0",
+                isAdmin: false
+            },
+            "60f0cf0b-34b0-4abd-9769-8c42f830dffc": {
+                email: "peter@abv.bg",
+                username: "Peter Petrov",
+                hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1",
+                _createdOn: 1764520005123,
+                _id: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                accessToken: "a1b2c3d4e5f60718273645566778899aabbccddeeff00112233445566778899",
+                isAdmin: false
+            },
+        },
+        sessions: {
+        }
     };
     var seedData = {
-    	recipes: {
-    		"3987279d-0ad4-4afb-8ca9-5b256ae3b298": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			name: "Easy Lasagna",
-    			img: "assets/lasagna.jpg",
-    			ingredients: [
-    				"1 tbsp Ingredient 1",
-    				"2 cups Ingredient 2",
-    				"500 g  Ingredient 3",
-    				"25 g Ingredient 4"
-    			],
-    			steps: [
-    				"Prepare ingredients",
-    				"Mix ingredients",
-    				"Cook until done"
-    			],
-    			_createdOn: 1613551279012
-    		},
-    		"8f414b4f-ab39-4d36-bedb-2ad69da9c830": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			name: "Grilled Duck Fillet",
-    			img: "assets/roast.jpg",
-    			ingredients: [
-    				"500 g  Ingredient 1",
-    				"3 tbsp Ingredient 2",
-    				"2 cups Ingredient 3"
-    			],
-    			steps: [
-    				"Prepare ingredients",
-    				"Mix ingredients",
-    				"Cook until done"
-    			],
-    			_createdOn: 1613551344360
-    		},
-    		"985d9eab-ad2e-4622-a5c8-116261fb1fd2": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			name: "Roast Trout",
-    			img: "assets/fish.jpg",
-    			ingredients: [
-    				"4 cups Ingredient 1",
-    				"1 tbsp Ingredient 2",
-    				"1 tbsp Ingredient 3",
-    				"750 g  Ingredient 4",
-    				"25 g Ingredient 5"
-    			],
-    			steps: [
-    				"Prepare ingredients",
-    				"Mix ingredients",
-    				"Cook until done"
-    			],
-    			_createdOn: 1613551388703
-    		}
-    	},
-    	comments: {
-    		"0a272c58-b7ea-4e09-a000-7ec988248f66": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			content: "Great recipe!",
-    			recipeId: "8f414b4f-ab39-4d36-bedb-2ad69da9c830",
-    			_createdOn: 1614260681375,
-    			_id: "0a272c58-b7ea-4e09-a000-7ec988248f66"
-    		}
-    	},
-    	records: {
-    		i01: {
-    			name: "John1",
-    			val: 1,
-    			_createdOn: 1613551388703
-    		},
-    		i02: {
-    			name: "John2",
-    			val: 1,
-    			_createdOn: 1613551388713
-    		},
-    		i03: {
-    			name: "John3",
-    			val: 2,
-    			_createdOn: 1613551388723
-    		},
-    		i04: {
-    			name: "John4",
-    			val: 2,
-    			_createdOn: 1613551388733
-    		},
-    		i05: {
-    			name: "John5",
-    			val: 2,
-    			_createdOn: 1613551388743
-    		},
-    		i06: {
-    			name: "John6",
-    			val: 3,
-    			_createdOn: 1613551388753
-    		},
-    		i07: {
-    			name: "John7",
-    			val: 3,
-    			_createdOn: 1613551388763
-    		},
-    		i08: {
-    			name: "John8",
-    			val: 2,
-    			_createdOn: 1613551388773
-    		},
-    		i09: {
-    			name: "John9",
-    			val: 3,
-    			_createdOn: 1613551388783
-    		},
-    		i10: {
-    			name: "John10",
-    			val: 1,
-    			_createdOn: 1613551388793
-    		}
-    	},
-    	catches: {
-    		"07f260f4-466c-4607-9a33-f7273b24f1b4": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			angler: "Paulo Admorim",
-    			weight: 636,
-    			species: "Atlantic Blue Marlin",
-    			location: "Vitoria, Brazil",
-    			bait: "trolled pink",
-    			captureTime: 80,
-    			_createdOn: 1614760714812,
-    			_id: "07f260f4-466c-4607-9a33-f7273b24f1b4"
-    		},
-    		"bdabf5e9-23be-40a1-9f14-9117b6702a9d": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			angler: "John Does",
-    			weight: 554,
-    			species: "Atlantic Blue Marlin",
-    			location: "Buenos Aires, Argentina",
-    			bait: "trolled pink",
-    			captureTime: 120,
-    			_createdOn: 1614760782277,
-    			_id: "bdabf5e9-23be-40a1-9f14-9117b6702a9d"
-    		}
-    	},
-    	furniture: {
-    	},
-    	orders: {
-    	},
-    	movies: {
-    		"1240549d-f0e0-497e-ab99-eb8f703713d7": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			title: "Black Widow",
-    			description: "Natasha Romanoff aka Black Widow confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises. Comes on the screens 2020.",
-    			img: "https://miro.medium.com/max/735/1*akkAa2CcbKqHsvqVusF3-w.jpeg",
-    			_createdOn: 1614935055353,
-    			_id: "1240549d-f0e0-497e-ab99-eb8f703713d7"
-    		},
-    		"143e5265-333e-4150-80e4-16b61de31aa0": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			title: "Wonder Woman 1984",
-    			description: "Diana must contend with a work colleague and businessman, whose desire for extreme wealth sends the world down a path of destruction, after an ancient artifact that grants wishes goes missing.",
-    			img: "https://pbs.twimg.com/media/ETINgKwWAAAyA4r.jpg",
-    			_createdOn: 1614935181470,
-    			_id: "143e5265-333e-4150-80e4-16b61de31aa0"
-    		},
-    		"a9bae6d8-793e-46c4-a9db-deb9e3484909": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			title: "Top Gun 2",
-    			description: "After more than thirty years of service as one of the Navy's top aviators, Pete Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him.",
-    			img: "https://i.pinimg.com/originals/f2/a4/58/f2a458048757bc6914d559c9e4dc962a.jpg",
-    			_createdOn: 1614935268135,
-    			_id: "a9bae6d8-793e-46c4-a9db-deb9e3484909"
-    		}
-    	},
-    	likes: {
-    	},
-    	ideas: {
-    		"833e0e57-71dc-42c0-b387-0ce0caf5225e": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			title: "Best Pilates Workout To Do At Home",
-    			description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minima possimus eveniet ullam aspernatur corporis tempore quia nesciunt nostrum mollitia consequatur. At ducimus amet aliquid magnam nulla sed totam blanditiis ullam atque facilis corrupti quidem nisi iusto saepe, consectetur culpa possimus quos? Repellendus, dicta pariatur! Delectus, placeat debitis error dignissimos nesciunt magni possimus quo nulla, fuga corporis maxime minus nihil doloremque aliquam quia recusandae harum. Molestias dolorum recusandae commodi velit cum sapiente placeat alias rerum illum repudiandae? Suscipit tempore dolore autem, neque debitis quisquam molestias officia hic nesciunt? Obcaecati optio fugit blanditiis, explicabo odio at dicta asperiores distinctio expedita dolor est aperiam earum! Molestias sequi aliquid molestiae, voluptatum doloremque saepe dignissimos quidem quas harum quo. Eum nemo voluptatem hic corrupti officiis eaque et temporibus error totam numquam sequi nostrum assumenda eius voluptatibus quia sed vel, rerum, excepturi maxime? Pariatur, provident hic? Soluta corrupti aspernatur exercitationem vitae accusantium ut ullam dolor quod!",
-    			img: "./images/best-pilates-youtube-workouts-2__medium_4x3.jpg",
-    			_createdOn: 1615033373504,
-    			_id: "833e0e57-71dc-42c0-b387-0ce0caf5225e"
-    		},
-    		"247efaa7-8a3e-48a7-813f-b5bfdad0f46c": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			title: "4 Eady DIY Idea To Try!",
-    			description: "Similique rem culpa nemo hic recusandae perspiciatis quidem, quia expedita, sapiente est itaque optio enim placeat voluptates sit, fugit dignissimos tenetur temporibus exercitationem in quis magni sunt vel. Corporis officiis ut sapiente exercitationem consectetur debitis suscipit laborum quo enim iusto, labore, quod quam libero aliquid accusantium! Voluptatum quos porro fugit soluta tempore praesentium ratione dolorum impedit sunt dolores quod labore laudantium beatae architecto perspiciatis natus cupiditate, iure quia aliquid, iusto modi esse!",
-    			img: "./images/brightideacropped.jpg",
-    			_createdOn: 1615033452480,
-    			_id: "247efaa7-8a3e-48a7-813f-b5bfdad0f46c"
-    		},
-    		"b8608c22-dd57-4b24-948e-b358f536b958": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			title: "Dinner Recipe",
-    			description: "Consectetur labore et corporis nihil, officiis tempora, hic ex commodi sit aspernatur ad minima? Voluptas nesciunt, blanditiis ex nulla incidunt facere tempora laborum ut aliquid beatae obcaecati quidem reprehenderit consequatur quis iure natus quia totam vel. Amet explicabo quidem repellat unde tempore et totam minima mollitia, adipisci vel autem, enim voluptatem quasi exercitationem dolor cum repudiandae dolores nostrum sit ullam atque dicta, tempora iusto eaque! Rerum debitis voluptate impedit corrupti quibusdam consequatur minima, earum asperiores soluta. A provident reiciendis voluptates et numquam totam eveniet! Dolorum corporis libero dicta laborum illum accusamus ullam?",
-    			img: "./images/dinner.jpg",
-    			_createdOn: 1615033491967,
-    			_id: "b8608c22-dd57-4b24-948e-b358f536b958"
-    		}
-    	},
-    	catalog: {
-    		"53d4dbf5-7f41-47ba-b485-43eccb91cb95": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			make: "Table",
-    			model: "Swedish",
-    			year: 2015,
-    			description: "Medium table",
-    			price: 235,
-    			img: "./images/table.png",
-    			material: "Hardwood",
-    			_createdOn: 1615545143015,
-    			_id: "53d4dbf5-7f41-47ba-b485-43eccb91cb95"
-    		},
-    		"f5929b5c-bca4-4026-8e6e-c09e73908f77": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			make: "Sofa",
-    			model: "ES-549-M",
-    			year: 2018,
-    			description: "Three-person sofa, blue",
-    			price: 1200,
-    			img: "./images/sofa.jpg",
-    			material: "Frame - steel, plastic; Upholstery - fabric",
-    			_createdOn: 1615545572296,
-    			_id: "f5929b5c-bca4-4026-8e6e-c09e73908f77"
-    		},
-    		"c7f51805-242b-45ed-ae3e-80b68605141b": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			make: "Chair",
-    			model: "Bright Dining Collection",
-    			year: 2017,
-    			description: "Dining chair",
-    			price: 180,
-    			img: "./images/chair.jpg",
-    			material: "Wood laminate; leather",
-    			_createdOn: 1615546332126,
-    			_id: "c7f51805-242b-45ed-ae3e-80b68605141b"
-    		}
-    	},
-    	teams: {
-    		"34a1cab1-81f1-47e5-aec3-ab6c9810efe1": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			name: "Storm Troopers",
-    			logoUrl: "/assets/atat.png",
-    			description: "These ARE the droids we're looking for",
-    			_createdOn: 1615737591748,
-    			_id: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1"
-    		},
-    		"dc888b1a-400f-47f3-9619-07607966feb8": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			name: "Team Rocket",
-    			logoUrl: "/assets/rocket.png",
-    			description: "Gotta catch 'em all!",
-    			_createdOn: 1615737655083,
-    			_id: "dc888b1a-400f-47f3-9619-07607966feb8"
-    		},
-    		"733fa9a1-26b6-490d-b299-21f120b2f53a": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			name: "Minions",
-    			logoUrl: "/assets/hydrant.png",
-    			description: "Friendly neighbourhood jelly beans, helping evil-doers succeed.",
-    			_createdOn: 1615737688036,
-    			_id: "733fa9a1-26b6-490d-b299-21f120b2f53a"
-    		}
-    	},
-    	members: {
-    		"cc9b0a0f-655d-45d7-9857-0a61c6bb2c4d": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
-    			status: "member",
-    			_createdOn: 1616236790262,
-    			_updatedOn: 1616236792930
-    		},
-    		"61a19986-3b86-4347-8ca4-8c074ed87591": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-    			status: "member",
-    			_createdOn: 1616237188183,
-    			_updatedOn: 1616237189016
-    		},
-    		"8a03aa56-7a82-4a6b-9821-91349fbc552f": {
-    			_ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-    			teamId: "733fa9a1-26b6-490d-b299-21f120b2f53a",
-    			status: "member",
-    			_createdOn: 1616237193355,
-    			_updatedOn: 1616237195145
-    		},
-    		"9be3ac7d-2c6e-4d74-b187-04105ab7e3d6": {
-    			_ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-    			teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-    			status: "member",
-    			_createdOn: 1616237231299,
-    			_updatedOn: 1616237235713
-    		},
-    		"280b4a1a-d0f3-4639-aa54-6d9158365152": {
-    			_ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
-    			teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-    			status: "member",
-    			_createdOn: 1616237257265,
-    			_updatedOn: 1616237278248
-    		},
-    		"e797fa57-bf0a-4749-8028-72dba715e5f8": {
-    			_ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
-    			teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
-    			status: "member",
-    			_createdOn: 1616237272948,
-    			_updatedOn: 1616237293676
-    		}
-    	}
+        books: [
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Empire of Silence",
+                "series": "The Sun Eater",
+                "numberInSeries": 1,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 753,
+                "year": 2018,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1523897945i/36454667.jpg",
+                "_createdOn": 1764599686201,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "Hadrian Marlowe, a man revered as a hero and despised as a murderer, chronicles his tale in the galaxy-spanning debut of the Sun Eater series, merging the best of space opera and epic fantasy.\n\nIt was not his war.\nOn the wrong planet, at the right time, for the best reasons, Hadrian Marlowe started down a path that could only end in fire. The galaxy remembers him as a the man who burned every last alien Cielcin from the sky. They remember him as a the devil who destroyed a sun, casually annihilating four billion human lives—even the Emperor himself—against Imperial orders.\nBut Hadrian was not a hero. He was not a monster. He was not even a soldier.\nFleeing his father and a future as a torturer, Hadrian finds himself stranded on a strange, backwater world. Forced to fight as a gladiator and into the intrigues of a foreign planetary court, he will find himself fight a war he did not start, for an Empire he does not love, against an enemy he will never understand.",
+                "_id": "82107d6e-81c6-4f34-81e3-e9dcb97984bc"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Howling Dark",
+                "series": "The Sun Eater",
+                "numberInSeries": 2,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 688,
+                "year": 2019,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1563298830i/42298449.jpg",
+                "_createdOn": 1764599686202,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "The second novel of the galaxy-spanning Sun Eater series merges the best of space opera and epic fantasy, as Hadrian Marlowe continues down a path that can only end in fire.\n\nHadrian Marlowe is lost.\n\nFor half a century, he has searched the farther suns for the lost planet of Vorgossos, hoping to find a way to contact the elusive alien Cielcin. He has not succeeded, and for years has wandered among the barbarian Normans as captain of a band of mercenaries.\n\nDetermined to make peace and bring an end to nearly four hundred years of war, Hadrian must venture beyond the security of the Sollan Empire and among the Extrasolarians who dwell between the stars. There, he will face not only the aliens he has come to offer peace, but contend with creatures that once were human, with traitors in his midst, and with a meeting that will bring him face to face with no less than the oldest enemy of mankind.\n\nIf he succeeds, he will usher in a peace unlike any in recorded history. If he fails...the galaxy will burn.",
+                "_id": "00cea304-fff3-4b3f-b015-ddd4a03fa871"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Demon in White",
+                "series": "The Sun Eater",
+                "numberInSeries": 3,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 784,
+                "year": 2020,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1574314340i/48906413.jpg",
+                "_createdOn": 1764599686203,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "For almost a hundred years, Hadrian Marlowe has served the Empire in its war against the Cielcin, a vicious alien race bent on humanity’s destruction. Rumors of a new king amongst the Cielcin have reached the Imperial throne. This one is not like the others. It does not raid borderworld territories, preferring precise, strategic attacks on the humans’ Empire.\n\nTo make matters worse, a cult of personality has formed around Hadrian, spurred on by legends of his having defied death itself. Men call him Halfmortal. Hadrian’s rise to prominence proves dangerous to himself and his team, as pressures within the Imperial government distrust or resent his new influence.\n\nCaught in the middle, Hadrian must contend with enemies before him—and behind.\n\nAnd above it all, there is the mystery of the Quiet. Hadrian did defy death. He did return. But the keys to the only place in the universe where Hadrian might find the answers he seeks lie in the hands of the Emperor himself....",
+                "_id": "5321337c-6c3e-4515-b034-fd905a39bb68"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Kingdoms of Death",
+                "series": "The Sun Eater",
+                "numberInSeries": 4,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 544,
+                "year": 2022,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1634104594i/58420375.jpg",
+                "_createdOn": 1764599686204,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "The fourth novel of the galaxy-spanning Sun Eater series merges the best of space opera and epic fantasy, as Hadrian Marlowe continues down a path that can only end in fire.\n\nHadrian Marlowe is trapped.\n\nFor nearly a century, he has been a guest of the Emperor, forced into the role of advisor, a prisoner of his own legend. But the war is changing. Mankind is losing.\n\nThe Cielcin are spilling into human space from the fringes, picking their targets with cunning precision. The Great Prince Syriani Dorayaica is uniting their clans, forging them into an army and threat the likes of which mankind has never seen.\n\nAnd the Empire stands alone.\n\nNow the Emperor has no choice but to give Hadrian Marlowe—once his favorite knight—one more impossible task: journey across the galaxy to the Lothrian Commonwealth and convince them to join the war. But not all is as it seems, and Hadrian’s journey will take him far beyond the Empire, beyond the Commonwealth, impossibly deep behind enemy lines.",
+                "_id": "a73b1436-bbcf-4227-862a-def1b2226926"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Ashes of Man",
+                "series": "The Sun Eater",
+                "numberInSeries": 5,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 544,
+                "year": 2022,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1644986472i/60427253.jpg",
+                "_createdOn": 1764599686205,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "The fifth novel of the galaxy-spanning Sun Eater series merges the best of space opera and epic fantasy, as Hadrian Marlowe continues down a path that can only end in fire.\n\nThe galaxy is burning.\n\nWith the Cielcin united under one banner, the Sollan Empire stands alone after the betrayal of the Commonwealth. The Prophet-King of the Cielcin has sent its armies to burn the worlds of men, and worse, there are rumors...whispers that Hadrian Marlowe is dead, killed in the fighting.\n\nBut it is not so. Hadrian survived with the help of the witch, Valka, and together they escaped the net of the enemy having learned a terrible truth: the gods that the Cielcin worship are real and will not rest until the universe is dark and cold.\n\nWhat is more, the Emperor himself is in danger. The Prophet-King has learned to track his movements as he travels along the borders of Imperial space. Now the Cielcin legions are closing in, their swords poised to strike off the head of all mankind.",
+                "_id": "c78eeb93-6288-4486-989e-25092333a642"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Disquiet Gods",
+                "series": "The Sun Eater",
+                "numberInSeries": 6,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 704,
+                "year": 2024,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1690034659i/176443792.jpg",
+                "_createdOn": 1764599686206,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "The sixth novel of the galaxy-spanning Sun Eater series merges the best of space opera and epic fantasy, as Hadrian Marlowe continues down a path that can only end in fire.\n\nThe end is nigh.\n\nIt has been nearly two hundred years since Hadrian Marlowe assaulted the person of the Emperor and walked away from war. From his Empire. His duty. From the will and service of the eldritch being known only as the Quiet. The galaxy lies in the grip of a terrible plague, and worse, the Cielcin have overrun the realms of men.\n\nA messenger has come to Jadd, bearing a summons from the Sollan Emperor for the one-time hero. A summons, a pardon, and a plea. HAPSIS, the Emperor’s secret first-contact intelligence organization, has located one of the dreadful Watchers, the immense, powerful beings worshipped by the Pale Cielcin.\n\nCalled out of retirement and exile, the old hero—accompanied by his daughter, Cassandra—must race across the galaxy and against time to accomplish one last, impossible\n\nTo kill a god.",
+                "_id": "52d44f5c-6c18-4375-9f36-5f0c279eaff8"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Shadows Upon Time",
+                "series": "The Sun Eater",
+                "numberInSeries": 7,
+                "author": "Christopher Ruocchio",
+                "genre": "Science Fiction",
+                "pages": 928,
+                "year": 2025,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1740399833i/222685709.jpg",
+                "_createdOn": 1764599686207,
+                "tags": [
+                    "adult",
+                    "sci-fantasy",
+                    "space-opera"
+                ],
+                "description": "The seventh and final novel of the galaxy-spanning series merges the best of space opera and epic fantasy, as Hadrian Marlowe at last lights the greatest fire humanity has ever seen\n\nAmbitious universe-building combines with intimate character portraits for storytelling on a truly epic scale—for fans of Orson Scott Card, Adrian Tchaikovsky, Patrick Rothfuss, and Jack Campbell\n\nThe trumpet sounds.\n\nThe end has come at last. After his victory at Vorgossos, Hadrian Marlowe finds himself a fugitive, on the run not only from the Extrasolarians, but from his own people, the Sollan Empire he betrayed—and who betrayed him. Hidden safely beyond the borders of human space, Hadrian awaits the arrival of the one ally he has left: the Jaddian Prince Kaim-Olorin du Otranto.\n\nWhat's more, the inhuman Cielcin have vanished, unseen for more than one hundred years. The armies of men have grown complacent, but Hadrian knows the truth: the Cielcin are gathering their strength, preparing for their final assault against the heart of all mankind.\n\nOnly Hadrian possesses the power to stem the tide: an ancient war machine, forged by the daimon machines at the dawn of time. The mighty Demiurge. With it, Hadrian must face not just the Cielcin horde, but their Prophet-King, and the dark gods it serves—the very gods who shaped the universe itself.\n\nThis must be.",
+                "_id": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Red Rising",
+                "series": "Red Rising Saga",
+                "numberInSeries": 1,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 382,
+                "year": 2014,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1761311924i/15839976.jpg",
+                "_createdOn": 1764599686208,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "Darrow is a Red, a member of the lowest caste in the color-coded society of the future. Like his fellow Reds, he works all day, believing that he and his people are making the surface of Mars livable for future generations. Yet he toils willingly, trusting that his blood and sweat will one day result in a better world for his children.\n\nBut Darrow and his kind have been betrayed. Soon he discovers that humanity reached the surface generations ago. Vast cities and lush wilds spread across the planet. Darrow—and Reds like him—are nothing more than slaves to a decadent ruling class.\n\nInspired by a longing for justice, and driven by the memory of lost love, Darrow sacrifices everything to infiltrate the legendary Institute, a proving ground for the dominant Gold caste, where the next generation of humanity’s overlords struggle for power. He will be forced to compete for his life and the very future of civilization against the best and most brutal of Society’s ruling class. There, he will stop at nothing to bring down his enemies . . . even if it means he has to become one of them to do so.",
+                "_id": "2aff9c38-d4ab-481b-87d0-20c114a46a67"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Golden Son",
+                "series": "Red Rising Saga",
+                "numberInSeries": 2,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 447,
+                "year": 2015,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1394684475i/18966819.jpg",
+                "_createdOn": 1764599686209,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "As a Red, Darrow grew up working the mines deep beneath the surface of Mars, enduring backbreaking labor while dreaming of the better future he was building for his descendants. But the Society he faithfully served was built on lies. Darrow’s kind have been betrayed and denied by their elitist masters, the Golds—and their only path to liberation is revolution. And so Darrow sacrifices himself in the name of the greater good for which Eo, his true love and inspiration, laid down her own life. He becomes a Gold, infiltrating their privileged realm so that he can destroy it from within.\n\nA lamb among wolves in a cruel world, Darrow finds friendship, respect, and even love—but also the wrath of powerful rivals. To wage and win the war that will change humankind’s destiny, Darrow must confront the treachery arrayed against him, overcome his all-too-human desire for retribution—and strive not for violent revolt but a hopeful rebirth. Though the road ahead is fraught with danger and deceit, Darrow must choose to follow Eo’s principles of love and justice to free his people.\n\nHe must live for more.",
+                "_id": "0fcfc589-7de4-4227-99e2-d444c8354b6c"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Morning Star",
+                "series": "Red Rising Saga",
+                "numberInSeries": 3,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 525,
+                "year": 2016,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1461354277i/18966806.jpg",
+                "_createdOn": 1764599686210,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "Darrow would have lived in peace, but his enemies brought him war. The Gold overlords demanded his obedience, hanged his wife, and enslaved his people. But Darrow is determined to fight back. Risking everything to transform himself and breach Gold society, Darrow has battled to survive the cutthroat rivalries that breed Society’s mightiest warriors, climbed the ranks, and waited patiently to unleash the revolution that will tear the hierarchy apart from within.\n\nFinally, the time has come.\n\nBut devotion to honor and hunger for vengeance run deep on both sides. Darrow and his comrades-in-arms face powerful enemies without scruple or mercy. Among them are some Darrow once considered friends. To win, Darrow will need to inspire those shackled in darkness to break their chains, unmake the world their cruel masters have built, and claim a destiny too long denied—and too glorious to surrender.",
+                "_id": "4032affc-615e-4e41-9eb5-6f9517d4d9c9"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Iron Gold",
+                "series": "Red Rising Saga",
+                "numberInSeries": 4,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 602,
+                "year": 2018,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1716325988i/33257757.jpg",
+                "_createdOn": 1764599686211,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "They call him father, liberator, warlord, Reaper. But he feels a boy as he falls toward the pale blue planet, his armor red, his army vast, his heart heavy. It is the tenth year of war and the thirty-second of his life.\n\nA decade ago, Darrow was the hero of the revolution he believed would break the chains of the Society. But the Rising has shattered everything: Instead of peace and freedom, it has brought endless war. Now he must risk everything he has fought for on one last desperate mission. Darrow still believes he can save everyone, but can he save himself?\n\nAnd throughout the worlds, other destinies entwine with Darrow’s to change his fate forever:\n\nA young Red girl flees tragedy in her refugee camp and achieves for herself a new life she could never have imagined.\n\nAn ex-soldier broken by grief is forced to steal the most valuable thing in the galaxy—or pay with his life.\n\nAnd Lysander au Lune, the heir in exile to the sovereign, wanders the stars with his mentor, Cassius, haunted by the loss of the world that Darrow transformed, and dreaming of what will rise from its ashes.\n\nRed Rising was the story of the end of one universe, and Iron Gold is the story of the creation of a new one. Witness the beginning of a stunning new saga of tragedy and triumph from masterly New York Times bestselling author Pierce Brown.",
+                "_id": "6aa9a204-67f3-4a97-9f66-15f999539e79"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Dark Age",
+                "series": "Red Rising Saga",
+                "numberInSeries": 5,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 758,
+                "year": 2019,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1525464420i/29226553.jpg",
+                "_createdOn": 1764599686212,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "space-opera"
+                ],
+                "description": "For a decade Darrow led a revolution against the corrupt color-coded Society. Now, outlawed by the very Republic he founded, he wages a rogue war on Mercury in hopes that he can still salvage the dream of Eo. But as he leaves death and destruction in his wake, is he still the hero who broke the chains? Or will another legend rise to take his place?\n\nLysander au Lune, the heir in exile, has returned to the Core. Determined to bring peace back to mankind at the edge of his sword, he must overcome or unite the treacherous Gold families of the Core and face down Darrow over the skies of war-torn Mercury.\n\nBut theirs are not the only fates hanging in the balance.\n\nOn Luna, Mustang, Sovereign of the Republic, campaigns to unite the Republic behind her husband. Beset by political and criminal enemies, can she outwit her opponents in time to save him?\n\nOnce a Red refugee, young Lyria now stands accused of treason, and her only hope is a desperate escape with unlikely new allies.\n\nAbducted by a new threat to the Republic, Pax and Electra, the children of Darrow and Sevro, must trust in Ephraim, a thief, for their salvation—and Ephraim must look to them for his chance at redemption.\n\nAs alliances shift, break, and re-form—and power is seized, lost, and reclaimed—every player is at risk in a game of conquest that could turn the Rising into a new Dark Age.\n\nThe #1 New York Times bestselling author of Morning Star returns to the Red Rising universe with the thrilling sequel to Iron Gold.",
+                "_id": "fcd39f63-7e0b-423c-8aec-1838b29a162e"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Light Bringer",
+                "series": "Red Rising Saga",
+                "numberInSeries": 6,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "pages": 682,
+                "year": 2023,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1667655583i/29227774.jpg",
+                "_createdOn": 1764599686213,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "Darrow returns as Pierce Brown’s New York Times bestselling Red Rising series continues in the thrilling sequel to Dark Age.\n\n“The measure of a man is not the fear he sows in his enemies. It is the hope he gives his friends.”—Virginia au Augustus\n\nThe Reaper is a legend, more myth than man: the savior of worlds, the leader of the Rising, the breaker of chains.\n\nBut the Reaper is also Darrow, born of the red soil of Mars: a husband, a father, a friend.\n\nThe worlds once needed the Reaper. But now they need Darrow. Because after the dark age will come a new age: of light, of victory, of hope.",
+                "_id": "2d172481-4848-47fe-bf71-9c1e51b98773"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Red God",
+                "series": "Red Rising Saga",
+                "numberInSeries": 7,
+                "author": "Pierce Brown",
+                "genre": "Science Fiction",
+                "year": 2026,
+                "tags": [
+                    "adult",
+                    "dystopia",
+                    "space-opera"
+                ],
+                "description": "Planned final volume of the saga, promising to conclude Darrow’s story and the fate of the fractured Society in one last, system-spanning conflict.",
+                "_id": "f9a471df-5c1e-4a72-b467-0726400778b7"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Empire of the Vampire",
+                "series": "Empire of the Vampire",
+                "numberInSeries": 1,
+                "author": "Jay Kristoff",
+                "genre": "Fantasy",
+                "pages": 725,
+                "year": 2021,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1611438107i/43728380.jpg",
+                "_createdOn": 1764599686214,
+                "tags": [
+                    "adult",
+                    "dark-fantasy",
+                    "vampires"
+                ],
+                "description": "From holy cup comes holy light;\nThe faithful hands sets world aright.\nAnd in the Seven Martyrs’ sight,\nMere man shall end this endless night.\n\nIt has been twenty-seven long years since the last sunrise. For nearly three decades, vampires have waged war against humanity; building their eternal empire even as they tear down our own. Now, only a few tiny sparks of light endure in a sea of darkness.\n\nGabriel de León is a silversaint: a member of a holy brotherhood dedicated to defending realm and church from the creatures of the night. But even the Silver Order couldn’t stem the tide once daylight failed us, and now, only Gabriel remains.\n\nImprisoned by the very monsters he vowed to destroy, the last silversaint is forced to tell his story. A story of legendary battles and forbidden love, of faith lost and friendships won, of the Wars of the Blood and the Forever King and the quest for humanity’s last remaining hope:\n\nThe Holy Grail.",
+                "_id": "c16329f7-a90c-4228-835d-77a14d69bf64"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Empire of the Damned",
+                "series": "Empire of the Vampire",
+                "numberInSeries": 2,
+                "author": "Jay Kristoff",
+                "genre": "Fantasy",
+                "pages": 646,
+                "year": 2024,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1709245057i/209320632.jpg",
+                "_createdOn": 1764599686215,
+                "tags": [
+                    "adult",
+                    "dark-fantasy",
+                    "vampires"
+                ],
+                "description": "Gabriel de León has saved the Holy Grail from death, but his chance to end the endless night is lost.\n\nAfter turning his back on his silversaint brothers once and for all, Gabriel and the Grail set out to learn the truth of how Daysdeath might finally be undone.\n\nBut the last silversaint faces peril, within and without. Pursued by children of the Forever King, drawn into wars and webs centuries in the weaving, and ravaged by his own rising bloodlust, Gabriel may not survive to see the truth of the Grail revealed.",
+                "_id": "736c0499-72c6-4a16-89df-f761f23376f8"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Empire of the Dawn",
+                "series": "Empire of the Vampire",
+                "numberInSeries": 3,
+                "author": "Jay Kristoff",
+                "genre": "Fantasy",
+                "pages": 800,
+                "year": 2025,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1743512828i/228188208.jpg",
+                "_createdOn": 1764599686216,
+                "tags": [
+                    "adult",
+                    "dark-fantasy",
+                    "vampires"
+                ],
+                "description": "From holy cup comes holy light;\nThe faithful hands sets world aright.\nAnd in the Seven Martyrs’ sight,\nMere man shall end this endless night.\n\nGabriel de León has lost his family, his faith, and the last hope of ending the endless night—his surrogate daughter, Dior. With no thought left but vengeance, he and a band of loyal brothers journey into the war-torn heart of Elidaen to claim the life of the Forever King.\n\nUnbeknownst to the Last Silversaint, the Grail still lives—speeding towards the besieged capital of Augustin in the frail hope of ending Daysdeath. But deadly treachery awaits within the halls of power, and the Forever King’s legions march ever closer. Gabriel and Dior will be drawn into a final battle that will shape the very fate of the Empire, but as the sun sets for what may the last time, there will be no one left for them to trust.\n\nNot even each other",
+                "_id": "17935d4a-9ca4-478d-bdf5-86a3906d41a9"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Black Company",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 1,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 319,
+                "year": 1984,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1431815019i/25550470.jpg",
+                "_createdOn": 1764599686217,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "Some feel the Lady, newly risen from centuries in thrall, stands between humankind and evil. Some feel she is evil itself.\n\nThe hard-bitten men of the Black Company take their pay and do what they must, burying their doubts with their dead.\n\nUntil the prophecy: The White Rose has been reborn, somewhere, to embody good once more.\n\nThere must be a way for the Black Company to find her.",
+                "_id": "952d7634-53b9-48c6-ab9b-3f7ef52c39e1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Shadows Linger",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 2,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 287,
+                "year": 1984,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1407410290i/19368525.jpg",
+                "_createdOn": 1764599686218,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "Mercenary soldiers in the service of the Lady, the Black Company stands against the rebels of the White Rose. They are tough men, proud of honoring their contracts. The Lady is evil, but so, too, are those who falsely profess to follow the White Rose, reincarnation of a centuries-dead heroine. Yet now some of the Company have discovered that the mute girl they rescued and sheltered is truly the White Rose reborn. Now there may be a path to the light, even for such as they. If they can survive it.\nAt the publisher's request, this title is being sold without Digital Rights Management software (DRM) applied.",
+                "_id": "10df412d-84ef-49ea-a625-4d356bb5a49e"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The White Rose",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 3,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 317,
+                "year": 1985,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1327901074i/400906.jpg",
+                "_createdOn": 1764599686219,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "She is the last hope of good in the war against the evil sorceress known as the Lady. From a secret base on the Plains of Fear, where even the Lady hesitates to go, the Black Company, once in service to the Lady, now fights to bring victory to the White Rose. But now an even greater evil threatens the world. All the great battles that have gone before will seem a skirmishes when the Dominator rises from the grave.",
+                "_id": "332553b9-7470-4c55-9c25-0ff29ce8ec3b"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Shadow Games",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 4,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 311,
+                "year": 1989,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1389666582i/113540.jpg",
+                "_createdOn": 1764599686220,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "After the devastating battle at the Tower of Charm, Croaker leads the greatly diminished Black Company south, in search of the lost Annals. The Annals will be returned to Khatovar, eight thousand miles away, a city that may exists only in legend...the origin of the first Free Companies.\n\nEvery step of the way the Company is hounded by shadowy figured and carrion-eating crows. As they march every southward, through bug infested jungle, rivers dense with bloodthirsty pirates, and cities, dead and living, haunted by the passage of the Company north, their numbers grow until they are thousands strong.\n\nBut always they are watched--by the Shadowmasters--a deadly new enemy: twisted creature that deal in darkness and death: powerful, shadowy creatures bent on smothering the world in their foul embrace. This is the first round in a deadly game, a game that the Black Company cannot hope to win.",
+                "_id": "52b9869a-2bb0-4628-814e-b246b24e09c1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Dreams of Steel",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 5,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 346,
+                "year": 1990,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1389666584i/400900.jpg",
+                "_createdOn": 1764599686221,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "Croaker has fallen and, following the Company's disastrous defeat at Dejagore, Lady is one of the few survivors--determined to avenge the Company and herself against the Shadowmasters, no matter what the cost.\n\nBut in assembling a new fighting force from the dregs and rabble of Taglios, she finds herself offered help by a mysterious, ancient cult of murder--competent, reliable, and apparently committed to her goals.\n\nMeanwhile, far away, Shadowmasters conspire against one another and the world, weaving dark spells that reach into the heart of Taglios. And in a hidden grove, a familiar figure slowly awakens to find himself the captive of an animated, headless corpse.\n\nMercilessly cutting through Taglian intrigues, Lady appears to be growing stronger every day. All that disturbs her are the dreams which afflict her by night--dreams of carnage, of destruction, of universal death, unceasing...",
+                "_id": "04528d54-20fc-4a07-9981-1ce37e627124"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Bleak Seasons",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 6,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 316,
+                "year": 1996,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1389586789i/400911.jpg",
+                "_createdOn": 1764599686222,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "\"Let me tell you who I am, on the chance that these scribblings do survive....I am Murgen, Standard bearer of the Black Company, though I bear the shame of having lost that standard in battle. I am keeping these Annals because Croaker is dead. One-Eye won't, and hardly anyone else can read or write. I will be your guide for however long it takes the Shadowlanders to force our present predicament to its inevitable end...\" So writes Murgen, seasoned veteran of the Black Company. The Company has taken the fortress of Stormgard from the evil Shadowlanders, lords of darkness from the far reaches of the earth. Now the waiting begins.\n\nExhausted from the siege, beset by sorcery, and vastly outnumbered, the Company have risked their souls as well as their lives to hold their prize. But this is the end of an age, and great forces are at work. The ancient race known as the Nyueng Bao swear that ancient gods are stirring. the Company's commander has gone mad and flirts with the forces of darkness. Only Murgen, touched by a spell that has set his soul adrift in time, begins at last to comprehend the dark design that has made pawns of men and god alike.",
+                "_id": "adbe7b18-df5d-4cc3-b082-04331edcdbbc"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "She Is the Darkness",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 7,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 470,
+                "year": 1997,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1390686957i/400897.jpg",
+                "_createdOn": 1764599686223,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "The wind whines and howls with bitter breath. Lightning snarls and barks. Rage is an animate force upon the plain of glittering stone. Even shadows are afraid.\n\nAt the heart of the plain stands a vast grey stronghold, unknown, older than any written memory. One ancient tower has collapsed across the fissure. From the heart of the fastness comes a great deep slow breath like that of a slumbering world-heart, cracking the olden silence.\n\nDeath is eternity. Eternity is stone. Stone is silence.\n\nStone cannot speak but stone remembers.\n\nSo begins the next movement of Glittering Stone....\n\nThe tale again comes to us from the pen of Murgen, Annalist and Standard Bearer of the Black Company, whose developing powers of travel through space and time give him a perspective like no other.\n\nLed by the wily commander, Croaker, and the Lady, the Company is working for the Taglian government, but neither the Company nor the Taglians are overflowing with trust for each other. Arrayed against both is a similarly tenuous alliance of sorcerers, including the diabolical Soulcatcher, the psychotic Howler, and a four-year-old child who may be the most powerful of all.",
+                "_id": "17a1fb8a-9bc6-4c68-8072-5d86f8bb826e"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Water Sleeps",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 8,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 470,
+                "year": 1999,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1404655797i/349470.jpg",
+                "_createdOn": 1764599686224,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "Regrouping in Taglios, the surviving members of the Black Company are determined to free their fellow warriors held in stasis beneath the glittering plain. Journey there under terrible conditions, they arrive just in time for a magical conflagration in which the bones of the world will be revealed, the history of the Company unveiled, and new world gained and lost...all at a terrible price.",
+                "_id": "604f90c0-1313-46ec-b85b-9a5d3c9b7cb6"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Soldiers Live",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 9,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 566,
+                "year": 2000,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1388305400i/400899.jpg",
+                "_createdOn": 1764599686225,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "When sorcerers and demigods go to war, those wars are fought by mercenaries, \"dog soldiers,\" grunts in the trenches. And the stories of those soldiers are the stories of Glen Cook's hugely popular \"Black Company\" novels. If the Joseph Heller of Catch-22 were to tell the story of The Lord of the Rings, it might read like the Black Company books. There is nothing else in fantasy like them.\n\nNow, at last, Cook brings the \"Glittering Stone\" cycle within the Black Company series to an end . . . but an end with many other tales left to tell. As Soldiers Live opens, Croaker is military dictator of all the Taglias, and no Black Company member has died in battle for four years. Croaker figures it can't last. He's right.\n\nFor, of course, many of the Company's old adversaries are still around. Narayan Singh and his adopted daughter--actually the offspring of Croaker and the Lady--hope to bring about the apocalyptic Year of the Skulls. Other old enemies like Shadowcatcher, Longshadow, and Howler are also ready to do the Company harm. And much of the Company is still recovering from the fifteen years many of them spent in a stasis field.\n\nThen a report arrives of an evil spirit, a forvalaka, that has taken over one of their old enemies. It attacks them at a shadowgate--setting off a chain of events that will bring the Company to the edge of apocalypse and, as usual, several steps beyond.\n\nGlen Cook is the leading modern writer of epic fantasy noir, and Soldiers Live is Cook at his best. None of his legion of fans will want to miss it.",
+                "_id": "fa31207b-93c4-4449-94bd-bd9f9b6225bf"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Lies Weeping",
+                "series": "The Chronicles of the Black Company",
+                "numberInSeries": 10,
+                "author": "Glen Cook",
+                "genre": "Fantasy",
+                "pages": 384,
+                "year": 2025,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1735546293i/222376544.jpg",
+                "_createdOn": 1764599686226,
+                "tags": [
+                    "adult",
+                    "grimdark",
+                    "military-fantasy"
+                ],
+                "description": "From the godfather of Grimdark himself, LIES WEEPING is the first book in a brand new arc of Glen Cook's groundbreaking Chronicles of the Black Company series!\n\nThe Black Company has retreated across the plain of glittering stone, toward a shadow gate that would let them trade the dangers of the plain for the questionable safety of the Company’s one-time haven on Hsien, a region in the world known as the Land of Unknown Shadows.\n\nIn Hsien, the company returns to their former base, An Abode of Ravens, where the Lady ages backwards in a return to force, shaking off the thrall, one breath at a time. Meanwhile, Croaker, ascended to godlike status as the Steadfast Guardian, has been left behind in the Nameless Fortress.\n\nIn their adopted father’s stead, Arkana and Shukrat have taken up the role of annalist for the Black Company. At first, life in Hsien appears quiet, even boring, but it is quickly apparent that strange goings on are more than what they seem, and it's up to them to discover the truth hidden in the shadows of this strange land.",
+                "_id": "0ea35733-6a32-4146-aed4-d1dd01631417"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Gardens of the Moon",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 1,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 666,
+                "year": 1999,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1548497031i/55399.jpg",
+                "_createdOn": 1764599686227,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "Vast legions of gods, mages, humans, dragons and all manner of creatures play out the fate of the Malazan Empire in this first book in a major epic fantasy series from Steven Erikson.\n\nThe Malazan Empire simmers with discontent, bled dry by interminable warfare, bitter infighting and bloody confrontations with the formidable Anomander Rake and his Tiste Andii, ancient and implacable sorcerers. Even the imperial legions, long inured to the bloodshed, yearn for some respite. Yet Empress Laseen's rule remains absolute, enforced by her dread Claw assassins.\n\nFor Sergeant Whiskeyjack and his squad of Bridgeburners, and for Tattersail, surviving cadre mage of the Second Legion, the aftermath of the siege of Pale should have been a time to mourn the many dead. But Darujhistan, last of the Free Cities of Genabackis, yet holds out. It is to this ancient citadel that Laseen turns her predatory gaze.\n\nHowever, it would appear that the Empire is not alone in this great game. Sinister, shadowbound forces are gathering as the gods themselves prepare to play their hand...\n\nConceived and written on a panoramic scale, Gardens of the Moon is epic fantasy of the highest order--an enthralling adventure by an outstanding new voice.",
+                "_id": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Deadhouse Gates",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 2,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 604,
+                "year": 2000,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1385272744i/55401.jpg",
+                "_createdOn": 1764599686228,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "In the vast dominion of Seven Cities, in the Holy Desert Raraku, the seer Sha'ik and her followers prepare for the long-prophesied uprising known as the Whirlwind. Unprecedented in size and savagery, this maelstrom of fanaticism and bloodlust will embroil the Malazan Empire in one of the bloodiest conflicts it has ever known, shaping destinies and giving birth to legends . . .\n\nSet in a brilliantly realized world ravaged by dark, uncontrollable magic, Deadhouse Gates is a novel of war, intrigue and betrayal confirms Steven Eirkson as a storyteller of breathtaking skill, imagination and originality--a new master of epic fantasy.",
+                "_id": "23405fcb-79df-49d7-a605-74e8a0a35de4"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Memories of Ice",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 3,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 925,
+                "year": 2001,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1548497075i/175983.jpg",
+                "_createdOn": 1764599686229,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "Marking the return of many characters from Gardens of the Moon and introducing a host of remarkable new players, Memories of Ice is both a momentous new chapter in Steven Erikson's magnificent epic fantasy and a triumph of storytelling. The ravaged continent of Genabackis has given birth to a terrifying new the Pannion Domin. Like a tide of corrupted blood, it seethes across the land, devouring all. In its path stands an uneasy Onearm's army and Whiskeyjack's Bridgeburners alongside their enemies of old--the forces of the Warlord Caladan Brood, Anomander Rake and his Tiste Andii mages, and the Rhivi people of the plains. But ancient undead clans are also gathering; the T'lan Imass have risen. For it would seem something altogether darker and more malign threatens this world. Rumors abound that the Crippled God is now unchained and intent on a terrible revenge.",
+                "_id": "1eb22952-67f8-467b-b1c8-1fe291d50381"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "House of Chains",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 4,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 709,
+                "year": 2002,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1548490548i/55398.jpg",
+                "_createdOn": 1764599686230,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "In Northern Genabackis, a raiding party of tribal warriors descends from the mountains into the southern flat lands. Their intention is to wreak havoc among the despised lowlanders. But for the one named Karsa Orlong it marks the beginning of what will prove an extraordinary destiny.\n\nSome years later, it is the aftermath of the Chain of Dogs. Coltaine, revered commander of the Malazan 7th Army is dead. And now Tavore, elder sister of Ganoes Paran and Adjunct to the Empress, has arrived in the last remaining Malazan stronghold of the Seven Cities to take charge. Untested and new to command, she must hone a small army of twelve thousand soldiers, mostly raw recruits, into a viable fighting force and lead them into battle against the massed hordes of Sha'ik's Whirlwind. Her only hope lies in resurrecting the shattered faith of the few remaining survivors from Coltaine's legendary march, veterans one and all.\n\nIn distant Raraku, in the heart of the Holy Desert, the seer Sha'ik waits with her rebel army. But waiting is never easy. Her disparate collection of warlords - tribal chiefs, High Mages, a renegade Malazan Fist and his sorceror - is locked in a vicious power struggle that threatens to tear the rebellion apart from within. And Sha'ik herself suffers, haunted by the private knowledge of her nemesis, Tavore... her own sister.\n\nSo begins this pivotal new chapter in Steven Erikson's MALAZAN BOOK OF THE FALLEN - an epic novel of war, intrigue, magic and betrayal from a writer regarded as one of the most original, imaginative and exciting storytellers in fantasy today.",
+                "_id": "528376b3-a72d-4ad4-b7c1-fcacb9e26de0"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Midnight Tides",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 5,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 960,
+                "year": 2004,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1366996057i/345299.jpg",
+                "_createdOn": 1764599686231,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "After decades of warfare, the five tribes of the Tiste Edur are united under the implacable rule of the Warlock King of the Hiroth. But the price of peace is a pact with a hidden power whose motives may be deadly. To the south, the expansionist kingdom of Lether has devoured all lesser neighbors - except the Tiste Edur.",
+                "_id": "78d01cc0-04b3-4a8e-adae-7792992c5ef2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Bonehunters",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 6,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 1203,
+                "year": 2006,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1399934281i/478951.jpg",
+                "_createdOn": 1764599686232,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "The Seven Cities Rebellion has been crushed. Sha'ik is dead. One last rebel force remains, holed up in the city of Y'Ghatan and under the fanatical command of Leoman of the Flails. The prospect of laying siege to this ancient fortress makes the battle-weary Malaz 14th Army uneasy. For it was here that the Empire's greatest champion Dassem Ultor was slain and a tide of Malazan blood spilled. A place of foreboding, its smell is of death. But elsewhere, agents of a far greater conflict have made their opening moves. The Crippled God has been granted a place in the pantheon, a schism threatens and sides must be chosen. Whatever each god decides, the ground-rules have changed, irrevocably, terrifyingly and the first blood spilled will be in the mortal world. A world in which a host of characters, familiar and new, including Heboric Ghost Hands, the possessed Apsalar, Cutter, once a thief now a killer, the warrior Karsa Orlong and the two ancient wanderers Icarium and Mappo, each searching for such a fate as they might fashion with their own hands, guided by their own will. If only the gods would leave them alone. But now that knives have been unsheathed, the gods are disinclined to be kind. There shall be war, war in the heavens.And the prize? Nothing less than existence itself...\n\n\nHere is the stunning new chapter in Steven Erikson magnificent 'Malazan Book of the Fallen' - hailed an epic of the imagination and acknowledged as a fantasy classic in the making.",
+                "_id": "cf0cb13e-6719-41f4-b4fc-4064899cf081"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Reaper's Gale",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 7,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 1280,
+                "year": 2007,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1403011403i/459064.jpg",
+                "_createdOn": 1764599686233,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "A truly epic fantasy series that has confirmed its author as one of the most original and exciting genre storytellers in years.\n\nErikson’s ‘ Malazan Book of the Fallen ’ has been recognised the world-over by writers, critics and fans alike — in a recent review of The Bonehunters, the sixth chapter in this remarkable tale, the UK’s Interzone magazine hailed it ‘a masterpiece’ and ‘the benchmark for all future works in the field’, while the hugely influential genre website, Ottawa-based SF Site, declared ‘this series has clearly established itself as the most significant work of epic fantasy since Donaldson’s Chronicles of Thomas Covenant’.\n\nNow comes Reaper’s Gale — the seventh Tale of the Malazan Book of the Fallen — and neither Erikson nor the excitement are showing any sign of letting up. Mauled and now cut adrift by the Malazan Empire, Tavore and her now infamous 14th army have landed on the coast of a strange, unknown continent and find themselves facing an even more dangerous the Tiste Edur, a nightmarish empire pledged to serve the Crippled God…\n\nA brutal, harrowing novel of war, intrigue and dark, uncontrollable magic, this is fantasy at its most imaginative and storytelling at its most thrilling.",
+                "_id": "1b53bf06-31c8-4e90-9337-2af799dbc498"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Toll the Hounds",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 8,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 1008,
+                "year": 2008,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1442456749i/938544.jpg",
+                "_createdOn": 1764599686234,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "In Darujhistan, the city of blue fire, it is said that love and death shall arrive dancing. It is summer and the heat is oppressive, but for the small round man in the faded red waistcoat, discomfiture is not just because of the sun. All is not well. Dire portents plague his nights and haunt the city streets like fiends of shadow. Assassins skulk in alleyways, but the quarry has turned and the hunters become the hunted.\n\nHidden hands pluck the strings of tyranny like a fell chorus. While the bards sing their tragic tales, somewhere in the distance can be heard the baying of Hounds...And in the distant city of Black Coral, where rules Anomander Rake, Son of Darkness, ancient crimes awaken, intent on revenge. It seems Love and Death are indeed about to arrive...hand in hand, dancing.\n\nA thrilling, harrowing novel of war, intrigue and dark, uncontrollable magic, Toll the Hounds is the new chapter in Erikson's monumental series - epic fantasy at its most imaginative and storytelling at its most exciting.",
+                "_id": "8a24d781-ca32-416a-9e17-5c8a5d2eb999"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Dust of Dreams",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 9,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 889,
+                "year": 2009,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1388268201i/4703427.jpg",
+                "_createdOn": 1764599686235,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "In war everyone loses. This brutal truth can be seen in the eyes of every soldier in every world…\n\nIn Letherii, the exiled Malazan army commanded by Adjunct Tavore begins its march into the eastern Wastelands, to fight for an unknown cause against an enemy it has never seen.\n\nAnd in these same Wastelands, others gather to confront their destinies. The warlike Barghast, thwarted in their vengeance against the Tiste Edur, seek new enemies beyond the border and Onos Toolan, once immortal T'lan Imass now mortal commander of the White Face clan, faces insurrection. To the south, the Perish Grey Helms parlay passage through the treacherous kingdom of Bolkando. Their intention is to rendezvous with the Bonehunters but their vow of allegiance to the Malazans will be sorely tested. And ancient enclaves of an Elder Race are in search of salvation--not among their own kind, but among humans--as an old enemy draws ever closer to the last surviving bastion of the K'Chain Che'Malle.\n\nSo this last great army of the Malazan Empire is resolved to make one final defiant, heroic stand in the name of redemption. But can deeds be heroic when there is no one to witness them? And can that which is not witnessed forever change the world? Destines are rarely simple, truths never clear but one certainty is that time is on no one's side. For the Deck of Dragons has been read, unleashing a dread power that none can comprehend…\n\nIn a faraway land and beneath indifferent skies, the final chapter of 'The Malazan Book of the Fallen' has begun…",
+                "_id": "a586e22b-87e5-44c4-a166-f6be149d4026"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Crippled God",
+                "series": "Malazan Book of the Fallen",
+                "numberInSeries": 10,
+                "author": "Steven Erikson",
+                "genre": "Fantasy",
+                "pages": 921,
+                "year": 2011,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1320388198i/8447255.jpg",
+                "_createdOn": 1764599686236,
+                "tags": [
+                    "adult",
+                    "epic-fantasy",
+                    "grimdark"
+                ],
+                "description": "The Bonehunters march for Kolanse, led by Adjunct Tavore. This woman with no gifts of magic, deemed plain, unprepossessing, displaying nothing to instill loyalty or confidence, will challenge the gods - if her own mutinous troops don't kill her first.\n\nHer enemy, the Forkrul Assail, seek to cleanse the world, to annihilate everything. In the realm of Kurald Galain, home to the long lost city of Kharkanas, a refugees commanded by Yedan Derryg, the Watch, await the breaching of Lightfall, and the coming of the Tiste Liosan. In this war they cannot win, they will die in the name of an empty city and a queen with no subjects.\n\nElsewhere, the three Elder Gods, Kilmandaros, Errastas and Sechul Lath, work to shatter the chains binding Korabas, the Otataral Dragon. Against her force of utter devastation, no mortal can stand. At the Gates of Starvald Demelain, the Azath House sealing the portal is dying. Soon will come the Eleint, dragons, and a final cataclysm.",
+                "_id": "59a19460-0190-45d7-9d85-3d5d9f048ac0"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "New Spring",
+                "series": "The Wheel of Time",
+                "numberInSeries": 0,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 423,
+                "year": 2004,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1311355164i/8892653.jpg",
+                "_createdOn": 1764599686237,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The prequel novel to the globally bestselling Wheel of Time series - a fantasy phenomenon\n\nThe city of Canluum lies close to the scarred and desolate wastes of the Blight, a walled haven from the dangers away to the north, and a refuge from the ill works of those who serve the Dark One. Or so it is said. The city that greets Al'Lan Mandragoran, exiled king of Malkier and the finest swordsman of his generation, is instead one that is rife with rumour and the whisperings of Shadowspawn. Proof, should he have required it, that the Dark One grows powerful once more and that his minions are at work throughout the lands.\n\nAnd yet it is within Canluum's walls that Lan will meet a woman who will shape his destiny. Moiraine is a young and powerful Aes Sedai who has journeyed to the city in search of a bondsman. She requires aid in a desperate quest to prove the truth of a vague and largely discredited prophecy - one that speaks of a means to turn back the shadow, and of a child who may be the dragon reborn.",
+                "_id": "73e303f1-f91c-4cf1-8949-da34d322a446"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Eye of the World",
+                "series": "The Wheel of Time",
+                "numberInSeries": 1,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 800,
+                "year": 1990,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1465920672i/8153988.jpg",
+                "_createdOn": 1764599686238,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The Wheel of Time turns and Ages come and pass, leaving memories that become legend. Legend fades to myth, and even myth is long forgotten when the Age that gave it birth returns again. What was, what will be, and what is, may yet fall under the Shadow.\n\nMoiraine Damodred arrives in Emond’s Field on a quest to find the one prophesized to stand against The Dark One, a malicious entity sowing the seeds of chaos and destruction. When a vicious band of half-men, half beasts invade the village seeking their master’s enemy, Moiraine persuades Rand al’Thor and his friends to leave their home and enter a larger unimaginable world filled with dangers waiting in the shadows and in the light.",
+                "_id": "daede8cc-eafd-499a-9b32-f0c7dc4f48d3"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Great Hunt",
+                "series": "The Wheel of Time",
+                "numberInSeries": 2,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 705,
+                "year": 1990,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1506238578i/8153989.jpg",
+                "_createdOn": 1764599686239,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The Forsaken are loose, the Horn of Valere has been found and the Dead are rising from their dreamless sleep. The Prophecies are being fulfilled - but Rand al'Thor, the shepherd the Aes Sedai have proclaimed as the Dragon Reborn, desperately seeks to escape his destiny.\n\nRand cannot run for ever. With every passing day the Dark One grows in strength and strives to shatter his ancient prison, to break the Wheel, to bring an end to Time and sunder the weave of the Pattern.\n\nAnd the Pattern demands the Dragon.",
+                "_id": "144158ce-53fe-4994-9488-47d644911b05"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Dragon Reborn",
+                "series": "The Wheel of Time",
+                "numberInSeries": 3,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 624,
+                "year": 1991,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1328309587i/8153990.jpg",
+                "_createdOn": 1764599686240,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The Dragon Reborn—the leader long prophesied who will save the world, but in the saving destroy it; the savior who will run mad and kill all those dearest to him—is on the run from his destiny.\n\nAble to touch the One Power, but unable to control it, and with no one to teach him how—for no man has done it in three thousand years—Rand al'Thor knows only that he must face the Dark One. But how?\n\nWinter has stopped the war—almost—yet men are dying, calling out for the Dragon. But where is he?\n\nPerrin Aybara is in pursuit with Moiraine Sedai, her Warder Lan, and Loial the Ogier. Bedeviled by dreams, Perrin is grappling with another deadly problem—how is he to escape the loss of his own humanity?\n\nEgwene, Elayne and Nynaeve are approaching Tar Valon, where Mat will be healed—if he lives until they arrive. But who will tell the Amyrlin their news—that the Black Ajah, long thought only a hideous rumor, is all too real? They cannot know that in Tar Valon far worse awaits...\n\nAhead, for all of them, in the Heart of the Stone, lies the next great test of the Dragon reborn....",
+                "_id": "21308944-5938-4cf8-bbfb-c2d419f6860e"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Shadow Rising",
+                "series": "The Wheel of Time",
+                "numberInSeries": 4,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 1007,
+                "year": 1992,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1328309590i/8153991.jpg",
+                "_createdOn": 1764599686241,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The seals of Shayol Ghul are weak now, and the Dark One reaches out. The Shadow is rising to cover humankind.\n\nIn Tar Valon, Min sees portents of hideous doom. Will the White Tower itself be broken?\n\nIn the Two Rivers, the Whitecloaks ride in pursuit of a man with golden eyes, and in pursuit of the Dragon Reborn.\n\nIn Cantorin, among the Sea Folk, High Lady Suroth plans the return of the Seanchan armies to the mainland.\n\nIn the Stone of Tear, the Lord Dragon considers his next move. It will be something no one expects, not the Black Ajah, not Tairen nobles, not Aes Sedai, not Egwene or Elayne or Nynaeve.\n\nAgainst the Shadow rising stands the Dragon Reborn.....",
+                "_id": "6881f7fc-8b5e-4722-be90-5f129fabac0a"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Fires of Heaven",
+                "series": "The Wheel of Time",
+                "numberInSeries": 5,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 989,
+                "year": 1993,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1627891529i/8148129.jpg",
+                "_createdOn": 1764599686242,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "Prophesized to defeat the Dark One, Rand al'Thor, the Dragon Reborn, has upset the balance of power across the land. Shaido Aiel are on the march, ravaging everything in their path. The White Tower's Amyrlin has been deposed, turning the Aes Sedai against one another. The forbidden city of Rhuidean is overrun by Shadowspawn.\n\nDespite the chaos swirling around him, Rand continues to learn how to harness his abilities, determined to wield the One Power--and ignoring the counsel of Moiraine Damodred at great cost.",
+                "_id": "18d8f73e-9efc-4417-b913-f91338584567"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Lord of Chaos",
+                "series": "The Wheel of Time",
+                "numberInSeries": 6,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 1011,
+                "year": 1994,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1328331731i/11203969.jpg",
+                "_createdOn": 1764599686243,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "On the slopes of Shayol Ghul, the Myrddraal swords are forged, and the sky is not the sky of this world ...\n\nIn Salidar the White Tower in exile prepares an embassy to Caemlyn, where Rand Al'Thor, the Dragon Reborn, holds the throne -- and where an unexpected visitor may change the world ...\n\nIn Emond's Field, Perrin Goldeneyes, Lord of the Two Rivers, feels the pull of ta'veren to ta'veren and prepares to march ...\n\nMorgase of Caemlyn finds a most unexpected, and quite unwelcome, ally ...\n\nAnd south lies Illian, where Sammael holds sway ...",
+                "_id": "86f42aa4-57e1-480b-8a9f-b8a853754948"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "A Crown of Swords",
+                "series": "The Wheel of Time",
+                "numberInSeries": 7,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 684,
+                "year": 1996,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1328331735i/11203971.jpg",
+                "_createdOn": 1764599686244,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The war for humanity's survival has begun.\n\nRand al'Thor, the Dragon Reborn, has escaped the snares of the White Tower and the first of the rebel Aes Sedai have sworn to follow him. Attacked by the servants of the Dark, threatened by the invading Seanchan, Rand rallies his forces and brings battle to bear upon Illian, stronghold of Sammael the Forsaken . . .\n\nIn the city of Ebou Dar, Elayne, Aviendha and Mat struggle to secure the ter'angreal that can break the Dark One's hold on the world's weather - and an ancient bane moves to oppose them. In the town of Salidar, Egwene al'Vere gathers an army to reclaim Tar Valon and reunite the Aes Sedai . . .\n\nAnd in Shadar Logoth, city of darkness, a terrible power awakens . . .",
+                "_id": "4135cbb0-9ffc-4246-8165-2a2d108a8252"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Path of Daggers",
+                "series": "The Wheel of Time",
+                "numberInSeries": 8,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 685,
+                "year": 1998,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1763068419i/75031540.jpg",
+                "_createdOn": 1764599686245,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The Seanchan invasion force is in possession of Ebou Dar. Nynaeve, Elayne, and Aviendha head for Caemlyn and Elayne's rightful throne, but on the way they discover an enemy much worse than the Seanchan.\n\nIn Illian, Rand vows to throw the Seanchan back as he did once before. But signs of madness are appearing among the Asha'man.\n\nIn Ghealdan, Perrin faces the intrigues of Whitecloaks, Seanchan invaders, the scattered Shaido Aiel, and the Prophet himself. Perrin's beloved wife, Faile, may pay with her life, and Perrin himself may have to destroy his soul to save her.\n\nMeanwhile the rebel Aes Sedai under their young Amyrlin, Egwene al'Vere, face an army that intends to keep them away from the White Tower. But Egwene is determined to unseat the usurper Elaida and reunite the Aes Sedai. She does not yet understand the price that others—and she herself—will pay.",
+                "_id": "a2dcc30c-4f95-4a1b-83a4-5a7418a2c9f2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Winter's Heart",
+                "series": "The Wheel of Time",
+                "numberInSeries": 9,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 780,
+                "year": 2000,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1316032011i/8479487.jpg",
+                "_createdOn": 1764599686246,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "Rand is on the run with Min, and in Cairhein, Cadsuane is trying to figure out where he is headed. Rand's destination is, in fact, one she has never considered.\n\nMazrim Taim, leader of the Black Tower, is revealed to be a liar. But what is he up to?\n\nFaile, with the Aiel Maidens, Bain and Chiad, and her companions, Queen Alliandre and Morgase, is prisoner of Savanna's sept.\n\nPerrin is desperately searching for Faile. With Elyas Machera, Berelain, the Prophet and a very mixed \"army\" of disparate forces, he is moving through country rife with bandits and roving Seanchan. The Forsaken are ever more present, and united, and the man called Slayer stalks Tel'aran'rhiod and the wolfdream.\n\nIn Ebou Dar, the Seanchan princess known as Daughter of the Nine Moons arrives--and Mat, who had been recuperating in the Tarasin Palace, is introduced to her. Will the marriage that has been foretold come about?\n\nThere are neither beginnings or endings to the turning of the Wheel of Time. But it is a beginning....",
+                "_id": "544aa42c-19cb-45ce-abe9-161e80efeede"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Crossroads of Twilight",
+                "series": "The Wheel of Time",
+                "numberInSeries": 10,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 704,
+                "year": 2003,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1364691484i/11183587.jpg",
+                "_createdOn": 1764599686247,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "Fleeing from Ebou Dar with the kidnapped Daughter of the Nine Moons, whom he is fated to marry, Mat Cauthon learns that he can neither keep her nor let her go, not in safety for either of them, for both the Shadow and the might of the Seanchan Empire are in deadly pursuit.\n\nPerrin Aybara seeks to free his wife, Faile, a captive of the Shaido, but his only hope may be an alliance with the enemy. Can he remain true to his friend Rand and to himself? For his love of Faile, Perrin is willing to sell his soul.\n\nAt Tar Valon, Egwene al'Vere, the young Amyrlin of the rebel Aes Sedai, lays siege to the heart of Aes Sedai power, but she must win quickly, with as little bloodshed as possible, for unless the Aes Sedai are reunited, only the male Asha'man will remain to defend the world against the Dark One, and nothing can hold the Asha'man themselves back from total power except the Aes Sedai and a unified White Tower.\n\nIn Andor, Elayne Trakland fights for the Lion Throne that is hers by right, but enemies and Darkfriends surround her, plotting her destruction. If she fails, Andor may fall to the Shadow, and the Dragon Reborn with it.\n\nRand al'Thor, the Dragon Reborn himself, has cleansed the Dark One's taint from the male half of the True Source, and everything has changed. Yet nothing has, for only men who can channel believe that saidin is clean again, and a man who can channel is still hated and feared-even one prophesied to save the world. Now, Rand must gamble again, with himself at stake, and he cannot be sure which of his allies are really enemies. ",
+                "_id": "9c9d685c-a580-4aca-96db-492aba5b0ee3"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Knife of Dreams",
+                "series": "The Wheel of Time",
+                "numberInSeries": 11,
+                "author": "Robert Jordan",
+                "genre": "Fantasy",
+                "pages": 860,
+                "year": 2005,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1328321554i/8260859.jpg",
+                "_createdOn": 1764599686248,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The dead are walking, men die impossible deaths, and it seems as though reality itself has become unstable: All are signs of the imminence of Tarmon Gai'don, the Last Battle, when Rand al'Thor, the Dragon Reborn, must confront the Dark One as humanity's only hope. But Rand dares not fight until he possesses all the surviving seals on the Dark One's prison and has dealt with the Seanchan, who threaten to overrun all nations this side of the Aryth Ocean and increasingly seem too entrenched to be fought off. But his attempt to make a truce with the Seanchan is shadowed by treachery that may cost him everything. Whatever the price, though, he must have that truce. And he faces other dangers.\n\nThe winds of time have become a storm, and things that everyone believes are fixed in place forever are changing before their eyes. Even the White Tower itself is no longer a place of safety. Now Rand, Perrin and Mat, Egwene and Elayne, Nynaeve and Lan, and even Loial, must ride those storm winds, or the Dark One will triumph.",
+                "_id": "909f2088-397d-42e0-b697-f97dd2d28f91"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "The Gathering Storm",
+                "series": "The Wheel of Time",
+                "numberInSeries": 12,
+                "author": "Robert Jordan & Brandon Sanderson",
+                "genre": "Fantasy",
+                "pages": 824,
+                "year": 2009,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1412064722i/22522646.jpg",
+                "_createdOn": 1764599686249,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "Tarmon Gai'don, the Last Battle, looms. And mankind is not ready.\n\nThe final volume of the Wheel of Time, A Memory of Light, was partially written by Robert Jordan before his untimely passing in 2007. Brandon Sanderson, New York Times bestselling author of the Mistborn books, and now Stormlight Archive, among others, was chosen by Jordan's editor--his wife, Harriet McDougal--to complete the final volume, later expanded to three books.\n\nIn this epic novel, Robert Jordan's international bestselling series begins its dramatic conclusion. Rand al'Thor, the Dragon Reborn, struggles to unite a fractured network of kingdoms and alliances in preparation for the Last Battle. As he attempts to halt the Seanchan encroachment northward--wishing he could form at least a temporary truce with the invaders--his allies watch in terror the shadow that seems to be growing within the heart of the Dragon Reborn himself.\n\nEgwene al'Vere, the Amyrlin Seat of the rebel Aes Sedai, is a captive of the White Tower and subject to the whims of their tyrannical leader. As days tick toward the Seanchan attack she knows is imminent, Egwene works to hold together the disparate factions of Aes Sedai while providing leadership in the face of increasing uncertainty and despair. Her fight will prove the mettle of the Aes Sedai, and her conflict will decide the future of the White Tower--and possibly the world itself.",
+                "_id": "70f11040-4ef0-4b91-959b-ad2d8ea667cd"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "Towers of Midnight",
+                "series": "The Wheel of Time",
+                "numberInSeries": 13,
+                "author": "Robert Jordan & Brandon Sanderson",
+                "genre": "Fantasy",
+                "pages": 863,
+                "year": 2010,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1418113446i/23168792.jpg",
+                "_createdOn": 1764599686250,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The end draws near....\n\nThe Last Battle has started. The seals on the Dark One’s prison are crumbling. The Pattern itself is unraveling, and the armies of the Shadow have begun to boil out of the Blight.\n\nThe sun has begun to set upon the Third Age.\n\nPerrin Aybara is now hunted by specters from his past: Whitecloaks, a slayer of wolves, and the responsibilities of leadership. All the while, an unseen foe is slowly pulling a noose tight around his neck. To prevail, he must seek answers in Tel’aran’rhiod and find a way--at long last--to master the wolf within him or lose himself to it forever\n\nMeanwhile, Matrim Cauthon prepares for the most difficult challenge of his life. The creatures beyond the stone gateways--the Aelfinn and the Eelfinn--have confused him, taunted him, and left him hanged, his memory stuffed with bits and pieces of other men’s lives. He had hoped that his last confrontation with them would be the end of it, but the Wheel weaves as the Wheel wills. The time is coming when he will again have to dance with the Snakes and the Foxes, playing a game that cannot be won. The Tower of Ghenjei awaits, and its secrets will reveal the fate of a friend long lost.\n\nThis penultimate novel of Robert Jordan’s #1 New York Times bestselling series--the second of three based on materials he left behind when he died in 2007--brings dramatic and compelling developments to many threads in the Pattern. The end draws near.\n\nDovie’andi se tovya sagain. It’s time to toss the dice.",
+                "_id": "3d0b3913-b09d-4cf3-9f47-d2aece98759a"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "title": "A Memory of Light",
+                "series": "The Wheel of Time",
+                "numberInSeries": 14,
+                "author": "Robert Jordan & Brandon Sanderson",
+                "genre": "Fantasy",
+                "pages": 912,
+                "year": 2013,
+                "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1647270202i/7743175.jpg",
+                "_createdOn": 1764599686251,
+                "tags": [
+                    "epic-fantasy",
+                    "classic"
+                ],
+                "description": "The Wheel of Time turns and Ages come and go, leaving memories that become legend. Legend fades to myth, and even myth is long forgotten when the Age that gave it birth returns again. In the Third Age, an Age of Prophecy, the World and Time themselves hang in the balance. What was, what will be, and what is, may yet fall under the Shadow.\n\nWhen Robert Jordan died in 2007, all feared that these concluding scenes would never be written. But working from notes and partials left by Jordan, established fantasy writer Brandon Sanderson stepped in to complete the masterwork. With The Gathering Storm (Book 12) and Towers of Midnight (Book 13) behind him, Sanderson now re-creates the vision that Robert Jordan left behind.\n\nEdited by Jordan's widow, who edited all of Jordan's books, A Memory of Light will delight, enthrall, and deeply satisfy all of Jordan's legions of readers.\n\nThe Wheel of Time turns, and Ages come and pass.\nWhat was, what will be, and what is,\nmay yet fall under the Shadow.\nLet the Dragon ride again on the winds of time.",
+                "_id": "8bee0f72-6877-4e06-9a2a-027a0b151a61"
+            }
+        ],
+        recipes: {
+            "3987279d-0ad4-4afb-8ca9-5b256ae3b298": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                name: "Easy Lasagna",
+                img: "assets/lasagna.jpg",
+                ingredients: [
+                    "1 tbsp Ingredient 1",
+                    "2 cups Ingredient 2",
+                    "500 g  Ingredient 3",
+                    "25 g Ingredient 4"
+                ],
+                steps: [
+                    "Prepare ingredients",
+                    "Mix ingredients",
+                    "Cook until done"
+                ],
+                _createdOn: 1613551279012
+            },
+            "8f414b4f-ab39-4d36-bedb-2ad69da9c830": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                name: "Grilled Duck Fillet",
+                img: "assets/roast.jpg",
+                ingredients: [
+                    "500 g  Ingredient 1",
+                    "3 tbsp Ingredient 2",
+                    "2 cups Ingredient 3"
+                ],
+                steps: [
+                    "Prepare ingredients",
+                    "Mix ingredients",
+                    "Cook until done"
+                ],
+                _createdOn: 1613551344360
+            },
+            "985d9eab-ad2e-4622-a5c8-116261fb1fd2": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                name: "Roast Trout",
+                img: "assets/fish.jpg",
+                ingredients: [
+                    "4 cups Ingredient 1",
+                    "1 tbsp Ingredient 2",
+                    "1 tbsp Ingredient 3",
+                    "750 g  Ingredient 4",
+                    "25 g Ingredient 5"
+                ],
+                steps: [
+                    "Prepare ingredients",
+                    "Mix ingredients",
+                    "Cook until done"
+                ],
+                _createdOn: 1613551388703
+            }
+        },
+        comments: {
+            "0a272c58-b7ea-4e09-a000-7ec988248f66": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                content: "Great recipe!",
+                recipeId: "8f414b4f-ab39-4d36-bedb-2ad69da9c830",
+                _createdOn: 1614260681375,
+                _id: "0a272c58-b7ea-4e09-a000-7ec988248f66"
+            }
+        },
+        records: {
+            i01: {
+                name: "John1",
+                val: 1,
+                _createdOn: 1613551388703
+            },
+            i02: {
+                name: "John2",
+                val: 1,
+                _createdOn: 1613551388713
+            },
+            i03: {
+                name: "John3",
+                val: 2,
+                _createdOn: 1613551388723
+            },
+            i04: {
+                name: "John4",
+                val: 2,
+                _createdOn: 1613551388733
+            },
+            i05: {
+                name: "John5",
+                val: 2,
+                _createdOn: 1613551388743
+            },
+            i06: {
+                name: "John6",
+                val: 3,
+                _createdOn: 1613551388753
+            },
+            i07: {
+                name: "John7",
+                val: 3,
+                _createdOn: 1613551388763
+            },
+            i08: {
+                name: "John8",
+                val: 2,
+                _createdOn: 1613551388773
+            },
+            i09: {
+                name: "John9",
+                val: 3,
+                _createdOn: 1613551388783
+            },
+            i10: {
+                name: "John10",
+                val: 1,
+                _createdOn: 1613551388793
+            }
+        },
+        catches: {
+            "07f260f4-466c-4607-9a33-f7273b24f1b4": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                angler: "Paulo Admorim",
+                weight: 636,
+                species: "Atlantic Blue Marlin",
+                location: "Vitoria, Brazil",
+                bait: "trolled pink",
+                captureTime: 80,
+                _createdOn: 1614760714812,
+                _id: "07f260f4-466c-4607-9a33-f7273b24f1b4"
+            },
+            "bdabf5e9-23be-40a1-9f14-9117b6702a9d": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                angler: "John Does",
+                weight: 554,
+                species: "Atlantic Blue Marlin",
+                location: "Buenos Aires, Argentina",
+                bait: "trolled pink",
+                captureTime: 120,
+                _createdOn: 1614760782277,
+                _id: "bdabf5e9-23be-40a1-9f14-9117b6702a9d"
+            }
+        },
+        furniture: {
+        },
+        orders: {
+        },
+        movies: {
+            "1240549d-f0e0-497e-ab99-eb8f703713d7": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                title: "Black Widow",
+                description: "Natasha Romanoff aka Black Widow confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises. Comes on the screens 2020.",
+                img: "https://miro.medium.com/max/735/1*akkAa2CcbKqHsvqVusF3-w.jpeg",
+                _createdOn: 1614935055353,
+                _id: "1240549d-f0e0-497e-ab99-eb8f703713d7"
+            },
+            "143e5265-333e-4150-80e4-16b61de31aa0": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                title: "Wonder Woman 1984",
+                description: "Diana must contend with a work colleague and businessman, whose desire for extreme wealth sends the world down a path of destruction, after an ancient artifact that grants wishes goes missing.",
+                img: "https://pbs.twimg.com/media/ETINgKwWAAAyA4r.jpg",
+                _createdOn: 1614935181470,
+                _id: "143e5265-333e-4150-80e4-16b61de31aa0"
+            },
+            "a9bae6d8-793e-46c4-a9db-deb9e3484909": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                title: "Top Gun 2",
+                description: "After more than thirty years of service as one of the Navy's top aviators, Pete Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him.",
+                img: "https://i.pinimg.com/originals/f2/a4/58/f2a458048757bc6914d559c9e4dc962a.jpg",
+                _createdOn: 1614935268135,
+                _id: "a9bae6d8-793e-46c4-a9db-deb9e3484909"
+            }
+        },
+        likes: {
+        },
+        ideas: {
+            "833e0e57-71dc-42c0-b387-0ce0caf5225e": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                title: "Best Pilates Workout To Do At Home",
+                description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minima possimus eveniet ullam aspernatur corporis tempore quia nesciunt nostrum mollitia consequatur. At ducimus amet aliquid magnam nulla sed totam blanditiis ullam atque facilis corrupti quidem nisi iusto saepe, consectetur culpa possimus quos? Repellendus, dicta pariatur! Delectus, placeat debitis error dignissimos nesciunt magni possimus quo nulla, fuga corporis maxime minus nihil doloremque aliquam quia recusandae harum. Molestias dolorum recusandae commodi velit cum sapiente placeat alias rerum illum repudiandae? Suscipit tempore dolore autem, neque debitis quisquam molestias officia hic nesciunt? Obcaecati optio fugit blanditiis, explicabo odio at dicta asperiores distinctio expedita dolor est aperiam earum! Molestias sequi aliquid molestiae, voluptatum doloremque saepe dignissimos quidem quas harum quo. Eum nemo voluptatem hic corrupti officiis eaque et temporibus error totam numquam sequi nostrum assumenda eius voluptatibus quia sed vel, rerum, excepturi maxime? Pariatur, provident hic? Soluta corrupti aspernatur exercitationem vitae accusantium ut ullam dolor quod!",
+                img: "./images/best-pilates-youtube-workouts-2__medium_4x3.jpg",
+                _createdOn: 1615033373504,
+                _id: "833e0e57-71dc-42c0-b387-0ce0caf5225e"
+            },
+            "247efaa7-8a3e-48a7-813f-b5bfdad0f46c": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                title: "4 Eady DIY Idea To Try!",
+                description: "Similique rem culpa nemo hic recusandae perspiciatis quidem, quia expedita, sapiente est itaque optio enim placeat voluptates sit, fugit dignissimos tenetur temporibus exercitationem in quis magni sunt vel. Corporis officiis ut sapiente exercitationem consectetur debitis suscipit laborum quo enim iusto, labore, quod quam libero aliquid accusantium! Voluptatum quos porro fugit soluta tempore praesentium ratione dolorum impedit sunt dolores quod labore laudantium beatae architecto perspiciatis natus cupiditate, iure quia aliquid, iusto modi esse!",
+                img: "./images/brightideacropped.jpg",
+                _createdOn: 1615033452480,
+                _id: "247efaa7-8a3e-48a7-813f-b5bfdad0f46c"
+            },
+            "b8608c22-dd57-4b24-948e-b358f536b958": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                title: "Dinner Recipe",
+                description: "Consectetur labore et corporis nihil, officiis tempora, hic ex commodi sit aspernatur ad minima? Voluptas nesciunt, blanditiis ex nulla incidunt facere tempora laborum ut aliquid beatae obcaecati quidem reprehenderit consequatur quis iure natus quia totam vel. Amet explicabo quidem repellat unde tempore et totam minima mollitia, adipisci vel autem, enim voluptatem quasi exercitationem dolor cum repudiandae dolores nostrum sit ullam atque dicta, tempora iusto eaque! Rerum debitis voluptate impedit corrupti quibusdam consequatur minima, earum asperiores soluta. A provident reiciendis voluptates et numquam totam eveniet! Dolorum corporis libero dicta laborum illum accusamus ullam?",
+                img: "./images/dinner.jpg",
+                _createdOn: 1615033491967,
+                _id: "b8608c22-dd57-4b24-948e-b358f536b958"
+            }
+        },
+        catalog: {
+            "53d4dbf5-7f41-47ba-b485-43eccb91cb95": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                make: "Table",
+                model: "Swedish",
+                year: 2015,
+                description: "Medium table",
+                price: 235,
+                img: "./images/table.png",
+                material: "Hardwood",
+                _createdOn: 1615545143015,
+                _id: "53d4dbf5-7f41-47ba-b485-43eccb91cb95"
+            },
+            "f5929b5c-bca4-4026-8e6e-c09e73908f77": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                make: "Sofa",
+                model: "ES-549-M",
+                year: 2018,
+                description: "Three-person sofa, blue",
+                price: 1200,
+                img: "./images/sofa.jpg",
+                material: "Frame - steel, plastic; Upholstery - fabric",
+                _createdOn: 1615545572296,
+                _id: "f5929b5c-bca4-4026-8e6e-c09e73908f77"
+            },
+            "c7f51805-242b-45ed-ae3e-80b68605141b": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                make: "Chair",
+                model: "Bright Dining Collection",
+                year: 2017,
+                description: "Dining chair",
+                price: 180,
+                img: "./images/chair.jpg",
+                material: "Wood laminate; leather",
+                _createdOn: 1615546332126,
+                _id: "c7f51805-242b-45ed-ae3e-80b68605141b"
+            }
+        },
+        teams: {
+            "34a1cab1-81f1-47e5-aec3-ab6c9810efe1": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                name: "Storm Troopers",
+                logoUrl: "/assets/atat.png",
+                description: "These ARE the droids we're looking for",
+                _createdOn: 1615737591748,
+                _id: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1"
+            },
+            "dc888b1a-400f-47f3-9619-07607966feb8": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                name: "Team Rocket",
+                logoUrl: "/assets/rocket.png",
+                description: "Gotta catch 'em all!",
+                _createdOn: 1615737655083,
+                _id: "dc888b1a-400f-47f3-9619-07607966feb8"
+            },
+            "733fa9a1-26b6-490d-b299-21f120b2f53a": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                name: "Minions",
+                logoUrl: "/assets/hydrant.png",
+                description: "Friendly neighbourhood jelly beans, helping evil-doers succeed.",
+                _createdOn: 1615737688036,
+                _id: "733fa9a1-26b6-490d-b299-21f120b2f53a"
+            }
+        },
+        members: {
+            "cc9b0a0f-655d-45d7-9857-0a61c6bb2c4d": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
+                status: "member",
+                _createdOn: 1616236790262,
+                _updatedOn: 1616236792930
+            },
+            "61a19986-3b86-4347-8ca4-8c074ed87591": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
+                status: "member",
+                _createdOn: 1616237188183,
+                _updatedOn: 1616237189016
+            },
+            "8a03aa56-7a82-4a6b-9821-91349fbc552f": {
+                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
+                teamId: "733fa9a1-26b6-490d-b299-21f120b2f53a",
+                status: "member",
+                _createdOn: 1616237193355,
+                _updatedOn: 1616237195145
+            },
+            "9be3ac7d-2c6e-4d74-b187-04105ab7e3d6": {
+                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
+                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
+                status: "member",
+                _createdOn: 1616237231299,
+                _updatedOn: 1616237235713
+            },
+            "280b4a1a-d0f3-4639-aa54-6d9158365152": {
+                _ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
+                status: "member",
+                _createdOn: 1616237257265,
+                _updatedOn: 1616237278248
+            },
+            "e797fa57-bf0a-4749-8028-72dba715e5f8": {
+                _ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
+                status: "member",
+                _createdOn: 1616237272948,
+                _updatedOn: 1616237293676
+            }
+        }
     };
     var rules$1 = {
-    	users: {
-    		".create": false,
-    		".read": [
-    			"Owner"
-    		],
-    		".update": false,
-    		".delete": false
-    	},
-    	members: {
-    		".update": "isOwner(user, get('teams', data.teamId))",
-    		".delete": "isOwner(user, get('teams', data.teamId)) || isOwner(user, data)",
-    		"*": {
-    			teamId: {
-    				".update": "newData.teamId = data.teamId"
-    			},
-    			status: {
-    				".create": "newData.status = 'pending'"
-    			}
-    		}
-    	}
+        users: {
+            ".create": false,
+            ".read": [
+                "Owner"
+            ],
+            ".update": false,
+            ".delete": false
+        },
+        members: {
+            ".update": "isOwner(user, get('teams', data.teamId))",
+            ".delete": "isOwner(user, get('teams', data.teamId)) || isOwner(user, data)",
+            "*": {
+                teamId: {
+                    ".update": "newData.teamId = data.teamId"
+                },
+                status: {
+                    ".create": "newData.status = 'pending'"
+                }
+            }
+        }
     };
     var settings = {
-    	identity: identity,
-    	protectedData: protectedData,
-    	seedData: seedData,
-    	rules: rules$1
+        identity: identity,
+        protectedData: protectedData,
+        seedData: seedData,
+        rules: rules$1
     };
 
     const plugins = [

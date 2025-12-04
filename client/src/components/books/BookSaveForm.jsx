@@ -1,30 +1,58 @@
-// pages/BookCreateForm.jsx
-import { useNavigate } from "react-router";
+import { useEffect, useMemo } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useFormRequest } from "../../hooks/useFormRequest";
+import { useFetch } from "../../hooks/useRequest";
 
-const initialValues = {
-    title: "",
-    author: "",
-    genre: "",
-    isbn: "",
-    pages: "",
-    year: "",
-    coverUrl: "",
-    tags: "",
-    description: "",
-};
-
-export default function BookCreateForm() {
+export default function BookSaveForm() {
     const navigate = useNavigate();
+    const { bookId } = useParams();
+    const isEdit = Boolean(bookId);
+
+    const { data: book, loading: loadingBook, error: bookError } = useFetch(
+        isEdit ? `/data/books/${bookId}` : null,
+        { immediate: isEdit }
+    );
+
+    const initialValues = useMemo(() => {
+        if (isEdit && book) {
+            return {
+                title: book.title ?? "",
+                author: book.author ?? "",
+                genre: book.genre ?? "",
+                isbn: book.isbn ?? "",
+                pages: book.pages ?? "",
+                year: book.year ?? "",
+                coverUrl: book.coverUrl ?? "",
+                tags: book.tags ? book.tags.join(", ") : "",
+                description: book.description ?? "",
+                numberInSeries: book.numberInSeries ?? "",
+                series: book.series ?? "",
+            };
+        }
+        return {
+            title: "",
+            author: "",
+            genre: "",
+            isbn: "",
+            pages: "",
+            year: "",
+            coverUrl: "",
+            tags: "",
+            description: "",
+            numberInSeries: "",
+            series: "",
+        };
+    }, [isEdit, book]);
 
     const {
         registerInput,
         formProps,
         loading,
         error,
+        reset,
     } = useFormRequest({
-        path: "/data/books",
-        method: "POST",
+        path: isEdit ? `/data/books/${bookId}` : "/data/books",
+        method: isEdit ? "PUT" : "POST",
         initialValues,
         withAuth: true,
         mapValues: (values) => ({
@@ -33,32 +61,63 @@ export default function BookCreateForm() {
             year: values.year ? Number(values.year) : undefined,
             numberInSeries: values.numberInSeries ? Number(values.numberInSeries) : undefined,
             tags: values.tags
-              ? values.tags.split(",").map(t => t.trim()).filter(Boolean)
-              : [],
+                ? values.tags.split(",").map(t => t.trim()).filter(Boolean)
+                : [],
         }),
         onSuccess: (data, reset) => {
             reset();
-            navigate("/catalog");
+            if (isEdit) {
+                navigate(`/catalog/${bookId}/details`);
+            } else {
+                navigate("/catalog");
+            }
         },
     });
 
-    const handleCancel = () => navigate("/books");
+    // Populate form when book data arrives (edit mode)
+        useEffect(() => {
+        if (!isEdit || !book) return;
+        const vals = {
+            title: book.title ?? "",
+            author: book.author ?? "",
+            genre: book.genre ?? "",
+            isbn: book.isbn ?? "",
+            pages: book.pages ?? "",
+            year: book.year ?? "",
+            coverUrl: book.coverUrl ?? "",
+            tags: book.tags ? book.tags.join(", ") : "",
+            description: book.description ?? "",
+            numberInSeries: book.numberInSeries ?? "",
+            series: book.series ?? "",
+        };
+        reset(vals);
+    }, [isEdit, book, reset]);
+
+    const handleCancel = () => navigate(isEdit ? `/catalog/${bookId}/details` : "/catalog");
+
+    if (isEdit && loadingBook) {
+        return <div className="flex-1 flex items-center justify-center">Loading...</div>;
+    }
+
+    if (isEdit && bookError) {
+        return <div className="flex-1 flex items-center justify-center">Failed to load book for editing</div>;
+    }
 
     return (
         <main className="flex-1">
             <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
                 <header className="space-y-2">
                     <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-                        Add a new book
+                        {isEdit ? "Edit book" : "Add a new book"}
                     </h1>
                     <p className="text-sm text-slate-400 max-w-2xl">
-                        Add a book to your catalog. You can always edit these details later.
+                        {isEdit ? "Update the book details." : "Add a book to your catalog. You can always edit these details later."}
                     </p>
                 </header>
 
                 {error && (
                     <p className="text-sm text-red-400">
-                        {error.message || "Something went wrong while creating the book."}
+                        {error.message || "Something went wrong while saving the book."}
                     </p>
                 )}
                 {loading && (

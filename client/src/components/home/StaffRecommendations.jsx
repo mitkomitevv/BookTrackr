@@ -1,42 +1,35 @@
+import { useMemo } from "react";
 import BookCard from "../book-card/BookCard";
-
-const STAFF_PICKS = [
-    {
-        id: 1,
-        title: "A Song for Distant Suns",
-        author: "Marcos Ibarra",
-        tags: ["Sci-Fi", "Space Opera"],
-        description:
-            "A sweeping, character-driven space epic about the last signal from a dying star — and the people obsessed with decoding it.",
-        rating: "4.48",
-        ratingsCount: "12.1k",
-        coverUrl: "/images/books/distant-suns.jpg",
-    },
-    {
-        id: 2,
-        title: "The House Between Seasons",
-        author: "Aya Morrow",
-        tags: ["Fantasy", "Cozy"],
-        description:
-            "A quiet, atmospheric fantasy set in an inn that only appears on the border of seasons, hosting travelers out of time.",
-        rating: "4.35",
-        ratingsCount: "6.4k",
-        coverUrl: "/images/books/house-between-seasons.jpg",
-    },
-    {
-        id: 3,
-        title: "Margins of the Map",
-        author: "Noah Clarke",
-        tags: ["Literary", "Contemporary"],
-        description:
-            "A cartographer returns to his hometown to redraw the coastline and confront the fault lines of his past.",
-        rating: "4.02",
-        ratingsCount: "3.9k",
-        coverUrl: "/images/books/margins-of-the-map.jpg",
-    },
-];
+import { useFetch } from "../../hooks/useRequest";
 
 export default function StaffRecommendations() {
+    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home', { immediate: true });
+    const RAW_RECOMMENDATIONS = useMemo(() => settings?.staffRecommendations || [], [settings]);
+
+    const idPicks = useMemo(() => {
+        if (!Array.isArray(RAW_RECOMMENDATIONS)) return [];
+        return RAW_RECOMMENDATIONS.map(p => (typeof p === 'object' ? (p._id || p.id) : String(p))).filter(Boolean);
+    }, [RAW_RECOMMENDATIONS]);
+
+    // Request only the picked books from the server
+    const booksPath = useMemo(() => {
+        if (idPicks.length === 0) return null;
+        const inside = idPicks.map(id => id.toString().replace(/"/g, '\\"')).join('","');
+        const clause = `_id in ("${inside}")`;
+        return `/data/books?where=${encodeURIComponent(clause)}`;
+    }, [idPicks]);
+
+    const { data: booksData, loading: booksLoading, error: booksError } = useFetch(booksPath, { immediate: Boolean(booksPath) });
+
+    const recommended = useMemo(() => {
+        if (!Array.isArray(idPicks) || idPicks.length === 0) return [];
+        const books = Array.isArray(booksData) ? booksData : [];
+        return idPicks.map(id => books.find(b => b._id == id || b.id == id)).filter(Boolean);
+    }, [idPicks, booksData]);
+
+    const loading = settingsLoading || booksLoading;
+    const error = settingsError || booksError;
+
     return (
         <section className="space-y-4">
             <div className="flex items-center justify-between gap-4">
@@ -51,18 +44,12 @@ export default function StaffRecommendations() {
             </div>
 
             <div className="grid gap-4 sm:gap-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
-                {STAFF_PICKS.map((book) => (
-                    <BookCard
-                        key={book.id}
-                        title={book.title}
-                        author={book.author}
-                        description={book.description}
-                        tags={book.tags}
-                        rating={book.rating}
-                        ratingsCount={book.ratingsCount}
-                        coverUrl={book.coverUrl}
-                        href="#"
-                    />
+                {loading && <div className="text-sm text-slate-400">Loading recommendations…</div>}
+                {error && <div className="text-sm text-red-400">Failed to load recommendations</div>}
+                {!loading && recommended.length === 0 && <div className="text-sm text-slate-400">No recommendations set.</div>}
+
+                {recommended.map((book) => (
+                    <BookCard key={book._id} {...book} />
                 ))}
             </div>
         </section>

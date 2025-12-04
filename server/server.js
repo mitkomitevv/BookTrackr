@@ -484,7 +484,7 @@
             '>=': (prop, value) => record => record[prop] >= JSON.parse(value),
             '>': (prop, value) => record => record[prop] > JSON.parse(value),
             '=': (prop, value) => record => record[prop] == JSON.parse(value),
-            ' like ': (prop, value) => record => record[prop].toLowerCase().includes(JSON.parse(value).toLowerCase()),
+            ' like ': (prop, value) => record => String(record[prop] ?? '').toLowerCase().includes(JSON.parse(value).toLowerCase()),
             ' in ': (prop, value) => record => JSON.parse(`[${/\((.+?)\)/.exec(value)[1]}]`).includes(record[prop]),
         };
         const pattern = new RegExp(`^(.+?)(${Object.keys(operators).join('|')})(.+?)$`, 'i');
@@ -826,6 +826,27 @@
         const storage = createInstance(settings.seedData);
         const protectedStorage = createInstance(settings.protectedData);
 
+        // Restore session records for any seeded users that include an `accessToken`.
+        // This ensures seeded tokens remain valid across server restarts for the
+        // development server (avoids confusing 403s when sessions are stored in-memory).
+        try {
+            const seededUsers = protectedStorage.get('users') || [];
+            for (const u of seededUsers) {
+                if (u && u.accessToken) {
+                    // If a session with this accessToken already exists, skip
+                    const existing = protectedStorage.query('sessions', { accessToken: u.accessToken })[0];
+                    if (existing) continue;
+
+                    // Create a session entry and set its accessToken to the seeded value
+                    let s = protectedStorage.add('sessions', { userId: u._id });
+                    s = protectedStorage.set('sessions', s._id, Object.assign({ accessToken: u.accessToken }, s));
+                }
+            }
+        } catch (err) {
+            // non-fatal - if protectedStorage doesn't have users/sessions yet, ignore
+            console.error('Failed to restore seeded sessions:', err && err.message);
+        }
+
         return function decoreateContext(context, request) {
             context.storage = storage;
             context.protectedStorage = protectedStorage;
@@ -844,11 +865,29 @@
         for (let collectionName in seedData) {
             if (seedData.hasOwnProperty(collectionName)) {
                 const collection = new Map();
-                for (let recordId in seedData[collectionName]) {
-                    if (seedData.hasOwnProperty(collectionName)) {
-                        collection.set(recordId, seedData[collectionName][recordId]);
+                const source = seedData[collectionName];
+
+                // Support seed data as either an object keyed by id or as an array
+                // of records. When it's an array, prefer the record's own `_id` or
+                // `id` as the storage key so seeded ids are preserved. Otherwise
+                // fall back to generating a uuid.
+                if (Array.isArray(source)) {
+                    for (let item of source) {
+                        if (!item) continue;
+                        const key = item._id || item.id || uuid$2();
+                        // store a shallow copy without the duplicated _id key in value
+                        const stored = Object.assign({}, item);
+                        delete stored._id;
+                        collection.set(key, stored);
+                    }
+                } else {
+                    for (let recordId in source) {
+                        if (source.hasOwnProperty(recordId)) {
+                            collection.set(recordId, source[recordId]);
+                        }
                     }
                 }
+
                 collections.set(collectionName, collection);
             }
         }
@@ -1057,6 +1096,9 @@
     }
 
     function deepCopy(value) {
+        if (value === null) {
+            return null;
+        }
         if (Array.isArray(value)) {
             return value.map(deepCopy);
         } else if (typeof value == 'object') {
@@ -1083,12 +1125,29 @@
             const userToken = request.headers['x-authorization'];
             if (userToken !== undefined) {
                 let user;
+                console.log('Incoming auth token:', userToken ? (userToken.length > 12 ? userToken.slice(0, 8) + '...' : userToken) : '<none>');
                 const session = findSessionByToken(userToken);
                 if (session !== undefined) {
+                    console.log('Found session for token, sessionId=', session._id, 'userId=', session.userId);
                     const userData = context.protectedStorage.get('users', session.userId);
                     if (userData !== undefined) {
                         console.log('Authorized as ' + userData[identity]);
                         user = userData;
+                    } else {
+                        console.log('Session referenced missing user:', session.userId);
+                    }
+                } else {
+                    console.log('No session found for token; trying seeded user fallback');
+                    try {
+                        const seeded = context.protectedStorage.query('users', { accessToken: userToken })[0];
+                        if (seeded) {
+                            console.log('Authorized (seed) as ' + seeded[identity]);
+                            user = seeded;
+                        } else {
+                            console.log('No seeded user matched token');
+                        }
+                    } catch (e) {
+                        console.error('Seeded user fallback error:', e && e.message);
                     }
                 }
                 if (user !== undefined) {
@@ -1128,8 +1187,21 @@
                         const result = targetUser[0];
                         delete result.hashedPassword;
 
-                        const session = saveSession(result._id);
-                        result.accessToken = session.accessToken;
+                        // const session = saveSession(result._id);
+                        // result.accessToken = session.accessToken;
+
+                        let session = saveSession(result._id);
+
+                        if (result.accessToken) {
+                            try {
+                                session = context.protectedStorage.set('sessions', session._id, Object.assign({ accessToken: result.accessToken }, session));
+                                result.accessToken = result.accessToken;
+                            } catch (e) {
+                                result.accessToken = session.accessToken;
+                            }
+                        } else {
+                            result.accessToken = session.accessToken;
+                        }
 
                         return result;
                     } else {
@@ -2338,6 +2410,17 @@
                 "_id": "8bee0f72-6877-4e06-9a2a-027a0b151a61"
             }
         ],
+        "settings": {
+            home: {
+                pickOfMonth: "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                pickOfMonthReview: "That's such a fantastic book that keeps you hooked from the beginning to the end. The characters are well-developed, and the plot twists kept me on the edge of my seat. Highly recommended!",
+                staffRecommendations: [
+                    "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                    "5321337c-6c3e-4515-b034-fd905a39bb68",
+                    "73e303f1-f91c-4cf1-8949-da34d322a446"
+                ]
+            }
+        },
         recipes: {
             "3987279d-0ad4-4afb-8ca9-5b256ae3b298": {
                 _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",

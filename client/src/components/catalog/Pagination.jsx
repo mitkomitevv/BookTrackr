@@ -1,6 +1,4 @@
-import React from "react";
-
-export default function Pagination({ page = 1, pageSize = 10, total = null, onPageChange = () => { }, onPageSizeChange = () => { } }) {
+export default function Pagination({ page = 1, pageSize = 10, total = null, onPageChange = () => { }, onPageSizeChange = () => { }, hidePageSize = false }) {
     const totalPages = total ? Math.max(1, Math.ceil(total / pageSize)) : null;
 
     const goto = (p) => {
@@ -14,6 +12,13 @@ export default function Pagination({ page = 1, pageSize = 10, total = null, onPa
     return (
         <div className="flex items-center justify-center gap-4 pt-4 text-sm">
             <div className="flex items-center gap-2">
+                <button
+                    onClick={() => goto(1)}
+                    disabled={page === 1}
+                    className={`px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    First
+                </button>
                 <button
                     onClick={() => goto(page - 1)}
                     className="px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition"
@@ -64,22 +69,31 @@ export default function Pagination({ page = 1, pageSize = 10, total = null, onPa
                 >
                     Next
                 </button>
+                <button
+                    onClick={() => goto(totalPages || 1)}
+                    disabled={totalPages ? page === totalPages : true}
+                    className={`px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${totalPages && page === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    Last
+                </button>
             </div>
 
-            <div className="flex items-center gap-2">
-                <label className="text-slate-400 text-xs">Per page</label>
-                <select
-                    value={pageSize}
-                    onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                    className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-slate-200"
-                >
-                    {pageSizes.map((s) => (
-                        <option key={s} value={s}>
-                            {s}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            {!hidePageSize && (
+                <div className="flex items-center gap-2">
+                    <label className="text-slate-400 text-xs">Per page</label>
+                    <select
+                        value={pageSize}
+                        onChange={(e) => onPageSizeChange(Number(e.target.value))}
+                        className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-slate-200"
+                    >
+                        {pageSizes.map((s) => (
+                            <option key={s} value={s}>
+                                {s}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
         </div>
     );
 }

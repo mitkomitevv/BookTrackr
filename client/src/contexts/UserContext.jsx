@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { useRequest } from "../hooks/useRequest";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const UserContext = createContext({
     isAuthenticated: false,
@@ -18,7 +19,7 @@ const UserContext = createContext({
 });
 
 export function UserProvider({ children }) {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useLocalStorage(null, "auth");
     const { request } = useRequest();
 
     const registerHandler = async (email, password, name) => {

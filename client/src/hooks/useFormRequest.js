@@ -22,6 +22,7 @@ export function useFormRequest({
         initialValues,
         onSubmit: async (values) => {
             const payload = mapValues ? mapValues(values) : values;
+            console.log("Submitting form to", path, "with payload", payload);
 
             setLoading(true);
             setError(null);
@@ -29,8 +30,9 @@ export function useFormRequest({
             try {
                 const headers = withAuth && user?.accessToken
                     ? { "X-Authorization": user.accessToken }
-                    : {};
+                    : {}; 
 
+                console.log("Using headers:", path, method, payload, headers);
                 const result = await request(path, method, payload, headers);
                 onSuccess?.(result, form.reset);
             } catch (err) {

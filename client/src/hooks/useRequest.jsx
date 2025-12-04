@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const BASE_URL = "http://localhost:3030";
+export const BASE_URL = "http://localhost:3030";
 
-async function jsonRequest(path, method = "GET", body = null, headers = {}) {
+// TODO: fix double requests in some pages (Catalog, AdminPanel etc.)
+
+async function jsonRequest(path, method = "GET", body = null, headers = {}, signal) {
     const options = {
         method,
         headers: {
@@ -11,6 +13,10 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}) {
             ...headers,
         },
     };
+
+    if (signal) {
+        options.signal = signal;
+    }
 
     if (body !== null) {
         options.body = JSON.stringify(body);
@@ -42,19 +48,19 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}) {
 }
 
 
-// Imperative request hook - for actions (login, submit, etc.)
+// For actions (login, submit, etc.)
 
 export function useRequest() {
     const request = useCallback(
-        (path, method = "GET", body = null, headers = {}) =>
-            jsonRequest(path, method, body, headers),
+        (path, method = "GET", body = null, headers = {}, signal) =>
+            jsonRequest(path, method, body, headers, signal),
         []
     );
 
     return { request };
 }
 
-// Declarative fetch hook - for loading data on mount/dependency change
+// For loading data on mount/dependency change
 
 export function useFetch(path, { immediate = true, headers = {} } = {}) {
     const [data, setData] = useState(null);
@@ -65,7 +71,6 @@ export function useFetch(path, { immediate = true, headers = {} } = {}) {
 
     const fetchData = useCallback(async () => {
         if (!path) return;
-
         controllerRef.current?.abort();
         const controller = new AbortController();
         controllerRef.current = controller;
@@ -74,7 +79,7 @@ export function useFetch(path, { immediate = true, headers = {} } = {}) {
         setError(null);
 
         try {
-            const result = await jsonRequest(path, "GET", null, headers);
+            const result = await jsonRequest(path, "GET", null, headers, controller.signal);
             if (!controller.signal.aborted) {
                 setData(result);
             }

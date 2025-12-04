@@ -11,6 +11,11 @@ function gradientClassFor(key) {
     const idx = key.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % gradients.length;
     return gradients[idx];
 }
+import { Link, useNavigate } from "react-router";
+import { useRequest } from "../../hooks/useRequest";
+import { useContext, useState } from "react";
+import UserContext from "../../contexts/UserContext";
+import ConfirmModal from "../ui/ConfirmModal";
 
 export default function BookHeaderSection({
     title,
@@ -22,9 +27,34 @@ export default function BookHeaderSection({
     description,
     pages,
     year,
-    genre
-
+    genre,
+    _id,
 }) {
+    const navigate = useNavigate();
+    const { request } = useRequest();
+    const { user } = useContext(UserContext);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete = () => {
+        setShowConfirm(true);
+    };
+
+    const confirmDelete = async () => {
+        setDeleting(true);
+        try {
+            const headers = user?.accessToken ? { "X-Authorization": user.accessToken } : {};
+            await request(`/data/books/${_id}`, "DELETE", null, headers);
+            setShowConfirm(false);
+            navigate("/catalog");
+        } catch (err) {
+            console.error(err);
+            alert(err.payload?.message || "Failed to delete book.");
+        } finally {
+            setDeleting(false);
+        }
+    };
+
     return (
         <section className="flex flex-col lg:flex-row gap-8">
             {/* Left: cover + shelf actions + status */}
@@ -81,18 +111,40 @@ export default function BookHeaderSection({
             <div className="flex-1 space-y-5">
                 {/* Title & meta */}
                 <div className="space-y-2">
-                    <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-                        {title}
-                        {series && (
-                            <span className="text-lg text-slate-400 font-normal ml-2">
-                                ({series}{numberInSeries ? `, #${numberInSeries}` : ""})
-                            </span>
-                        )}
-                    </h1>
-                    <p className="text-sm text-slate-300">
-                        by{" "}
-                        <span className="text-slate-100 font-medium">{author}</span>
-                    </p>
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
+                                {title}
+                                {series && (
+                                    <span className="text-lg text-slate-400 font-normal ml-2">
+                                        ({series}{numberInSeries ? `, #${numberInSeries}` : ""})
+                                    </span>
+                                )}
+                            </h1>
+                            <p className="text-sm text-slate-300">
+                                by{" "}
+                                <span className="text-slate-100 font-medium">{author}</span>
+                            </p>
+                        </div>
+
+                        <div className="flex gap-2">
+                            <Link
+                                type="button"
+                                to={`/catalog/${_id}/edit`}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-slate-700 px-3 py-1 text-sm text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition"
+                            >
+                                Edit
+                            </Link>
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-500 transition"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
                         {tags && tags.map(tag => <span key={tag}>{tag}</span>)}
                         <span className="h-3 w-px bg-slate-700" />
@@ -130,6 +182,16 @@ export default function BookHeaderSection({
                     </div>
                 </section>
             </div>
+            <ConfirmModal
+                open={showConfirm}
+                onConfirm={confirmDelete}
+                onCancel={() => setShowConfirm(false)}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this book? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                loading={deleting}
+            />
         </section>
     );
 }
@@ -166,6 +228,7 @@ function RatingBar({ label, percent, width }) {
                 <div
                     className="h-full rounded-full bg-emerald-500"
                     style={{ width }}
+
                 />
             </div>
             <span>{percent}</span>

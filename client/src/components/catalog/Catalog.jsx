@@ -1,32 +1,45 @@
-import { useFetch, useRequest } from "../../hooks/useRequest";
+import { useFetch } from "../../hooks/useRequest";
 import BookCard from "../book-card/BookCard";
 import Pagination from "./Pagination";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router";
+import useSearchQuery from "../../hooks/useSearchQuery";
 
 export default function Catalog() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(null);
-
-    const { request } = useRequest();
+    const [searchParams] = useSearchParams();
+    const authorParam = searchParams.get("author");
+    const q = authorParam ?? (searchParams.get("q") || "");
 
     const offset = (page - 1) * pageSize;
-    const path = `/data/books?offset=${offset}&pageSize=${pageSize}`;
+
+    // build optional where clause from free-text `q` param
+    const whereClause = useSearchQuery(q, ['title', 'author']);
+
+    const whereQuery = whereClause ? `&where=${encodeURIComponent(whereClause)}` : "";
+    const path = `/data/books?offset=${offset}&pageSize=${pageSize}${whereQuery}`;
     const { data: books, loading, error } = useFetch(path);
 
-    // fetch total count when pageSize changes or on mount
+    // use useFetch for the total count as well so it benefits from aborts
+    const countPath = `/data/books?count=true${whereQuery}`;
+    const { data: countData, refetch: refetchCount } = useFetch(countPath);
+
+    // update total when the count response arrives
     useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const count = await request(`/data/books?count=true`);
-                if (!cancelled) setTotal(Number(count));
-            } catch {
-                // ignore count errors silently
-            }
-        })();
-        return () => (cancelled = true);
-    }, [pageSize, request]);
+        if (countData != null) setTotal(Number(countData));
+    }, [countData]);
+
+    // original behavior refetched count when pageSize changed; keep that behavior
+    useEffect(() => {
+        refetchCount?.();
+    }, [pageSize, refetchCount]);
+
+    // reset to first page when the query changes
+    useEffect(() => {
+        setPage(1);
+    }, [q]);
 
     return (
         <main className="flex-1">
@@ -38,16 +51,10 @@ export default function Catalog() {
                             Browse books
                         </h1>
                         <p className="text-sm text-slate-400">
-                            Explore your library by genre, mood, and more.
+                            Explore our library.
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-3 text-xs">
-                        <select className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200">
-                            <option>All genres</option>
-                            <option>Fantasy</option>
-                            <option>Sci-Fi</option>
-                            <option>Literary</option>
-                        </select>
                         <select className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200">
                             <option>Sort by: Trending</option>
                             <option>Highest rated</option>

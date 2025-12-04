@@ -48,7 +48,17 @@ export default function BookCard({
                                 )}
                             </h3>
                         </Link>
-                        <p className="text-xs text-slate-400">{author}</p>
+                        {author ? (
+                            <Link
+                                to={`/catalog?author=${encodeURIComponent(author)}`}
+                                className="text-xs text-slate-400 hover:underline"
+                                aria-label={`Search by author ${author}`}
+                            >
+                                {author}
+                            </Link>
+                        ) : (
+                            <p className="text-xs text-slate-400">Unknown author</p>
+                        )}
 
                         {/* Tags */}
                         {!compact && tags.length > 0 && (

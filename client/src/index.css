@@ -3,3 +3,7 @@
 .description {
     white-space: pre-wrap;
 }
+
+button {
+    cursor: pointer;
+}

@@ -35,7 +35,7 @@ export default function PickOfMonth() {
             ) : (
                 <>
                     {/* Book cover */}
-                    <div className="w-full md:w-48 flex-shrink-0 flex items-center justify-center">
+                    <Link to={`/catalog/${pickBook?._id}/details`} className="w-full md:w-48 flex-shrink-0 flex items-center justify-center">
                         {pickBook?.coverUrl ? (
                             <img
                                 src={pickBook.coverUrl}
@@ -56,7 +56,7 @@ export default function PickOfMonth() {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </Link>
 
                     {/* Review content */}
                     <div className="flex-1 space-y-4">
@@ -70,9 +70,14 @@ export default function PickOfMonth() {
                         </div>
 
                         <div className="space-y-2">
-                            <h2 className="text-xl sm:text-2xl font-semibold text-slate-50">
+                            <Link to={`/catalog/${pickBook?._id}/details`} className="text-xl sm:text-2xl font-semibold text-slate-50">
                                 {pickBook?.title || 'Loading...'}
-                            </h2>
+                                {pickBook?.series && (
+                                    <span className="text-xl text-slate-400 font-normal ml-2">
+                                        ({pickBook.series}{pickBook.numberInSeries ? `, #${pickBook.numberInSeries}` : ""})
+                                    </span>
+                                )}
+                            </Link>
                             <div className="text-sm text-slate-400">
                                 <Link
                                     to={`/catalog?author=${encodeURIComponent(pickBook?.author)}`}
@@ -102,7 +107,7 @@ export default function PickOfMonth() {
                                 <path d="M7.17 6.17C5.76 7.59 5 9.39 5 11.5V18h6v-7H8.5c0-1.21.38-2.12 1.17-2.83C10.46 7.46 11 6.3 11 5c0-1.07-.32-2-1-2.83C9.32 1.32 8.43 1 7.25 1 6.07 1 5.1 1.39 4.33 2.17 3.56 2.94 3.17 3.93 3.17 5.12c0 1.19.39 2.18 1.17 3.05l2.83-2z" />
                                 <path d="M17.17 6.17C15.76 7.59 15 9.39 15 11.5V18h6v-7h-2.5c0-1.21.38-2.12 1.17-2.83C20.46 7.46 21 6.3 21 5c0-1.07-.32-2-1-2.83C19.32 1.32 18.43 1 17.25 1 16.07 1 15.1 1.39 14.33 2.17c-.77.77-1.16 1.76-1.16 2.95 0 1.19.39 2.18 1.17 3.05l2.83-2z" />
                             </svg>
-                            <p className="text-sm text-slate-200 leading-relaxed">
+                            <p className="text-sm text-slate-200 leading-relaxed description">
                                 {review || 'Loading review...'}
                             </p>
                             <div className="mt-4 flex items-center justify-between text-xs">

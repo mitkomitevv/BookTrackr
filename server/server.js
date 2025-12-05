@@ -1438,6 +1438,21 @@
         }
     };
     var seedData = {
+        "settings": {
+            home: {
+                pickOfMonth: "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
+                pickOfMonthReview: `There are stories, dear reader, and then there are myths.....
+
+There are myths, dear reader, and there are Legends...Legends that transcend time and space and leave a forever impact.
+
+THIS. MUST. BE.`,
+                staffRecommendations: [
+                    "fcd39f63-7e0b-423c-8aec-1838b29a162e",
+                    "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
+                    "952d7634-53b9-48c6-ab9b-3f7ef52c39e1"
+                ]
+            }
+        },
         books: [
             {
                 "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
@@ -2410,321 +2425,35 @@
                 "_id": "8bee0f72-6877-4e06-9a2a-027a0b151a61"
             }
         ],
-        "settings": {
-            home: {
-                pickOfMonth: "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
-                pickOfMonthReview: "That's such a fantastic book that keeps you hooked from the beginning to the end. The characters are well-developed, and the plot twists kept me on the edge of my seat. Highly recommended!",
-                staffRecommendations: [
-                    "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
-                    "5321337c-6c3e-4515-b034-fd905a39bb68",
-                    "73e303f1-f91c-4cf1-8949-da34d322a446"
-                ]
-            }
-        },
-        recipes: {
-            "3987279d-0ad4-4afb-8ca9-5b256ae3b298": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                name: "Easy Lasagna",
-                img: "assets/lasagna.jpg",
-                ingredients: [
-                    "1 tbsp Ingredient 1",
-                    "2 cups Ingredient 2",
-                    "500 g  Ingredient 3",
-                    "25 g Ingredient 4"
-                ],
-                steps: [
-                    "Prepare ingredients",
-                    "Mix ingredients",
-                    "Cook until done"
-                ],
-                _createdOn: 1613551279012
+        reviews: [
+            {
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
+                "reviewContent": "6/5 if BR would allow it. A cut above. Incredible. My book of the year.\n\nI started this series back in 2020 when Mike from Mike's Book Reviews on Youtube was reading it. He discovered it and mentioned he was reading it in one of his videos and despite the series being incredibly under the radar at the time my library had a copy of Empire of Silence. I was in the mood for sci fi so I thought what the hell I'll read along with Mike. That is how an epic journey starts with a small step. Each book escalated my interest and my advocacy for this series and on November 18, 2025 I began the end (an ending iykyk). What followed was an S tier reading experience that consumed every bit of my entertainment time for the last 2 weeks. I savored it like a fine dining meal I didn't want to end.\n\nThis book starts, as you might expect, a bit of time after the end of Disquiet Gods and starts hurtling toward \"what must be\". Even knowing where it was going from the beginning, the amount of anxiety I felt at points in this book shows you that Ruocchio was in his bag here. I'm not going to summarize the book because there would be spoilers and simply too much to cover, but what I can say is what made this my book of the year.\n\nFirst, I think Ruocchio's character work here is some of the best in the series. Some of the best scenes in this entire series are in this book and they aren't action sequences or trippy mind bending stuff but the scenes where it may just be two characters in a room talking. You not only get amazing lore drops but you also get some fantastic dialogue and characterization. These scenes have incredible weight. There were even some characters that didn't get introduced until Disquiet Gods that get some great development here. It was a pleasure to read. I think there is one fairly glaring exception, but I'll cover that later.\n\nSecond, in my opinion this is the best paced book in the series. I don't say that because it has non-stop action sequences. I say that because of the first point I made in this review. Some of the \"slower\" quieter moments are some of my favorites. In addition to that I think Ruocchio leveled up his action writing as well. There's plenty of it here and it is utilized in the best way possible. It holds your attention and gets your blood up, but none of these sequences felt overly long or draggy. They are also spaced out well throughout the text.\n\nThird, some of the lore, worldbuilding, and I don't know what to call it but \"cosmic trippy shit\" is dialed to 11 here. There are several chapters that while I was reading it I had to just pause and say \"This is something special here.\" There are a few chapters that are a conversation with a new character that shows up in this book that were utterly captivating from a lore perspective. There is another \"trippy\" chapter that almost had me throwing my kindle across the room. There were some chapters that would be right at home in a top tier horror novel. I was captivated 100 percent of the time.\n\nFourth, the ending I found incredibly satisfying and cathartic. Is Ruocchio going to spoonfeed you all the answers? No but I think by now we probably should realize that. What he does do is giving you what you know is coming but in ways you may not expect at all. It's handled in way that concludes the story of the Sun Eater and justifies not telling you any more than you need to know. It absolutely leaves you wanting more in the way that all the best performances or pieces of art do. It's also a full conclusion while leaving questions and openings to continue to write more in this world. Also, going back to the characters for a moment, there are just some fantastic moments near the conclusion that are just fantastic concluding arcs for side characters where they really get their time to shine. Just wonderful.\n\nWhat didn't I like? Not much honestly. This was everything I wanted and could have asked for. I do have a couple of minor complaints. First, even though I think this book has Ruocchio's best character work it sadly has one character that didn't get that treatment, Cassandra. She was the weak link in Disquiet Gods for me, and despite some early promise in this book and some memorable scenes early she really disappointed me overall. In the back half of the book she just doesn't do much besides say \"Abba!\" a lot and not want to get left behind. It's wild to me to hear Ruocchio say he considers her such an important character when there are several other characters who have far less page time that get way more development. My second complaint, if you want to call it that, is there are times when I was reading, particularly toward the end, where it felt like there were allusions and references being made that were important but I simply wasn't able to pick up on my own. I realize this is a me problem and asking for clarification leads to good book conversation but it did feel slightly over my head at times.\n\nAll that being said, I was telling others that were also reading the book that as I was reading I could tell that this book (and series honestly) is something special. Not just another work of sci fi or fantasy. Some books are like that for me. I can't explain it fully, but as I'm reading it I know that this isn't like other stuff I've read. I had that feeling with all my all time favorites like A Song of Ice and Fire, King Killer Chronicle, Second Apocalypse, and now Sun Eater. These series and books are a cut above even other books I love even inclusive of flaws. I'm sad I won't be able to experience it again for the first time but what a ride.",
+                "helpfulCount": 0,
+                "_createdOn": 1764963515729,
+                "_updatedOn": 1764963785890,
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "_id": "d3a3974f-da4b-49c7-b506-babda3123cf7"
             },
-            "8f414b4f-ab39-4d36-bedb-2ad69da9c830": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                name: "Grilled Duck Fillet",
-                img: "assets/roast.jpg",
-                ingredients: [
-                    "500 g  Ingredient 1",
-                    "3 tbsp Ingredient 2",
-                    "2 cups Ingredient 3"
-                ],
-                steps: [
-                    "Prepare ingredients",
-                    "Mix ingredients",
-                    "Cook until done"
-                ],
-                _createdOn: 1613551344360
-            },
-            "985d9eab-ad2e-4622-a5c8-116261fb1fd2": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                name: "Roast Trout",
-                img: "assets/fish.jpg",
-                ingredients: [
-                    "4 cups Ingredient 1",
-                    "1 tbsp Ingredient 2",
-                    "1 tbsp Ingredient 3",
-                    "750 g  Ingredient 4",
-                    "25 g Ingredient 5"
-                ],
-                steps: [
-                    "Prepare ingredients",
-                    "Mix ingredients",
-                    "Cook until done"
-                ],
-                _createdOn: 1613551388703
+        ],
+        ratings: [
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
+                "stars": 5,
+                "_createdOn": 1764964261822,
+                "_id": "2425b21e-2fc3-44c0-ba26-29a3916ee5f9"
             }
-        },
-        comments: {
-            "0a272c58-b7ea-4e09-a000-7ec988248f66": {
+        ],
+        comments: [
+            {
                 _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                content: "Great recipe!",
-                recipeId: "8f414b4f-ab39-4d36-bedb-2ad69da9c830",
-                _createdOn: 1614260681375,
+                reviewId: "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                content: "That's a great review! I completely agree with your points, especially about the character development and pacing. Ruocchio really outdid himself in this one.",
+                _createdOn: 1764964261822,
                 _id: "0a272c58-b7ea-4e09-a000-7ec988248f66"
             }
-        },
-        records: {
-            i01: {
-                name: "John1",
-                val: 1,
-                _createdOn: 1613551388703
-            },
-            i02: {
-                name: "John2",
-                val: 1,
-                _createdOn: 1613551388713
-            },
-            i03: {
-                name: "John3",
-                val: 2,
-                _createdOn: 1613551388723
-            },
-            i04: {
-                name: "John4",
-                val: 2,
-                _createdOn: 1613551388733
-            },
-            i05: {
-                name: "John5",
-                val: 2,
-                _createdOn: 1613551388743
-            },
-            i06: {
-                name: "John6",
-                val: 3,
-                _createdOn: 1613551388753
-            },
-            i07: {
-                name: "John7",
-                val: 3,
-                _createdOn: 1613551388763
-            },
-            i08: {
-                name: "John8",
-                val: 2,
-                _createdOn: 1613551388773
-            },
-            i09: {
-                name: "John9",
-                val: 3,
-                _createdOn: 1613551388783
-            },
-            i10: {
-                name: "John10",
-                val: 1,
-                _createdOn: 1613551388793
-            }
-        },
-        catches: {
-            "07f260f4-466c-4607-9a33-f7273b24f1b4": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                angler: "Paulo Admorim",
-                weight: 636,
-                species: "Atlantic Blue Marlin",
-                location: "Vitoria, Brazil",
-                bait: "trolled pink",
-                captureTime: 80,
-                _createdOn: 1614760714812,
-                _id: "07f260f4-466c-4607-9a33-f7273b24f1b4"
-            },
-            "bdabf5e9-23be-40a1-9f14-9117b6702a9d": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                angler: "John Does",
-                weight: 554,
-                species: "Atlantic Blue Marlin",
-                location: "Buenos Aires, Argentina",
-                bait: "trolled pink",
-                captureTime: 120,
-                _createdOn: 1614760782277,
-                _id: "bdabf5e9-23be-40a1-9f14-9117b6702a9d"
-            }
-        },
-        furniture: {
-        },
-        orders: {
-        },
-        movies: {
-            "1240549d-f0e0-497e-ab99-eb8f703713d7": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                title: "Black Widow",
-                description: "Natasha Romanoff aka Black Widow confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises. Comes on the screens 2020.",
-                img: "https://miro.medium.com/max/735/1*akkAa2CcbKqHsvqVusF3-w.jpeg",
-                _createdOn: 1614935055353,
-                _id: "1240549d-f0e0-497e-ab99-eb8f703713d7"
-            },
-            "143e5265-333e-4150-80e4-16b61de31aa0": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                title: "Wonder Woman 1984",
-                description: "Diana must contend with a work colleague and businessman, whose desire for extreme wealth sends the world down a path of destruction, after an ancient artifact that grants wishes goes missing.",
-                img: "https://pbs.twimg.com/media/ETINgKwWAAAyA4r.jpg",
-                _createdOn: 1614935181470,
-                _id: "143e5265-333e-4150-80e4-16b61de31aa0"
-            },
-            "a9bae6d8-793e-46c4-a9db-deb9e3484909": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                title: "Top Gun 2",
-                description: "After more than thirty years of service as one of the Navy's top aviators, Pete Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him.",
-                img: "https://i.pinimg.com/originals/f2/a4/58/f2a458048757bc6914d559c9e4dc962a.jpg",
-                _createdOn: 1614935268135,
-                _id: "a9bae6d8-793e-46c4-a9db-deb9e3484909"
-            }
-        },
-        likes: {
-        },
-        ideas: {
-            "833e0e57-71dc-42c0-b387-0ce0caf5225e": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                title: "Best Pilates Workout To Do At Home",
-                description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minima possimus eveniet ullam aspernatur corporis tempore quia nesciunt nostrum mollitia consequatur. At ducimus amet aliquid magnam nulla sed totam blanditiis ullam atque facilis corrupti quidem nisi iusto saepe, consectetur culpa possimus quos? Repellendus, dicta pariatur! Delectus, placeat debitis error dignissimos nesciunt magni possimus quo nulla, fuga corporis maxime minus nihil doloremque aliquam quia recusandae harum. Molestias dolorum recusandae commodi velit cum sapiente placeat alias rerum illum repudiandae? Suscipit tempore dolore autem, neque debitis quisquam molestias officia hic nesciunt? Obcaecati optio fugit blanditiis, explicabo odio at dicta asperiores distinctio expedita dolor est aperiam earum! Molestias sequi aliquid molestiae, voluptatum doloremque saepe dignissimos quidem quas harum quo. Eum nemo voluptatem hic corrupti officiis eaque et temporibus error totam numquam sequi nostrum assumenda eius voluptatibus quia sed vel, rerum, excepturi maxime? Pariatur, provident hic? Soluta corrupti aspernatur exercitationem vitae accusantium ut ullam dolor quod!",
-                img: "./images/best-pilates-youtube-workouts-2__medium_4x3.jpg",
-                _createdOn: 1615033373504,
-                _id: "833e0e57-71dc-42c0-b387-0ce0caf5225e"
-            },
-            "247efaa7-8a3e-48a7-813f-b5bfdad0f46c": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                title: "4 Eady DIY Idea To Try!",
-                description: "Similique rem culpa nemo hic recusandae perspiciatis quidem, quia expedita, sapiente est itaque optio enim placeat voluptates sit, fugit dignissimos tenetur temporibus exercitationem in quis magni sunt vel. Corporis officiis ut sapiente exercitationem consectetur debitis suscipit laborum quo enim iusto, labore, quod quam libero aliquid accusantium! Voluptatum quos porro fugit soluta tempore praesentium ratione dolorum impedit sunt dolores quod labore laudantium beatae architecto perspiciatis natus cupiditate, iure quia aliquid, iusto modi esse!",
-                img: "./images/brightideacropped.jpg",
-                _createdOn: 1615033452480,
-                _id: "247efaa7-8a3e-48a7-813f-b5bfdad0f46c"
-            },
-            "b8608c22-dd57-4b24-948e-b358f536b958": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                title: "Dinner Recipe",
-                description: "Consectetur labore et corporis nihil, officiis tempora, hic ex commodi sit aspernatur ad minima? Voluptas nesciunt, blanditiis ex nulla incidunt facere tempora laborum ut aliquid beatae obcaecati quidem reprehenderit consequatur quis iure natus quia totam vel. Amet explicabo quidem repellat unde tempore et totam minima mollitia, adipisci vel autem, enim voluptatem quasi exercitationem dolor cum repudiandae dolores nostrum sit ullam atque dicta, tempora iusto eaque! Rerum debitis voluptate impedit corrupti quibusdam consequatur minima, earum asperiores soluta. A provident reiciendis voluptates et numquam totam eveniet! Dolorum corporis libero dicta laborum illum accusamus ullam?",
-                img: "./images/dinner.jpg",
-                _createdOn: 1615033491967,
-                _id: "b8608c22-dd57-4b24-948e-b358f536b958"
-            }
-        },
-        catalog: {
-            "53d4dbf5-7f41-47ba-b485-43eccb91cb95": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                make: "Table",
-                model: "Swedish",
-                year: 2015,
-                description: "Medium table",
-                price: 235,
-                img: "./images/table.png",
-                material: "Hardwood",
-                _createdOn: 1615545143015,
-                _id: "53d4dbf5-7f41-47ba-b485-43eccb91cb95"
-            },
-            "f5929b5c-bca4-4026-8e6e-c09e73908f77": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                make: "Sofa",
-                model: "ES-549-M",
-                year: 2018,
-                description: "Three-person sofa, blue",
-                price: 1200,
-                img: "./images/sofa.jpg",
-                material: "Frame - steel, plastic; Upholstery - fabric",
-                _createdOn: 1615545572296,
-                _id: "f5929b5c-bca4-4026-8e6e-c09e73908f77"
-            },
-            "c7f51805-242b-45ed-ae3e-80b68605141b": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                make: "Chair",
-                model: "Bright Dining Collection",
-                year: 2017,
-                description: "Dining chair",
-                price: 180,
-                img: "./images/chair.jpg",
-                material: "Wood laminate; leather",
-                _createdOn: 1615546332126,
-                _id: "c7f51805-242b-45ed-ae3e-80b68605141b"
-            }
-        },
-        teams: {
-            "34a1cab1-81f1-47e5-aec3-ab6c9810efe1": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                name: "Storm Troopers",
-                logoUrl: "/assets/atat.png",
-                description: "These ARE the droids we're looking for",
-                _createdOn: 1615737591748,
-                _id: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1"
-            },
-            "dc888b1a-400f-47f3-9619-07607966feb8": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                name: "Team Rocket",
-                logoUrl: "/assets/rocket.png",
-                description: "Gotta catch 'em all!",
-                _createdOn: 1615737655083,
-                _id: "dc888b1a-400f-47f3-9619-07607966feb8"
-            },
-            "733fa9a1-26b6-490d-b299-21f120b2f53a": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                name: "Minions",
-                logoUrl: "/assets/hydrant.png",
-                description: "Friendly neighbourhood jelly beans, helping evil-doers succeed.",
-                _createdOn: 1615737688036,
-                _id: "733fa9a1-26b6-490d-b299-21f120b2f53a"
-            }
-        },
-        members: {
-            "cc9b0a0f-655d-45d7-9857-0a61c6bb2c4d": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
-                status: "member",
-                _createdOn: 1616236790262,
-                _updatedOn: 1616236792930
-            },
-            "61a19986-3b86-4347-8ca4-8c074ed87591": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-                status: "member",
-                _createdOn: 1616237188183,
-                _updatedOn: 1616237189016
-            },
-            "8a03aa56-7a82-4a6b-9821-91349fbc552f": {
-                _ownerId: "847ec027-f659-4086-8032-5173e2f9c93a",
-                teamId: "733fa9a1-26b6-490d-b299-21f120b2f53a",
-                status: "member",
-                _createdOn: 1616237193355,
-                _updatedOn: 1616237195145
-            },
-            "9be3ac7d-2c6e-4d74-b187-04105ab7e3d6": {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-                status: "member",
-                _createdOn: 1616237231299,
-                _updatedOn: 1616237235713
-            },
-            "280b4a1a-d0f3-4639-aa54-6d9158365152": {
-                _ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
-                teamId: "dc888b1a-400f-47f3-9619-07607966feb8",
-                status: "member",
-                _createdOn: 1616237257265,
-                _updatedOn: 1616237278248
-            },
-            "e797fa57-bf0a-4749-8028-72dba715e5f8": {
-                _ownerId: "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
-                teamId: "34a1cab1-81f1-47e5-aec3-ab6c9810efe1",
-                status: "member",
-                _createdOn: 1616237272948,
-                _updatedOn: 1616237293676
-            }
-        }
+        ],
     };
     var rules$1 = {
         users: {

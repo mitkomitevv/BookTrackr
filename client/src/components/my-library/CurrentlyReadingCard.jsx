@@ -1,4 +1,3 @@
-// src/components/my-library/CurrentlyReadingCard.jsx
 export default function CurrentlyReadingCard({ book }) {
     return (
         <article className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-900/70 p-4">

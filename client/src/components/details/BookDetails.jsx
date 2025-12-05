@@ -29,7 +29,7 @@ export default function BookDetails() {
                 {/* Bottom: reviews + sidebar */}
                 <section className="flex flex-col lg:flex-row gap-8 pt-4 pb-8 border-t border-slate-900">
                     <div className="flex-1">
-                        <BookReviewsSection />
+                        <BookReviewsSection bookId={bookId} bookTitle={book.title} />
                     </div>
                     <BookSidebar />
                 </section>

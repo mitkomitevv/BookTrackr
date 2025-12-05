@@ -1,13 +1,40 @@
-export default function Pagination({ page = 1, pageSize = 10, total = null, onPageChange = () => { }, onPageSizeChange = () => { }, hidePageSize = false }) {
+import { useRef, useEffect } from 'react';
+
+export default function Pagination({ page = 1, pageSize = 20, total = null, onPageChange = () => { }, onPageSizeChange = () => { }, hidePageSize = false }) {
+    const scrollTimeoutRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+                scrollTimeoutRef.current = null;
+            }
+        };
+    }, []);
     const totalPages = total ? Math.max(1, Math.ceil(total / pageSize)) : null;
 
     const goto = (p) => {
         if (p < 1) p = 1;
         if (totalPages && p > totalPages) p = totalPages;
-        onPageChange(p);
+        // cancel any pending change
+        if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current);
+            scrollTimeoutRef.current = null;
+        }
+
+        if (typeof window !== 'undefined') {
+            // scroll first (smooth), then change page after a short delay
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            scrollTimeoutRef.current = setTimeout(() => {
+                onPageChange(p);
+                scrollTimeoutRef.current = null;
+            }, 220);
+        } else {
+            onPageChange(p);
+        }
     };
 
-    const pageSizes = [10, 20, 50];
+    const pageSizes = [20, 30, 50, 100];
 
     return (
         <div className="flex items-center justify-center gap-4 pt-4 text-sm">
@@ -83,7 +110,23 @@ export default function Pagination({ page = 1, pageSize = 10, total = null, onPa
                     <label className="text-slate-400 text-xs">Per page</label>
                     <select
                         value={pageSize}
-                        onChange={(e) => onPageSizeChange(Number(e.target.value))}
+                        onChange={(e) => {
+                            // similar: scroll first then change page size
+                            if (scrollTimeoutRef.current) {
+                                clearTimeout(scrollTimeoutRef.current);
+                                scrollTimeoutRef.current = null;
+                            }
+                            const newSize = Number(e.target.value);
+                            if (typeof window !== 'undefined') {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                scrollTimeoutRef.current = setTimeout(() => {
+                                    onPageSizeChange(newSize);
+                                    scrollTimeoutRef.current = null;
+                                }, 220);
+                            } else {
+                                onPageSizeChange(newSize);
+                            }
+                        }}
                         className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-slate-200"
                     >
                         {pageSizes.map((s) => (

@@ -21,7 +21,6 @@ export default function App() {
         <div className="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
             <Header />
 
-            {/* TODO: show admin link only for admins */}
             {/* TODO: Route Guards */}
             <Routes>
                 <Route path="/admin" element={<AdminPanel />} />

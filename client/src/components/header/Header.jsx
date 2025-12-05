@@ -5,7 +5,7 @@ import Search from "../search/Search";
 
 const navLinkClass = ({ isActive }) =>
     [
-        "pb-1 text-sm transition border-b-2", // base styles
+        "pb-1 text-sm transition border-b-2",
         isActive
             ? "text-slate-100 border-emerald-500"
             : "text-slate-300 border-transparent hover:text-emerald-400 hover:border-emerald-500/60",

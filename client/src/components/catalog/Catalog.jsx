@@ -1,13 +1,13 @@
 import { useFetch } from "../../hooks/useRequest";
 import BookCard from "../book-card/BookCard";
-import Pagination from "./Pagination";
+import Pagination from "../ui/Pagination";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import useSearchQuery from "../../hooks/useSearchQuery";
 
 export default function Catalog() {
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [total, setTotal] = useState(null);
     const [searchParams] = useSearchParams();
     const authorParam = searchParams.get("author");

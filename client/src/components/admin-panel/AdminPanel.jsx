@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import UserContext from "../../contexts/UserContext";
 import { useRequest, useFetch } from "../../hooks/useRequest";
-import Pagination from "../catalog/Pagination";
+import Pagination from "../ui/Pagination";
 import Search from "../search/Search";
+import ReviewModal from "../ui/ReviewModal";
 
 export default function AdminPanel() {
     const { user } = useContext(UserContext);
@@ -176,6 +177,29 @@ export default function AdminPanel() {
         }
     };
 
+    const saveReviewHandler = async (text) => {
+        setSavingReview(true);
+        setMessage(null);
+        try {
+            const payload = {
+                pickOfMonth: pendingPickId,
+                pickOfMonthReview: text,
+                staffRecommendations: Array.from(staffRecommendations),
+            };
+            await request("/data/settings/home", "PATCH", payload, user?.accessToken ? { "X-Authorization": user.accessToken } : {});
+            setPickOfTheMonth(pendingPickId);
+            setShowReviewModal(false);
+            setPendingPickId(null);
+            setPendingReviewText('');
+            setMessage({ type: "success", text: "Pick and review saved." });
+            refetchSettings?.();
+        } catch (err) {
+            setMessage({ type: "error", text: err?.payload?.message || err.message || "Failed to save review." });
+        } finally {
+            setSavingReview(false);
+        }
+    };
+
     return (
         <main className="flex-1">
             <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
@@ -303,61 +327,14 @@ export default function AdminPanel() {
                                 {message.text}
                             </div>
                         )}
-                        {/* Review modal */}
-                        {showReviewModal && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center">
-                                <div className="absolute inset-0 bg-black/50" onClick={() => setShowReviewModal(false)} />
-                                <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full text-slate-100 shadow-lg">
-                                    <h3 className="text-lg font-semibold mb-2">Add Pick of the Month review</h3>
-                                    <p className="text-sm text-slate-300 mb-4">Add a short editor review that will appear on Home for the selected pick.</p>
-                                    <textarea
-                                        value={pendingReviewText}
-                                        onChange={(e) => setPendingReviewText(e.target.value)}
-                                        rows={6}
-                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 mb-4"
-                                        placeholder="Write a short review or blurb for this pick..."
-                                    />
-                                    <div className="flex justify-end gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => { setShowReviewModal(false); setPendingPickId(null); setPendingReviewText(''); }}
-                                            className="px-3 py-1 rounded-2xl border border-slate-700 text-sm text-slate-200 hover:border-slate-500 transition"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={async () => {
-                                                setSavingReview(true);
-                                                setMessage(null);
-                                                try {
-                                                    const payload = {
-                                                        pickOfMonth: pendingPickId,
-                                                        pickOfMonthReview: pendingReviewText,
-                                                        staffRecommendations: Array.from(staffRecommendations),
-                                                    };
-                                                    await request("/data/settings/home", "PATCH", payload, user?.accessToken ? { "X-Authorization": user.accessToken } : {});
-                                                    // update local state
-                                                    setPickOfTheMonth(pendingPickId);
-                                                    setShowReviewModal(false);
-                                                    setPendingPickId(null);
-                                                    setMessage({ type: "success", text: "Pick and review saved." });
-                                                    refetchSettings?.();
-                                                } catch (err) {
-                                                    setMessage({ type: "error", text: err?.payload?.message || err.message || "Failed to save review." });
-                                                } finally {
-                                                    setSavingReview(false);
-                                                }
-                                            }}
-                                            disabled={savingReview}
-                                            className="px-3 py-1 rounded-2xl bg-emerald-500 text-sm font-semibold text-slate-950 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
-                                        >
-                                            {savingReview ? 'Saving...' : 'Save review & pick'}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+
+                        <ReviewModal
+                            visible={showReviewModal}
+                            initialText={pendingReviewText}
+                            onClose={() => { setShowReviewModal(false); setPendingPickId(null); setPendingReviewText(''); }}
+                            onSave={saveReviewHandler}
+                            saving={savingReview}
+                        />
                     </div>
                 </section>
             </div>

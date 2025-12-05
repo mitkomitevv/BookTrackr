@@ -1,4 +1,12 @@
-// src/components/details/BookHeaderSection.jsx
+import { Link, useNavigate } from "react-router";
+import { useRequest, useFetch } from "../../hooks/useRequest";
+import { useContext, useState, useEffect, useMemo } from "react";
+import UserContext from "../../contexts/UserContext";
+import ConfirmModal from "../ui/ConfirmModal";
+import StarRating from "../ui/StarRating";
+import { useExpandable } from "../../hooks/useExpandable";
+
+
 function gradientClassFor(key) {
     const gradients = [
         "bg-gradient-to-br from-emerald-700 via-sky-700 to-violet-800",
@@ -11,11 +19,6 @@ function gradientClassFor(key) {
     const idx = key.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % gradients.length;
     return gradients[idx];
 }
-import { Link, useNavigate } from "react-router";
-import { useRequest } from "../../hooks/useRequest";
-import { useContext, useState } from "react";
-import UserContext from "../../contexts/UserContext";
-import ConfirmModal from "../ui/ConfirmModal";
 
 export default function BookHeaderSection({
     title,
@@ -35,12 +38,85 @@ export default function BookHeaderSection({
     const { user } = useContext(UserContext);
     const [showConfirm, setShowConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [userRating, setUserRating] = useState(0);
+    const [userRatingId, setUserRatingId] = useState(null);
+    const [savingRating, setSavingRating] = useState(false);
+    const { expanded: descriptionExpanded, setExpanded: setDescriptionExpanded, contentRef: descriptionRef, isLong: isDescriptionLong } = useExpandable(description);
 
-    const handleDelete = () => {
+    // Fetch all ratings for this book
+    const ratingsPath = _id ? `/data/ratings?where=${encodeURIComponent(`bookId="${_id}"`)}` : null;
+    const { data: ratingsData, refetch: refetchRatings } = useFetch(ratingsPath, { immediate: !!_id });
+
+    // Calculate average and find user's rating
+    const ratingStats = useMemo(() => {
+        if (!ratingsData || !Array.isArray(ratingsData) || ratingsData.length === 0) {
+            return { average: 0, count: 0, distribution: [0, 0, 0, 0, 0] };
+        }
+        const distribution = [0, 0, 0, 0, 0];
+        let sum = 0;
+        for (const r of ratingsData) {
+            if (r.stars >= 1 && r.stars <= 5) {
+                distribution[r.stars - 1]++;
+                sum += r.stars;
+            }
+        }
+        return {
+            average: sum / ratingsData.length,
+            count: ratingsData.length,
+            distribution,
+        };
+    }, [ratingsData]);
+
+    // Find user's existing rating
+    useEffect(() => {
+        if (user && ratingsData && Array.isArray(ratingsData)) {
+            const existing = ratingsData.find(r => r._ownerId === user._id);
+            if (existing) {
+                setUserRating(existing.stars || 0);
+                setUserRatingId(existing._id);
+            } else {
+                setUserRating(0);
+                setUserRatingId(null);
+            }
+        } else {
+            setUserRating(0);
+            setUserRatingId(null);
+        }
+    }, [user, ratingsData]);
+
+    const ratingChangeHandler = async (stars) => {
+        if (!user?.accessToken) return;
+        setSavingRating(true);
+        try {
+            const headers = { "X-Authorization": user.accessToken };
+            if (userRatingId) {
+                // Update existing rating
+                if (stars === 0) {
+                    // Delete rating
+                    await request(`/data/ratings/${userRatingId}`, "DELETE", null, headers);
+                    setUserRatingId(null);
+                } else {
+                    await request(`/data/ratings/${userRatingId}`, "PUT", { bookId: _id, stars }, headers);
+                }
+            } else if (stars > 0) {
+                // Create new rating
+                const result = await request("/data/ratings", "POST", { bookId: _id, stars }, headers);
+                setUserRatingId(result._id);
+            }
+            setUserRating(stars);
+            refetchRatings?.();
+        } catch (err) {
+            console.error("Failed to save rating:", err);
+        } finally {
+            setSavingRating(false);
+        }
+    };
+
+    const deleteHandler = () => {
         setShowConfirm(true);
     };
 
-    const confirmDelete = async () => {
+    const confirmDeleteHandler = async () => {
         setDeleting(true);
         try {
             const headers = user?.accessToken ? { "X-Authorization": user.accessToken } : {};
@@ -78,32 +154,22 @@ export default function BookHeaderSection({
 
                 {/* Shelf buttons */}
                 <div className="w-full flex flex-col gap-2 text-sm">
+                    <div className="flex items-center justify-between">
+                        <span className="text-slate-400">Your rating:</span>
+                        {user ? (
+                            <div className={savingRating ? "opacity-50 pointer-events-none" : ""}>
+                                <StarRating value={userRating} onChange={ratingChangeHandler} size="md" />
+                            </div>
+                        ) : (
+                            <span className="text-slate-500 text-[11px]">Log in to rate</span>
+                        )}
+                    </div>
                     <button className="w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2 font-semibold text-slate-950 shadow hover:bg-emerald-400 transition">
                         Add to "To Read"
                     </button>
                     <button className="w-full inline-flex items-center justify-center rounded-2xl border border-slate-700 px-4 py-2 font-medium text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition">
                         Mark as "Currently reading"
                     </button>
-                    <button className="w-full inline-flex items-center justify-center rounded-2xl border border-slate-700 px-4 py-2 font-medium text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition">
-                        I&apos;ve read this book
-                    </button>
-                </div>
-
-                {/* Your rating / status */}
-                <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/70 p-3 space-y-2 text-xs">
-                    <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Your status</span>
-                        <span className="inline-flex items-center rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                            To Read
-                        </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Your rating</span>
-                        <button className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-200">
-                            <span>Rate this book</span>
-                            <span className="text-lg leading-none">★</span>
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -137,7 +203,7 @@ export default function BookHeaderSection({
                             </Link>
                             <button
                                 type="button"
-                                onClick={handleDelete}
+                                onClick={deleteHandler}
                                 className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-500 transition"
                             >
                                 Delete
@@ -155,16 +221,29 @@ export default function BookHeaderSection({
                 </div>
 
                 {/* Rating summary */}
-                <RatingSummary />
+                <RatingSummary stats={ratingStats} />
 
                 {/* Description */}
                 <section className="space-y-3 text-sm">
                     <h2 className="text-sm font-semibold text-slate-100 tracking-wide uppercase">
                         Description
                     </h2>
-                    <p className="text-slate-300 leading-relaxed description">
-                        {description}
-                    </p>
+                    <div className="description">
+                        <p
+                            ref={descriptionRef}
+                            className={`text-slate-300 leading-relaxed ${!descriptionExpanded ? "line-clamp-[10]" : ""}`}
+                        >
+                            {description}
+                        </p>
+                        {isDescriptionLong && (
+                            <button
+                                onClick={() => setDescriptionExpanded(!descriptionExpanded)}
+                                className="mt-1 text-emerald-400 hover:text-emerald-300 font-medium text-sm"
+                            >
+                                {descriptionExpanded ? "See less" : "See more..."}
+                            </button>
+                        )}
+                    </div>
                 </section>
 
                 {/* Metadata tags */}
@@ -184,7 +263,7 @@ export default function BookHeaderSection({
             </div>
             <ConfirmModal
                 open={showConfirm}
-                onConfirm={confirmDelete}
+                onConfirm={confirmDeleteHandler}
                 onCancel={() => setShowConfirm(false)}
                 title="Confirm Delete"
                 message="Are you sure you want to delete this book? This action cannot be undone."
@@ -196,25 +275,30 @@ export default function BookHeaderSection({
     );
 }
 
-function RatingSummary() {
+function RatingSummary({ stats }) {
+    const { average, count, distribution } = stats || { average: 0, count: 0, distribution: [0, 0, 0, 0, 0] };
+    const percentages = distribution.map(d => count > 0 ? Math.round((d / count) * 100) : 0);
+
     return (
         <div className="flex flex-wrap items-center gap-6 rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-sm">
             <div className="flex items-center gap-2">
                 <span className="text-3xl leading-none text-amber-300">★</span>
                 <div>
-                    <div className="text-lg font-semibold text-slate-50">4.35</div>
+                    <div className="text-lg font-semibold text-slate-50">
+                        {count > 0 ? average.toFixed(2) : "—"}
+                    </div>
                     <div className="text-xs text-slate-400">
-                        6,421 ratings · 1,203 reviews
+                        {count} {count === 1 ? "rating" : "ratings"}
                     </div>
                 </div>
             </div>
 
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-2 text-[11px] text-slate-400">
-                <RatingBar label="5★" percent="62%" width="66%" />
-                <RatingBar label="4★" percent="23%" width="25%" />
-                <RatingBar label="3★" percent="10%" width="16%" />
-                <RatingBar label="2★" percent="3%" width="8%" />
-                <RatingBar label="1★" percent="2%" width="4%" />
+                <RatingBar label="5★" percent={`${percentages[4]}%`} width={`${percentages[4]}%`} />
+                <RatingBar label="4★" percent={`${percentages[3]}%`} width={`${percentages[3]}%`} />
+                <RatingBar label="3★" percent={`${percentages[2]}%`} width={`${percentages[2]}%`} />
+                <RatingBar label="2★" percent={`${percentages[1]}%`} width={`${percentages[1]}%`} />
+                <RatingBar label="1★" percent={`${percentages[0]}%`} width={`${percentages[0]}%`} />
             </div>
         </div>
     );

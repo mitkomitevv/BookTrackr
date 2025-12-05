@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 
-// src/components/details/Breadcrumbs.jsx
 export default function Breadcrumbs({
     title
 }) {

@@ -110,7 +110,7 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Mobile menu panel (vertical stack) */}
+            {/* Mobile menu panel */}
             {menuOpen && (
                 <div className="md:hidden bg-slate-950/95 border-t border-slate-800 px-4 py-3">
                     <nav className="flex flex-col gap-3 text-sm">

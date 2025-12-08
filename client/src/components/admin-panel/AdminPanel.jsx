@@ -4,6 +4,7 @@ import { useRequest, useFetch } from "../../hooks/useRequest";
 import Pagination from "../ui/Pagination";
 import Search from "../search/Search";
 import ReviewModal from "../ui/ReviewModal";
+import { Fragment } from "react";
 
 export default function AdminPanel() {
     const { user } = useContext(UserContext);
@@ -17,8 +18,7 @@ export default function AdminPanel() {
     const path = `/data/books?offset=${offset}&pageSize=${PAGE_SIZE}`;
     const { data: booksData, loading: booksLoading, error: booksError } = useFetch(path);
 
-    // load settings
-    const { data: settings, refetch: refetchSettings } = useFetch("/data/settings/home", { immediate: true });
+    const { data: settings, refetch: refetchSettings } = useFetch("/data/settings/home");
 
     const [query, setQuery] = useState("");
     const [pickOfTheMonth, setPickOfTheMonth] = useState(null);
@@ -33,27 +33,17 @@ export default function AdminPanel() {
     const [pendingReviewText, setPendingReviewText] = useState('');
     const [savingReview, setSavingReview] = useState(false);
 
+    const hasAnyPicks = !!(resolvedPicks?.pick || (resolvedPicks?.staff && resolvedPicks.staff.length > 0));
+
+
     // initialize from loaded settings
     useEffect(() => {
         if (settings) {
-            // Normalize pickOfMonth to an id string (if it's an object) or null
-            const pick = settings.pickOfMonth;
-            if (pick == null) {
-                setPickOfTheMonth(null);
-            } else if (typeof pick === 'object') {
-                setPickOfTheMonth(pick._id || pick.id || null);
-            } else {
-                setPickOfTheMonth(pick);
-            }
+            setPickOfTheMonth(settings.pickOfMonth);
 
             // Normalize staff recommendations to an array/set of ids (strings)
             const normalized = (settings.staffRecommendations || [])
-                .map(p => {
-                    if (p == null) return null;
-                    if (typeof p === 'object') return p._id || p.id || null;
-                    return String(p);
-                })
-                .filter(Boolean);
+                .map((p => String(p))).filter(Boolean);
             setStaffRecommendations(new Set(normalized));
         }
     }, [settings]);
@@ -130,6 +120,31 @@ export default function AdminPanel() {
         return ordered;
     }, [booksData, query, resolvedPicks]);
 
+
+    const highlightIds = useMemo(() => {
+        const ids = new Set();
+        if (pickOfTheMonth) {
+            ids.add(pickOfTheMonth);
+        };
+        for (const id of staffRecommendations) {
+            ids.add(id);
+        }
+        return ids;
+    }, [pickOfTheMonth, staffRecommendations]);
+
+    const highlightCount = useMemo(() => {
+        let count = 0;
+        for (const b of filtered) {
+            const id = b._id || b.id;
+            if (id && highlightIds.has(id)) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count;
+    }, [filtered, highlightIds]);
+
     // fetch total count for pagination
     useEffect(() => {
         let mounted = true;
@@ -137,8 +152,12 @@ export default function AdminPanel() {
             try {
                 const all = await request('/data/books');
                 if (!mounted) return;
-                if (Array.isArray(all)) setTotal(all.length);
-                else if (all && typeof all === 'object' && Array.isArray(all.data)) setTotal(all.data.length);
+                if (Array.isArray(all)) {
+                    setTotal(all.length);
+                }
+                else if (all && typeof all === 'object' && Array.isArray(all.data)) {
+                    setTotal(all.data.length);
+                }
                 else setTotal(null);
             } catch {
                 if (!mounted) return;
@@ -151,8 +170,11 @@ export default function AdminPanel() {
     const toggleStaff = (id) => {
         setStaffRecommendations(prev => {
             const next = new Set(prev);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
+            if (next.has(id)) {
+                next.delete(id);
+            } else {
+                next.add(id);
+            }
             return next;
         });
     };
@@ -218,31 +240,39 @@ export default function AdminPanel() {
 
                     <div className="space-y-3">
                         {/* Always-visible picks preview */}
-                        <div className="space-y-2">
-                            {resolvedPicks.pick && (
-                                <div>
-                                    <div className="text-sm font-medium text-emerald-300">Pick of the Month</div>
-                                    <div className="rounded-2xl border border-emerald-500 bg-slate-900/60 p-3">
-                                        <div className="font-medium text-slate-50 truncate">{resolvedPicks.pick.title}</div>
-                                        <div className="text-xs text-slate-400 truncate">by {resolvedPicks.pick.author}</div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {resolvedPicks.staff && resolvedPicks.staff.length > 0 && (
-                                <div>
-                                    <div className="text-sm font-medium text-emerald-300">Staff recommendations</div>
-                                    <div className="grid gap-2 sm:grid-cols-3 md:grid-cols-6 mt-2">
-                                        {resolvedPicks.staff.map(b => (
-                                            <div key={b._id || b.id} className="rounded-2xl border border-emerald-500 bg-slate-900/60 p-3 text-sm">
-                                                <div className="font-medium text-slate-50 truncate">{b.title}</div>
-                                                <div className="text-xs text-slate-400 truncate">by {b.author}</div>
+                        {hasAnyPicks && (
+                            <div className="space-y-2 pb-4 mb-4 border-b border-slate-800">
+                                {resolvedPicks.pick && (
+                                    <div>
+                                        <div className="text-sm font-medium text-emerald-300">Pick of the Month</div>
+                                        <div className="rounded-2xl border border-emerald-500 bg-slate-900/60 p-3">
+                                            <div className="font-medium text-slate-50 truncate">{resolvedPicks.pick.title}</div>
+                                            <div className="text-xs text-slate-400 truncate">
+                                                by {resolvedPicks.pick.author}
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
+                                )}
+
+                                {resolvedPicks.staff && resolvedPicks.staff.length > 0 && (
+                                    <div>
+                                        <div className="text-sm font-medium text-emerald-300">Staff recommendations</div>
+                                        <div className="grid gap-2 sm:grid-cols-3 md:grid-cols-6 mt-2">
+                                            {resolvedPicks.staff.map(b => (
+                                                <div
+                                                    key={b._id || b.id}
+                                                    className="rounded-2xl border border-emerald-500 bg-slate-900/60 p-3 text-sm"
+                                                >
+                                                    <div className="font-medium text-slate-50 truncate">{b.title}</div>
+                                                    <div className="text-xs text-slate-400 truncate">by {b.author}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* Search input (shared component) */}
                         <Search
                             value={query}
@@ -255,40 +285,57 @@ export default function AdminPanel() {
                             {booksError && <div className="text-sm text-red-400">Failed to load books</div>}
                             {!booksLoading && filtered.length === 0 && <div className="text-sm text-slate-400">No books found.</div>}
 
-                            {filtered.map((b) => {
+                            {filtered.map((b, index) => {
+                                const id = b._id || b.id;
                                 const isSelected = pickOfTheMonth === b._id;
+                                const showDivider =
+                                    highlightCount > 0 && index === highlightCount;
+
                                 return (
-                                    <div key={b._id} className="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3">
-                                        <div className="flex-1">
-                                            <div className="text-sm font-medium text-slate-50">{b.title}</div>
-                                            <div className="text-xs text-slate-400">by {b.author}</div>
+                                    <Fragment key={id}>
+                                        {showDivider && (
+                                            <div className="col-span-full my-3 border-t border-slate-800" />
+                                        )}
+
+                                        <div className="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-3">
+                                            <div className="flex-1">
+                                                <div className="text-sm font-medium text-slate-50">{b.title}</div>
+                                                <div className="text-xs text-slate-400">by {b.author}</div>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        if (pickOfTheMonth === b._id) {
+                                                            setPickOfTheMonth(null);
+                                                            return;
+                                                        }
+                                                        // Otherwise open review modal before saving the pick
+                                                        setPendingPickId(b._id);
+                                                        const existingReview = settings?.pickOfMonthReview || '';
+                                                        setPendingReviewText(existingReview);
+                                                        setShowReviewModal(true);
+                                                    }}
+                                                    className={`px-3 py-1 rounded-xl text-xs font-semibold ${isSelected
+                                                        ? "bg-emerald-500 text-slate-950"
+                                                        : "border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300"
+                                                        }`}
+                                                >
+                                                    Pick of the month
+                                                </button>
+                                                <button
+                                                    onClick={() => toggleStaff(b._id)}
+                                                    className={`px-2 py-0.5 rounded-xl text-[11px] ${staffRecommendations.has(b._id)
+                                                        ? "bg-emerald-500 text-slate-950"
+                                                        : "border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300"
+                                                        }`}
+                                                >
+                                                    {staffRecommendations.has(b._id)
+                                                        ? "Staff Recommendation ✓"
+                                                        : "Staff Recommendation"}
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col items-end gap-2">
-                                                    <button
-                                                        onClick={() => {
-                                                            if (pickOfTheMonth === b._id) {
-                                                                setPickOfTheMonth(null);
-                                                                return;
-                                                            }
-                                                            // Otherwise open review modal before saving the pick
-                                                            setPendingPickId(b._id);
-                                                            // Prefill review if settings has one for this pick
-                                                            const existingReview = settings?.pickOfMonthReview || '';
-                                                            setPendingReviewText(existingReview);
-                                                            setShowReviewModal(true);
-                                                        }}
-                                                        className={`px-3 py-1 rounded-xl text-xs font-semibold ${isSelected ? "bg-emerald-500 text-slate-950" : "border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300"}`}
-                                                    >
-                                                        {isSelected ? "Pick of the month" : "Pick of the month"}
-                                                    </button>
-                                            <button
-                                                onClick={() => toggleStaff(b._id)}
-                                                className={`px-2 py-0.5 rounded-xl text-[11px] ${staffRecommendations.has(b._id) ? "bg-emerald-500 text-slate-950" : "border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300"}`}
-                                            >
-                                                {staffRecommendations.has(b._id) ? "Staff Recommendation ✓" : "Staff Recommendation"}
-                                            </button>
-                                        </div>
-                                    </div>
+                                    </Fragment>
                                 );
                             })}
                         </div>

@@ -9,14 +9,11 @@ import Catalog from "./components/catalog/Catalog";
 import BookSaveForm from "./components/books/BookSaveForm";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
-// import { useContext } from "react";
-import UserContext from "./contexts/UserContext";
 import Logout from "./components/logout/Logout";
 import AdminPanel from "./components/admin-panel/AdminPanel";
 
 export default function App() {
-    // const { user } = useContext(UserContext)
-
+    // TODO: form validation, better error handling
     return (
         <div className="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
             <Header />

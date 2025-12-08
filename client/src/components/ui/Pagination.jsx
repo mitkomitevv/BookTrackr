@@ -37,23 +37,25 @@ export default function Pagination({ page = 1, pageSize = 20, total = null, onPa
     const pageSizes = [20, 30, 50, 100];
 
     return (
-        <div className="flex items-center justify-center gap-4 pt-4 text-sm">
-            <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-4 text-sm">
+            <div className="flex items-center gap-2 flex-wrap md:flex-nowrap max-w-full order-first md:order-none">
                 <button
                     onClick={() => goto(1)}
                     disabled={page === 1}
-                    className={`px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`flex items-center justify-center h-8 w-8 rounded-lg border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title="First page"
                 >
-                    First
+                    ⟨⟨
                 </button>
                 <button
                     onClick={() => goto(page - 1)}
-                    className="px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition"
+                    className="flex items-center justify-center h-8 w-8 rounded-lg border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition"
+                    title="Previous page"
                 >
-                    Previous
+                    ⟨
                 </button>
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap max-w-full px-1">
                     {totalPages ? (
                         Array.from({ length: Math.min(7, totalPages) }).map((_, i) => {
                             // center current page in the small pager when possible
@@ -67,7 +69,7 @@ export default function Pagination({ page = 1, pageSize = 20, total = null, onPa
                                     key={pageNum}
                                     onClick={() => goto(pageNum)}
                                     className={
-                                        `h-8 w-8 rounded-xl ${isActive ? 'bg-emerald-500 text-slate-950 font-semibold' : 'border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition'}`
+                                        `h-8 w-8 rounded-xl flex-shrink-0 ${isActive ? 'bg-emerald-500 text-slate-950 font-semibold' : 'border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition'}`
                                     }
                                 >
                                     {pageNum}
@@ -92,21 +94,23 @@ export default function Pagination({ page = 1, pageSize = 20, total = null, onPa
 
                 <button
                     onClick={() => goto(page + 1)}
-                    className="px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition"
+                    className="flex items-center justify-center h-8 w-8 rounded-lg border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition"
+                    title="Next page"
                 >
-                    Next
+                    ⟩
                 </button>
                 <button
                     onClick={() => goto(totalPages || 1)}
                     disabled={totalPages ? page === totalPages : true}
-                    className={`px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${totalPages && page === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`flex items-center justify-center h-8 w-8 rounded-lg border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition ${totalPages && page === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title="Last page"
                 >
-                    Last
+                    ⟩⟩
                 </button>
             </div>
 
             {!hidePageSize && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 order-last md:order-none">
                     <label className="text-slate-400 text-xs">Per page</label>
                     <select
                         value={pageSize}

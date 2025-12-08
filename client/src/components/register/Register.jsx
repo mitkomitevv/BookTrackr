@@ -1,4 +1,3 @@
-// pages/Register.jsx
 import { Link, useNavigate } from "react-router";
 import { useForm } from "../../hooks/useForm";
 import { useContext } from "react";
@@ -25,8 +24,7 @@ export default function Register() {
             }
 
             await registerHandler(email, password, name);
-            // You are now logged in (because context setUser) – choose where to go:
-            navigate("/"); // or "/books"
+            navigate("/");
         },
     });
 

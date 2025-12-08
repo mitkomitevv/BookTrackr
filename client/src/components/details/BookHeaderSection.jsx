@@ -4,7 +4,9 @@ import { useContext, useState, useEffect, useMemo } from "react";
 import UserContext from "../../contexts/UserContext";
 import ConfirmModal from "../ui/ConfirmModal";
 import StarRating from "../ui/StarRating";
+import ShelfModal from "../ui/ShelfModal";
 import { useExpandable } from "../../hooks/useExpandable";
+import { useShelfManagement } from "../../hooks/useShelfManagement";
 
 
 function gradientClassFor(key) {
@@ -32,22 +34,26 @@ export default function BookHeaderSection({
     year,
     genre,
     _id,
+    _ownerId,
 }) {
     const navigate = useNavigate();
     const { request } = useRequest();
-    const { user } = useContext(UserContext);
+    const { user, isAdmin } = useContext(UserContext);
     const [showConfirm, setShowConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [userRating, setUserRating] = useState(0);
     const [userRatingId, setUserRatingId] = useState(null);
     const [savingRating, setSavingRating] = useState(false);
+    const [showShelfModal, setShowShelfModal] = useState(false);
     const { expanded: descriptionExpanded, setExpanded: setDescriptionExpanded, contentRef: descriptionRef, isLong: isDescriptionLong } = useExpandable(description);
 
-    // Fetch all ratings for this book
     const ratingsPath = _id ? `/data/ratings?where=${encodeURIComponent(`bookId="${_id}"`)}` : null;
     const { data: ratingsData, refetch: refetchRatings } = useFetch(ratingsPath, { immediate: !!_id });
 
-    // Calculate average and find user's rating
+    const { shelves, bookShelves, toggleShelf, removeFromAllShelves } = useShelfManagement(_id, user);
+
+    const canEditDelete = user && (isAdmin || user._id === _ownerId);
+
     const ratingStats = useMemo(() => {
         if (!ratingsData || !Array.isArray(ratingsData) || ratingsData.length === 0) {
             return { average: 0, count: 0, distribution: [0, 0, 0, 0, 0] };
@@ -130,7 +136,7 @@ export default function BookHeaderSection({
             setDeleting(false);
         }
     };
-
+    
     return (
         <section className="flex flex-col lg:flex-row gap-8">
             {/* Left: cover + shelf actions + status */}
@@ -164,11 +170,16 @@ export default function BookHeaderSection({
                             <span className="text-slate-500 text-[11px]">Log in to rate</span>
                         )}
                     </div>
-                    <button className="w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2 font-semibold text-slate-950 shadow hover:bg-emerald-400 transition">
-                        Add to "To Read"
-                    </button>
-                    <button className="w-full inline-flex items-center justify-center rounded-2xl border border-slate-700 px-4 py-2 font-medium text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition">
-                        Mark as "Currently reading"
+                    <button
+                        onClick={() => setShowShelfModal(true)}
+                        disabled={!user}
+                        className="w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2 font-semibold text-slate-950 shadow hover:bg-emerald-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {!user 
+                            ? 'Log in to add' 
+                            : bookShelves.length > 0 
+                                ? bookShelves[0] 
+                                : 'Add to Shelf'}
                     </button>
                 </div>
             </div>
@@ -193,7 +204,7 @@ export default function BookHeaderSection({
                             </p>
                         </div>
 
-                        <div className="flex gap-2">
+                        {canEditDelete && (<div className="flex gap-2">
                             <Link
                                 type="button"
                                 to={`/catalog/${_id}/edit`}
@@ -209,6 +220,7 @@ export default function BookHeaderSection({
                                 Delete
                             </button>
                         </div>
+                        )}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
@@ -261,6 +273,7 @@ export default function BookHeaderSection({
                     </div>
                 </section>
             </div>
+
             <ConfirmModal
                 open={showConfirm}
                 onConfirm={confirmDeleteHandler}
@@ -270,6 +283,16 @@ export default function BookHeaderSection({
                 confirmText="Delete"
                 cancelText="Cancel"
                 loading={deleting}
+            />
+
+            <ShelfModal
+                isOpen={showShelfModal}
+                onClose={() => setShowShelfModal(false)}
+                bookTitle={title}
+                bookId={_id}
+                shelves={shelves}
+                onToggleShelf={toggleShelf}
+                onRemoveFromAll={removeFromAllShelves}
             />
         </section>
     );

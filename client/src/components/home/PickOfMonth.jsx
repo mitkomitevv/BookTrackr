@@ -1,9 +1,14 @@
-import { useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useFetch } from "../../hooks/useRequest";
+import { useShelfManagement } from "../../hooks/useShelfManagement";
 import { Link } from "react-router";
+import UserContext from "../../contexts/UserContext";
+import ShelfModal from "../ui/ShelfModal";
 
 export default function PickOfMonth() {
-    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home', { immediate: true });
+    const { user } = useContext(UserContext);
+    const [showShelfModal, setShowShelfModal] = useState(false);
+    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home');
 
     const bookId = useMemo(() => settings?.pickOfMonth || null, [settings]);
     const review = useMemo(() => settings?.pickOfMonthReview || null, [settings]);
@@ -20,10 +25,38 @@ export default function PickOfMonth() {
         }
     }, [bookData]);
 
-    const loading = settingsLoading || bookDataLoading;
+    const { data: ratingsData, loading: ratingsLoading } = useFetch('/data/ratings', { immediate: Boolean(bookId) });
+    const bookRatings = useMemo(() => {
+        if (!Array.isArray(ratingsData)) {
+            return [];
+        };
+
+        return Object.values(ratingsData).filter(rating => rating.bookId === bookId);
+    }, [ratingsData, bookId]);
+
+    const { data: reviewsData, loading: reviewsLoading } = useFetch('/data/reviews', { immediate: Boolean(bookId) });
+    const bookReviews = useMemo(() => {
+        if (!Array.isArray(reviewsData)) {
+            return [];
+        };
+
+        return Object.values(reviewsData).filter(review => review.bookId === bookId);
+    }, [reviewsData, bookId]);
+
+    const averageRating = useMemo(() => {
+        if (bookRatings.length === 0) {
+            return 0;
+        };
+
+        const sum = bookRatings.reduce((acc, rating) => acc + rating.stars, 0);
+        return (sum / bookRatings.length).toFixed(2);
+    }, [bookRatings]);
+
+    const loading = settingsLoading || bookDataLoading || ratingsLoading || reviewsLoading;
     const error = settingsError || bookDataError;
 
-    // TODO: Fix pick of the Month
+    // Use shelf management hook
+    const { shelves, bookShelves, toggleShelf, removeFromAllShelves } = useShelfManagement(bookId, user);
 
     return (
         <section className="mt-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8">
@@ -90,10 +123,10 @@ export default function PickOfMonth() {
                             </div>
                             <div className="flex items-center gap-3 text-xs">
                                 <div className="flex items-center gap-1 text-amber-300">
-                                    ★ 4.71
+                                    ★ {averageRating}
                                 </div>
                                 <span className="h-3 w-px bg-slate-700" />
-                                <span className="text-slate-400">1,824 ratings · 420 reviews</span>
+                                <span className="text-slate-400">{bookRatings.length} ratings · {bookReviews.length} reviews</span>
                             </div>
                         </div>
 
@@ -110,33 +143,35 @@ export default function PickOfMonth() {
                             <p className="text-sm text-slate-200 leading-relaxed description">
                                 {review || 'Loading review...'}
                             </p>
-                            <div className="mt-4 flex items-center justify-between text-xs">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-emerald-500 to-sky-500 flex items-center justify-center text-[11px] font-semibold text-slate-950">
-                                        MK
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-slate-100">Mira Koleva</span>
-                                        <span className="text-[11px] text-slate-400">
-                                            Senior editor · 324 books logged
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         {/* CTA buttons */}
                         <div className="flex flex-wrap gap-3 pt-2">
-                            <button className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition">
-                                Add to “To Read”
-                            </button>
-                            <button className="inline-flex items-center rounded-2xl border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 hover:border-emerald-500 hover:text-emerald-300 transition">
-                                See similar books
+                            <button 
+                                onClick={() => setShowShelfModal(true)}
+                                disabled={!user}
+                                className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {!user 
+                                    ? 'Log in to add' 
+                                    : bookShelves.length > 0 
+                                        ? bookShelves[0] 
+                                        : 'Add to Shelf'}
                             </button>
                         </div>
                     </div>
                 </>
             )}
+
+            <ShelfModal
+                isOpen={showShelfModal}
+                onClose={() => setShowShelfModal(false)}
+                bookTitle={pickBook?.title}
+                bookId={bookId}
+                shelves={shelves}
+                onToggleShelf={toggleShelf}
+                onRemoveFromAll={removeFromAllShelves}
+            />
         </section>
     );
 }

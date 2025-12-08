@@ -1,4 +1,3 @@
-// src/components/details/BookDetails.jsx
 import Breadcrumbs from "./Breadcrumbs";
 import BookHeaderSection from "./BookHeaderSection";
 import BookReviewsSection from "./BookReviewsSection";
@@ -23,15 +22,13 @@ export default function BookDetails() {
             <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
                 <Breadcrumbs title={book.title}/>
 
-                {/* Top: cover + main info */}
                 <BookHeaderSection {...book}/>
 
-                {/* Bottom: reviews + sidebar */}
                 <section className="flex flex-col lg:flex-row gap-8 pt-4 pb-8 border-t border-slate-900">
                     <div className="flex-1">
                         <BookReviewsSection bookId={bookId} bookTitle={book.title} />
                     </div>
-                    <BookSidebar />
+                    <BookSidebar bookId={bookId} />
                 </section>
             </div>
         </main>

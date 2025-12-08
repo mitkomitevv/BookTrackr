@@ -1433,6 +1433,33 @@
                 accessToken: "a1b2c3d4e5f60718273645566778899aabbccddeeff00112233445566778899",
                 isAdmin: false
             },
+            "5a7d1234-9af0-4b30-9e21-b38484f6c1ab": {
+                email: "mitko@abv.bg",
+                username: "Mitko Mitev",
+                hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1",
+                _createdOn: 1764975000000,
+                _id: "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                accessToken: "b7c3e4d5f6a718293a4b5c6d7e8f90112233445566778899aabbccddeeff0011",
+                isAdmin: false,
+            },
+            "9e3c6a2d-8bf0-4c91-92f4-1234567890ab": {
+                email: "elena@abv.bg",
+                username: "Elena Stoyanova",
+                hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1",
+                _createdOn: 1764976000000,
+                _id: "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                accessToken: "1111111111111111111111111111111111111111111111111111111111111111",
+                isAdmin: false
+            },
+            "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456": {
+                email: "ivan@abv.bg",
+                username: "Ivan Ivanov",
+                hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1",
+                _createdOn: 1764977000000,
+                _id: "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                accessToken: "2222222222222222222222222222222222222222222222222222222222222222",
+                isAdmin: false
+            },
         },
         sessions: {
         }
@@ -2429,12 +2456,102 @@ THIS. MUST. BE.`,
             {
                 "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
                 "reviewContent": "6/5 if BR would allow it. A cut above. Incredible. My book of the year.\n\nI started this series back in 2020 when Mike from Mike's Book Reviews on Youtube was reading it. He discovered it and mentioned he was reading it in one of his videos and despite the series being incredibly under the radar at the time my library had a copy of Empire of Silence. I was in the mood for sci fi so I thought what the hell I'll read along with Mike. That is how an epic journey starts with a small step. Each book escalated my interest and my advocacy for this series and on November 18, 2025 I began the end (an ending iykyk). What followed was an S tier reading experience that consumed every bit of my entertainment time for the last 2 weeks. I savored it like a fine dining meal I didn't want to end.\n\nThis book starts, as you might expect, a bit of time after the end of Disquiet Gods and starts hurtling toward \"what must be\". Even knowing where it was going from the beginning, the amount of anxiety I felt at points in this book shows you that Ruocchio was in his bag here. I'm not going to summarize the book because there would be spoilers and simply too much to cover, but what I can say is what made this my book of the year.\n\nFirst, I think Ruocchio's character work here is some of the best in the series. Some of the best scenes in this entire series are in this book and they aren't action sequences or trippy mind bending stuff but the scenes where it may just be two characters in a room talking. You not only get amazing lore drops but you also get some fantastic dialogue and characterization. These scenes have incredible weight. There were even some characters that didn't get introduced until Disquiet Gods that get some great development here. It was a pleasure to read. I think there is one fairly glaring exception, but I'll cover that later.\n\nSecond, in my opinion this is the best paced book in the series. I don't say that because it has non-stop action sequences. I say that because of the first point I made in this review. Some of the \"slower\" quieter moments are some of my favorites. In addition to that I think Ruocchio leveled up his action writing as well. There's plenty of it here and it is utilized in the best way possible. It holds your attention and gets your blood up, but none of these sequences felt overly long or draggy. They are also spaced out well throughout the text.\n\nThird, some of the lore, worldbuilding, and I don't know what to call it but \"cosmic trippy shit\" is dialed to 11 here. There are several chapters that while I was reading it I had to just pause and say \"This is something special here.\" There are a few chapters that are a conversation with a new character that shows up in this book that were utterly captivating from a lore perspective. There is another \"trippy\" chapter that almost had me throwing my kindle across the room. There were some chapters that would be right at home in a top tier horror novel. I was captivated 100 percent of the time.\n\nFourth, the ending I found incredibly satisfying and cathartic. Is Ruocchio going to spoonfeed you all the answers? No but I think by now we probably should realize that. What he does do is giving you what you know is coming but in ways you may not expect at all. It's handled in way that concludes the story of the Sun Eater and justifies not telling you any more than you need to know. It absolutely leaves you wanting more in the way that all the best performances or pieces of art do. It's also a full conclusion while leaving questions and openings to continue to write more in this world. Also, going back to the characters for a moment, there are just some fantastic moments near the conclusion that are just fantastic concluding arcs for side characters where they really get their time to shine. Just wonderful.\n\nWhat didn't I like? Not much honestly. This was everything I wanted and could have asked for. I do have a couple of minor complaints. First, even though I think this book has Ruocchio's best character work it sadly has one character that didn't get that treatment, Cassandra. She was the weak link in Disquiet Gods for me, and despite some early promise in this book and some memorable scenes early she really disappointed me overall. In the back half of the book she just doesn't do much besides say \"Abba!\" a lot and not want to get left behind. It's wild to me to hear Ruocchio say he considers her such an important character when there are several other characters who have far less page time that get way more development. My second complaint, if you want to call it that, is there are times when I was reading, particularly toward the end, where it felt like there were allusions and references being made that were important but I simply wasn't able to pick up on my own. I realize this is a me problem and asking for clarification leads to good book conversation but it did feel slightly over my head at times.\n\nAll that being said, I was telling others that were also reading the book that as I was reading I could tell that this book (and series honestly) is something special. Not just another work of sci fi or fantasy. Some books are like that for me. I can't explain it fully, but as I'm reading it I know that this isn't like other stuff I've read. I had that feeling with all my all time favorites like A Song of Ice and Fire, King Killer Chronicle, Second Apocalypse, and now Sun Eater. These series and books are a cut above even other books I love even inclusive of flaws. I'm sad I won't be able to experience it again for the first time but what a ride.",
-                "helpfulCount": 0,
                 "_createdOn": 1764963515729,
                 "_updatedOn": 1764963785890,
                 "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
                 "_id": "d3a3974f-da4b-49c7-b506-babda3123cf7"
             },
+            {
+                "bookId": "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                "reviewContent": "Empire of Silence is a stunning debut that combines the epic scale of Dune with the character-driven narrative of The Name of the Wind. Hadrian Marlowe is a compelling protagonist whose journey from aristocrat to gladiator to soldier is both tragic and inspiring. Ruocchio's prose is beautiful and evocative, painting vivid pictures of alien worlds and ancient civilizations. The worldbuilding is incredibly rich, blending science fiction and fantasy elements seamlessly. My only criticism is the pacing in the middle section, which drags a bit, but the payoff is absolutely worth it. Can't wait to continue the series!",
+                "_createdOn": 1764965000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-user-1"
+            },
+            {
+                "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f",
+                "reviewContent": "Gardens of the Moon is a challenging but rewarding read. Erikson drops you into the deep end of his complex world without much explanation, which can be disorienting at first. However, once you start piecing together the various plotlines and understanding the magic system, it becomes incredibly satisfying. The Bridgeburners are some of the best military characters I've read in fantasy. The scope is massive, and while it took me two attempts to get through it, I'm so glad I stuck with it. This is fantasy for readers who want to work for their payoff.",
+                "_createdOn": 1764966000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-user-2"
+            },
+            {
+                "bookId": "00cea304-fff3-4b3f-b015-ddd4a03fa871",
+                "reviewContent": "Howling Dark takes everything great about Empire of Silence and amplifies it. The stakes are higher, the worldbuilding deeper, and Hadrian's character development is phenomenal. The sequences with the Cielcin are genuinely unsettling and make them feel like a real alien threat rather than just monsters. Ruocchio's exploration of what it means to be human in the face of the truly alien is thought-provoking. The ending left me desperate for the next book.",
+                "_createdOn": 1764967000000,
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "_id": "review-peter-1"
+            },
+            {
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e",
+                "reviewContent": "Dark Age is a brutal, devastating masterpiece. Pierce Brown takes everything you love about this series and puts it through a meat grinder. The multiple POV structure works brilliantly here, showing the fractured state of the Republic and the Rising from all angles. Darrow's descent into darkness is painful to watch but feels earned. Lysander's chapters are surprisingly compelling—his idealism clashing with the reality of the Society creates fascinating tension. Lyria's storyline adds a grounded perspective that the series needed. The ending left me reeling. This is grimdark space opera at its finest.",
+                "_createdOn": 1764968000000,
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "_id": "review-peter-2"
+            },
+            {
+                "bookId": "952d7634-53b9-48c6-ab9b-3f7ef52c39e1",
+                "reviewContent": "The Black Company is the book that started it all for grimdark fantasy. Glen Cook's no-nonsense, military-focused storytelling is refreshing in a genre that can sometimes get bogged down in flowery prose. These are soldiers doing their jobs, and the moral ambiguity is what makes it so compelling. You're never quite sure if the Company are the good guys or not, and that's the point. The annals-style narration gives it a unique flavor. Essential reading for any fantasy fan.",
+                "_createdOn": 1764969000000,
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "_id": "review-admin-2"
+            },
+            {
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
+                "reviewContent": "Empire of the Dawn is everything I loved about Empire of the Vampire turned up to eleven. Jay Kristoff's prose is as gorgeous and brutal as ever. Gabriel's quest for vengeance drives the plot relentlessly forward, but the character development never takes a backseat. The world of eternal night continues to be one of the most atmospheric settings in fantasy. The vampire lore and mythology are rich and compelling. The twist near the end absolutely destroyed me.",
+                "_createdOn": 1764970000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-user-3"
+            },
+            {
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
+                "reviewContent": "Empire of the Dawn absolutely wrecked me. The father-daughter stuff between Gabriel and Dior is brutal in the best way, and the ending is going to live rent free in my head for a long time.",
+                "_createdOn": 1764970000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-user-3"
+            },
+            {
+                "bookId": "c16329f7-a90c-4228-835d-77a14d69bf64",
+                "reviewContent": "Empire of the Vampire is basically tailor-made for me: bleak world, gorgeous prose, and a main character who is a complete disaster but impossible to look away from. One of my all-time favorite vampire books.",
+                "_createdOn": 1764975200000,
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "_id": "review-mitko-1"
+            },
+            {
+                "bookId": "2d172481-4848-47fe-bf71-9c1e51b98773",
+                "reviewContent": "Light Bringer felt like coming home and getting punched in the face at the same time. The character work is insane and there are several moments that had me just staring at the page in shock.",
+                "_createdOn": 1764975250000,
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "_id": "review-mitko-2"
+            },
+            {
+                "bookId": "c16329f7-a90c-4228-835d-77a14d69bf64", // Empire of the Vampire
+                "reviewContent": "Empire of the Vampire is exactly the kind of gloomy, bloody epic I love. The framing device works so well and the emotional beats land hard.",
+                "_createdOn": 1764978400000,
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "_id": "review-elena-1"
+            },
+            {
+                "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f", // Gardens of the Moon
+                "reviewContent": "Gardens of the Moon is confusing at first, but on a reread the character arcs and worldbuilding really pay off. It absolutely rewards patience.",
+                "_createdOn": 1764978450000,
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "_id": "review-elena-2"
+            },
+            {
+                "bookId": "2d172481-4848-47fe-bf71-9c1e51b98773", // Light Bringer
+                "reviewContent": "Light Bringer somehow raises the stakes again. The political manoeuvring and the last third had me completely wired.",
+                "_createdOn": 1764978500000,
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "_id": "review-ivan-1"
+            },
+            {
+                "bookId": "2aff9c38-d4ab-481b-87d0-20c114a46a67", // Red Rising
+                "reviewContent": "Red Rising is still one of the most fun and brutal sci-fi books I have read. The academy arc never gets old.",
+                "_createdOn": 1764978550000,
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "_id": "review-ivan-2"
+            }
         ],
         ratings: [
             {
@@ -2443,17 +2560,613 @@ THIS. MUST. BE.`,
                 "stars": 5,
                 "_createdOn": 1764964261822,
                 "_id": "2425b21e-2fc3-44c0-ba26-29a3916ee5f9"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                "stars": 5,
+                "_createdOn": 1764964300000,
+                "_id": "rating-admin-2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "2aff9c38-d4ab-481b-87d0-20c114a46a67",
+                "stars": 4,
+                "_createdOn": 1764964400000,
+                "_id": "rating-admin-3"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f",
+                "stars": 5,
+                "_createdOn": 1764964500000,
+                "_id": "rating-admin-4"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                "stars": 5,
+                "_createdOn": 1764965100000,
+                "_id": "rating-user-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f",
+                "stars": 4,
+                "_createdOn": 1764966100000,
+                "_id": "rating-user-2"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
+                "stars": 5,
+                "_createdOn": 1764970100000,
+                "_id": "rating-user-3"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e",
+                "stars": 4,
+                "_createdOn": 1764971000000,
+                "_id": "rating-user-4"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "00cea304-fff3-4b3f-b015-ddd4a03fa871",
+                "stars": 5,
+                "_createdOn": 1764967100000,
+                "_id": "rating-peter-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e",
+                "stars": 5,
+                "_createdOn": 1764968100000,
+                "_id": "rating-peter-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                "stars": 4,
+                "_createdOn": 1764969000000,
+                "_id": "rating-peter-3"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
+                "stars": 5,
+                "_createdOn": 1764972000000,
+                "_id": "rating-peter-4"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
+                "stars": 5,
+                "_createdOn": 1764972000000,
+                "_id": "rating-peter-4"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "c16329f7-a90c-4228-835d-77a14d69bf64", // Empire of the Vampire
+                "stars": 5,
+                "_createdOn": 1764975300000,
+                "_id": "rating-mitko-1"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                "stars": 5,
+                "_createdOn": 1764975350000,
+                "_id": "rating-mitko-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "stars": 5,
+                "_createdOn": 1764975400000,
+                "_id": "rating-mitko-3"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "2d172481-4848-47fe-bf71-9c1e51b98773", // Light Bringer
+                "stars": 5,
+                "_createdOn": 1764975450000,
+                "_id": "rating-mitko-4"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "c16329f7-a90c-4228-835d-77a14d69bf64", // Empire of the Vampire
+                "stars": 5,
+                "_createdOn": 1764978600000,
+                "_id": "rating-elena-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                "stars": 5,
+                "_createdOn": 1764978650000,
+                "_id": "rating-elena-2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f", // Gardens of the Moon
+                "stars": 4,
+                "_createdOn": 1764978700000,
+                "_id": "rating-elena-3"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "bookId": "2d172481-4848-47fe-bf71-9c1e51b98773", // Light Bringer
+                "stars": 5,
+                "_createdOn": 1764978750000,
+                "_id": "rating-ivan-1"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e", // Dark Age
+                "stars": 5,
+                "_createdOn": 1764978800000,
+                "_id": "rating-ivan-2"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "bookId": "2aff9c38-d4ab-481b-87d0-20c114a46a67", // Red Rising
+                "stars": 5,
+                "_createdOn": 1764978850000,
+                "_id": "rating-ivan-3"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "bookId": "f9a471df-5c1e-4a72-b467-0726400778b7", // Red God
+                "stars": 4,
+                "_createdOn": 1764978900000,
+                "_id": "rating-ivan-4"
             }
         ],
         comments: [
             {
-                _ownerId: "35c62d76-8152-4626-8712-eeb96381bea8",
-                reviewId: "d3a3974f-da4b-49c7-b506-babda3123cf7",
-                content: "That's a great review! I completely agree with your points, especially about the character development and pacing. Ruocchio really outdid himself in this one.",
-                _createdOn: 1764964261822,
-                _id: "0a272c58-b7ea-4e09-a000-7ec988248f66"
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "content": "That's a great review! I completely agree with your points, especially about the character development and pacing. Ruocchio really outdid himself in this one.",
+                "_createdOn": 1764964261822,
+                "_id": "0a272c58-b7ea-4e09-a000-7ec988248f66"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "content": "This review convinced me to finally pick up the series! I've had Empire of Silence on my TBR for ages.",
+                "_createdOn": 1764965200000,
+                "_id": "comment-user-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "content": "I just finished this yesterday and wow, what an ending. Your review captures exactly how I felt about it.",
+                "_createdOn": 1764967200000,
+                "_id": "comment-peter-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-user-1",
+                "content": "Great review! The Dune comparison is spot on. Hadrian's story arc really does have that epic scope.",
+                "_createdOn": 1764965300000,
+                "_id": "comment-admin-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-2",
+                "content": "I had the exact same experience with Gardens of the Moon! It took me two tries but once it clicked, I was hooked.",
+                "_createdOn": 1764966200000,
+                "_id": "comment-peter-2"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-peter-2",
+                "content": "Dark Age hit different. Pierce Brown really wasn't holding back. Lysander's POV chapters were surprisingly good!",
+                "_createdOn": 1764968200000,
+                "_id": "comment-user-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-3",
+                "content": "Kristoff's writing is absolutely brutal in the best way. Gabriel's journey just keeps getting darker!",
+                "_createdOn": 1764970200000,
+                "_id": "comment-peter-3"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-3",
+                "content": "Kristoff really said: 'what if we just hurt them emotionally on every page?'",
+                "_createdOn": 1764970200000,
+                "_id": "comment-peter-3"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "content": "Sun Eater has set such a high bar it’s actually hard to pick up other sci-fi now. This review nails exactly why.",
+                "_createdOn": 1764975400000,
+                "_id": "comment-mitko-1"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-user-2",
+                "content": "Same experience with Gardens of the Moon – total confusion at first, then suddenly everything clicks and it becomes incredible.",
+                "_createdOn": 1764975450000,
+                "_id": "comment-mitko-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-peter-2",
+                "content": "Dark Age is pure suffering but I loved every second. That ending still haunts me.",
+                "_createdOn": 1764975500000,
+                "_id": "comment-mitko-3"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-user-3",
+                "content": "Totally agree, Empire of the Dawn left me in a mini reading slump too. Hard to move on after that ending.",
+                "_createdOn": 1764979000000,
+                "_id": "comment-elena-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-peter-2",
+                "content": "Dark Age is just pure pain. I love how your review mentions how relentless it feels.",
+                "_createdOn": 1764979050000,
+                "_id": "comment-elena-2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "content": "Your breakdown of Hadrian's arc is spot on. This series really does keep getting better with every book.",
+                "_createdOn": 1764979100000,
+                "_id": "comment-elena-3"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-user-1",
+                "content": "This was the review that finally pushed me to start Empire of Silence, no regrets at all.",
+                "_createdOn": 1764979150000,
+                "_id": "comment-ivan-1"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-user-2",
+                "content": "Nice point about needing to trust Erikson. It really does all click after a while.",
+                "_createdOn": 1764979200000,
+                "_id": "comment-ivan-2"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-admin-2",
+                "content": "Love that you highlighted how Red Rising stands on its own even if you only read book one.",
+                "_createdOn": 1764979250000,
+                "_id": "comment-ivan-3"
             }
         ],
+        reviewLikes: [
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "_createdOn": 1765046038628,
+                "_id": "2eeaafe2-92d1-4cf0-827a-821fc15a4035"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "_createdOn": 1764965250000,
+                "_id": "like-user-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "_createdOn": 1764967250000,
+                "_id": "like-peter-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-user-1",
+                "_createdOn": 1764965350000,
+                "_id": "like-admin-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-1",
+                "_createdOn": 1764965450000,
+                "_id": "like-peter-2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-user-2",
+                "_createdOn": 1764966250000,
+                "_id": "like-admin-3"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-peter-1",
+                "_createdOn": 1764967350000,
+                "_id": "like-user-3"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-peter-2",
+                "_createdOn": 1764968350000,
+                "_id": "like-admin-4"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-admin-2",
+                "_createdOn": 1764969200000,
+                "_id": "like-user-4"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-3",
+                "_createdOn": 1764970250000,
+                "_id": "like-peter-4"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-user-3",
+                "_createdOn": 1764970250000,
+                "_id": "like-peter-4"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "_createdOn": 1764975600000,
+                "_id": "like-mitko-1"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-user-1",
+                "_createdOn": 1764975650000,
+                "_id": "like-mitko-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-user-2",
+                "_createdOn": 1764975700000,
+                "_id": "like-mitko-3"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-peter-2",
+                "_createdOn": 1764975750000,
+                "_id": "like-mitko-4"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-user-3",
+                "_createdOn": 1764979300000,
+                "_id": "like-elena-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-peter-2",
+                "_createdOn": 1764979350000,
+                "_id": "like-elena-2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "d3a3974f-da4b-49c7-b506-babda3123cf7",
+                "_createdOn": 1764979400000,
+                "_id": "like-elena-3"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-ivan-1",
+                "_createdOn": 1764979450000,
+                "_id": "like-elena-4"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-user-1",
+                "_createdOn": 1764979500000,
+                "_id": "like-ivan-1"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-user-2",
+                "_createdOn": 1764979550000,
+                "_id": "like-ivan-2"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-admin-2",
+                "_createdOn": 1764979600000,
+                "_id": "like-ivan-3"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "reviewId": "review-elena-1",
+                "_createdOn": 1764979650000,
+                "_id": "like-ivan-4"
+            },
+        ],
+        shelves: [
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "read": ["82107d6e-81c6-4f34-81e3-e9dcb97984bc", "2aff9c38-d4ab-481b-87d0-20c114a46a67", "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"],
+                "currentlyReading": ["00cea304-fff3-4b3f-b015-ddd4a03fa871"],
+                "to-read": ["0fcfc589-7de4-4227-99e2-d444c8354b6c", "952d7634-53b9-48c6-ab9b-3f7ef52c39e1"],
+                "favoriteBooks": ["82107d6e-81c6-4f34-81e3-e9dcb97984bc", "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"],
+                "dnf": ["23405fcb-79df-49d7-a605-74e8a0a35de4"],
+                "_createdOn": 1765046038629,
+                "_id": "f4e5c3b1-FILLER-4c2a-9c3d-123456789abc"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "read": ["fcd39f63-7e0b-423c-8aec-1838b29a162e", "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"],
+                "currentlyReading": ["17935d4a-9ca4-478d-bdf5-86a3906d41a9"],
+                "to-read": ["2aff9c38-d4ab-481b-87d0-20c114a46a67", "952d7634-53b9-48c6-ab9b-3f7ef52c39e1", "0fcfc589-7de4-4227-99e2-d444c8354b6c", "23405fcb-79df-49d7-a605-74e8a0a35de4"],
+                "favoriteBooks": ["fcd39f63-7e0b-423c-8aec-1838b29a162e", "17935d4a-9ca4-478d-bdf5-86a3906d41a9"],
+                "dnf": ["00cea304-fff3-4b3f-b015-ddd4a03fa871"],
+                "_createdOn": 1764965100000,
+                "_id": "shelf-user-userov"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "read": ["3c3bfe22-e5f8-46e8-8088-72a051ff7f52", "0fcfc589-7de4-4227-99e2-d444c8354b6c"],
+                "currentlyReading": ["fcd39f63-7e0b-423c-8aec-1838b29a162e"],
+                "to-read": ["82107d6e-81c6-4f34-81e3-e9dcb97984bc", "952d7634-53b9-48c6-ab9b-3f7ef52c39e1", "17935d4a-9ca4-478d-bdf5-86a3906d41a9"],
+                "favoriteBooks": ["fcd39f63-7e0b-423c-8aec-1838b29a162e", "0fcfc589-7de4-4227-99e2-d444c8354b6c"],
+                "dnf": [],
+                "_createdOn": 1764967100000,
+                "_id": "shelf-peter-petrov"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "read": [
+                    "82107d6e-81c6-4f34-81e3-e9dcb97984bc", // Empire of Silence
+                    "2aff9c38-d4ab-481b-87d0-20c114a46a67", // Red Rising
+                    "277dfec1-7cea-4eab-9aa2-5456eb68eb6f", // Gardens of the Moon
+                    "c16329f7-a90c-4228-835d-77a14d69bf64"  // Empire of the Vampire
+                ],
+                "currentlyReading": [
+                    "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                    "fcd39f63-7e0b-423c-8aec-1838b29a162e"  // Dark Age
+                ],
+                "to-read": [
+                    "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                    "0ea35733-6a32-4146-aed4-d1dd01631417", // Lies Weeping
+                    "73e303f1-f91c-4cf1-8949-da34d322a446"  // New Spring
+                ],
+                "favoriteBooks": [
+                    "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
+                    "2aff9c38-d4ab-481b-87d0-20c114a46a67",
+                    "c16329f7-a90c-4228-835d-77a14d69bf64"
+                ],
+                "dnf": [
+                    "23405fcb-79df-49d7-a605-74e8a0a35de4" // Deadhouse Gates
+                ],
+                "_createdOn": 1764975050000,
+                "_id": "shelf-mitko-mitev"
+            },
+            , {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "read": [
+                    "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                    "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                    "2d172481-4848-47fe-bf71-9c1e51b98773", // Light Bringer
+                    "23405fcb-79df-49d7-a605-74e8a0a35de4", // Deadhouse Gates
+                    "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"  // Gardens of the Moon
+                ],
+                "currentlyReading": [
+                    "c16329f7-a90c-4228-835d-77a14d69bf64", // Empire of the Vampire
+                    "daede8cc-eafd-499a-9b32-f0c7dc4f48d3"  // The Eye of the World
+                ],
+                "to-read": [
+                    "736c0499-72c6-4a16-89df-f761f23376f8", // Empire of the Damned
+                    "952d7634-53b9-48c6-ab9b-3f7ef52c39e1", // The Black Company
+                    "144158ce-53fe-4994-9488-47d644911b05", // The Great Hunt
+                    "52d44f5c-6c18-4375-9f36-5f0c279eaff8"  // Disquiet Gods
+                ],
+                "favoriteBooks": [
+                    "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                    "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                    "2d172481-4848-47fe-bf71-9c1e51b98773"  // Light Bringer
+                ],
+                "dnf": [
+                    "1eb22952-67f8-467b-b1c8-1fe291d50381"   // Memories of Ice
+                ],
+                "_createdOn": 1764978050000,
+                "_id": "shelf-elena-stoyanova"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "read": [
+                    "2aff9c38-d4ab-481b-87d0-20c114a46a67", // Red Rising
+                    "0fcfc589-7de4-4227-99e2-d444c8354b6c", // Golden Son
+                    "4032affc-615e-4e41-9eb5-6f9517d4d9c9", // Morning Star
+                    "6aa9a204-67f3-4a97-9f66-15f999539e79", // Iron Gold
+                    "fcd39f63-7e0b-423c-8aec-1838b29a162e", // Dark Age
+                    "2d172481-4848-47fe-bf71-9c1e51b98773"  // Light Bringer
+                ],
+                "currentlyReading": [
+                    "f9a471df-5c1e-4a72-b467-0726400778b7", // Red God
+                    "52d44f5c-6c18-4375-9f36-5f0c279eaff8"  // Disquiet Gods
+                ],
+                "to-read": [
+                    "82107d6e-81c6-4f34-81e3-e9dcb97984bc", // Empire of Silence
+                    "00cea304-fff3-4b3f-b015-ddd4a03fa871", // Howling Dark
+                    "5321337c-6c3e-4515-b034-fd905a39bb68", // Demon in White
+                    "a73b1436-bbcf-4227-862a-def1b2226926", // Kingdoms of Death
+                    "c78eeb93-6288-4486-989e-25092333a642", // Ashes of Man
+                    "101b4a2f-fd3d-4552-a2de-026a73cf8e5e"  // Shadows Upon Time
+                ],
+                "favoriteBooks": [
+                    "2aff9c38-d4ab-481b-87d0-20c114a46a67", // Red Rising
+                    "fcd39f63-7e0b-423c-8aec-1838b29a162e", // Dark Age
+                    "2d172481-4848-47fe-bf71-9c1e51b98773"  // Light Bringer
+                ],
+                "dnf": [
+                    "277dfec1-7cea-4eab-9aa2-5456eb68eb6f", // Gardens of the Moon
+                    "23405fcb-79df-49d7-a605-74e8a0a35de4"  // Deadhouse Gates
+                ],
+                "_createdOn": 1764978150000,
+                "_id": "shelf-ivan-ivanov"
+            },
+        ],
+        readingProgress: [
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "00cea304-fff3-4b3f-b015-ddd4a03fa871",
+                "currentPage": 150,
+                "totalPages": 688,
+                "_createdOn": 1765046038630,
+                "_id": "progress-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
+                "currentPage": 312,
+                "totalPages": 656,
+                "_createdOn": 1764965150000,
+                "_id": "progress-user"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e",
+                "currentPage": 421,
+                "totalPages": 752,
+                "_createdOn": 1764967150000,
+                "_id": "progress-peter"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "17935d4a-9ca4-478d-bdf5-86a3906d41a9", // Empire of the Dawn
+                "currentPage": 450,
+                "totalPages": 800,
+                "_createdOn": 1764975100000,
+                "_id": "progress-mitko"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "bookId": "fcd39f63-7e0b-423c-8aec-1838b29a162e", // Dark Age
+                "currentPage": 693,
+                "totalPages": 758,
+                "_createdOn": 1764975100000,
+                "_id": "progress-mitko2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "c16329f7-a90c-4228-835d-77a14d69bf64", // Empire of the Vampire
+                "currentPage": 350,
+                "totalPages": 752,
+                "_createdOn": 1764978200000,
+                "_id": "progress-elena"
+            },
+            {
+                "_ownerId": "1a5d7c3e-b2a1-4d89-8c7f-abcdef123456",
+                "bookId": "f9a471df-5c1e-4a72-b467-0726400778b7", // Red God
+                "currentPage": 220,
+                "totalPages": 680,
+                "_createdOn": 1764978300000,
+                "_id": "progress-ivan"
+            }
+
+        ]
     };
     var rules$1 = {
         users: {
@@ -2475,7 +3188,43 @@ THIS. MUST. BE.`,
                     ".create": "newData.status = 'pending'"
                 }
             }
-        }
+        },
+        books: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data) || user.isAdmin",
+            ".delete": "isOwner(user, data) || user.isAdmin"
+        },
+        reviews: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data) || user.isAdmin",
+            ".delete": "isOwner(user, data) || user.isAdmin"
+        },
+        comments: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data) || user.isAdmin",
+            ".delete": "isOwner(user, data) || user.isAdmin"
+        },
+        reviewLikes: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data)",
+            ".delete": "isOwner(user, data)"
+        },
+        shelves: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data)",
+            ".delete": "isOwner(user, data)"
+        },
+        readingProgress: {
+            ".create": "newData._ownerId = user._id",
+            ".read": true,
+            ".update": "isOwner(user, data)",
+            ".delete": "isOwner(user, data)"
+        },
     };
     var settings = {
         identity: identity,
@@ -2496,6 +3245,8 @@ THIS. MUST. BE.`,
     const port = 3030;
 
     server.listen(port);
+    // If I want to connect through wifi on mobile
+    // server.listen(port, '0.0.0.0');
 
     console.log(`Server started on port ${port}. You can make requests to http://localhost:${port}/`);
     console.log(`Admin panel located at http://localhost:${port}/admin`);

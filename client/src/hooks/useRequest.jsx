@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 export const BASE_URL = "http://localhost:3030";
+// If I want to connect through wifi on mobile
+// export const BASE_URL = "http://192.168.0.102:3030";
 
 // TODO: fix double requests in some pages (Catalog, AdminPanel etc.)
 
@@ -49,19 +51,42 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}, sign
 
 
 // For actions (login, submit, etc.)
-
 export function useRequest() {
+    const controllerRef = useRef(null);
+
     const request = useCallback(
-        (path, method = "GET", body = null, headers = {}, signal) =>
-            jsonRequest(path, method, body, headers, signal),
+        async (path, method = "GET", body = null, headers = {}) => {
+            // Abort any in-flight request from this hook instance
+            controllerRef.current?.abort();
+
+            const controller = new AbortController();
+            controllerRef.current = controller;
+
+            try {
+                return await jsonRequest(path, method, body, headers, controller.signal);
+            } catch (err) {
+                if (controller.signal.aborted) {
+                    console.debug("Request aborted:", path);
+                    return;
+                }
+
+                throw err;
+            }
+        },
         []
     );
+
+    // Abort on unmount
+    useEffect(() => {
+        return () => {
+            controllerRef.current?.abort();
+        };
+    }, []);
 
     return { request };
 }
 
 // For loading data on mount/dependency change
-
 export function useFetch(path, { immediate = true, headers = {} } = {}) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(immediate);

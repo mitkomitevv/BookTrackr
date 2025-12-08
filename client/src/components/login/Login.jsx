@@ -17,7 +17,7 @@ export default function Login() {
         initialValues,
         onSubmit: async ({ email, password }) => {
             await loginHandler(email, password);
-            navigate("/"); // or "/books"
+            navigate("/");
         },
     });
 

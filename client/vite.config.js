@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  // server: {
+  //   // If I want to connect through wifi on mobile
+  //   host: true
+  // },
 })

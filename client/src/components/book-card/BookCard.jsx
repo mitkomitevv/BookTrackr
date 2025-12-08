@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import { useMemo } from "react";
+import { useFetch } from "../../hooks/useRequest";
 
 export default function BookCard({
     _id,
@@ -8,12 +10,28 @@ export default function BookCard({
     description,
     series,
     numberInSeries,
-    tags = [],
-    rating = null,
-    ratingsCount = null,
     showDescription = true,
-    compact = false,
 }) {
+    const { data: ratingsData } = useFetch('/data/ratings');
+
+    const { calculatedRating, calculatedCount } = useMemo(() => {
+        if (!_id || !Array.isArray(ratingsData)) {
+            return { calculatedRating: null, calculatedCount: null };
+        }
+
+        const bookRatings = ratingsData.filter(r => r.bookId === _id);
+
+        if (bookRatings.length === 0) {
+            return { calculatedRating: null, calculatedCount: null };
+        }
+
+        const avgRating = (bookRatings.reduce((sum, r) => sum + r.stars, 0) / bookRatings.length).toFixed(2);
+        return {
+            calculatedRating: parseFloat(avgRating),
+            calculatedCount: bookRatings.length
+        };
+    }, [_id, ratingsData]);
+
     return (
         <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-4 hover:border-emerald-500/70 transition group">
             <div className="flex gap-4">
@@ -59,20 +77,6 @@ export default function BookCard({
                         ) : (
                             <p className="text-xs text-slate-400">Unknown author</p>
                         )}
-
-                        {/* Tags */}
-                        {!compact && tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 pt-1">
-                                {tags.map((tag) => (
-                                    <span
-                                        key={tag}
-                                        className="inline-flex items-center rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300"
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
                     </header>
 
                     {/* Description */}
@@ -83,12 +87,12 @@ export default function BookCard({
                     )}
 
                     {/* Footer: rating + CTA */}
-                    <footer className="mt-3 flex items-center justify-between text-[11px]">
-                        {rating ? (
+                    <footer className="mt-3 flex items-center justify-between text-[13px]">
+                        {calculatedRating ? (
                             <div className="flex items-center gap-1 text-amber-300">
-                                ★ {rating}
-                                {ratingsCount && (
-                                    <span className="text-slate-500">· {ratingsCount} ratings</span>
+                                ★ {calculatedRating}
+                                {calculatedCount && (
+                                    <span className="text-slate-500">· {calculatedCount} ratings</span>
                                 )}
                             </div>
                         ) : (

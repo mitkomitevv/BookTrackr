@@ -3,7 +3,7 @@ import BookCard from "../book-card/BookCard";
 import { useFetch } from "../../hooks/useRequest";
 
 export default function StaffRecommendations() {
-    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home', { immediate: true });
+    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home');
     const RAW_RECOMMENDATIONS = useMemo(() => settings?.staffRecommendations || [], [settings]);
 
     const idPicks = useMemo(() => {

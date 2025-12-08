@@ -23,7 +23,6 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [savingReview, setSavingReview] = useState(false);
-    const [userReview, setUserReview] = useState(null);
     const [page, setPage] = useState(1);
     const [editingReview, setEditingReview] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -33,26 +32,49 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
     const [userRatingId, setUserRatingId] = useState(null);
     const [commentsReview, setCommentsReview] = useState(null);
 
-    // Fetch reviews for this book
-    const reviewsPath = bookId ? `/data/reviews?where=${encodeURIComponent(`bookId="${bookId}"`)}` + `&load=${encodeURIComponent('authorInfo=_ownerId:users')}` : null;
-    const { data: reviewsData, loading, refetch } = useFetch(reviewsPath, { immediate: !!bookId });
+    const reviewsPath = bookId
+        ? `/data/reviews?where=${encodeURIComponent(`bookId="${bookId}"`)}&load=${encodeURIComponent(
+              "authorInfo=_ownerId:users"
+          )}`
+        : null;
+
+    const {
+        data: reviewsData,
+        loading,
+        refetch,
+    } = useFetch(reviewsPath, { immediate: !!bookId });
 
     // Fetch ratings for this book (to prefill modal rating)
-    const ratingsPath = bookId ? `/data/ratings?where=${encodeURIComponent(`bookId="${bookId}"`)}` : null;
-    const { data: ratingsData, refetch: refetchRatings } = useFetch(ratingsPath, { immediate: !!bookId });
+    const ratingsPath = bookId
+        ? `/data/ratings?where=${encodeURIComponent(`bookId="${bookId}"`)}`
+        : null;
+
+    const {
+        data: ratingsData,
+        refetch: refetchRatings,
+    } = useFetch(ratingsPath, { immediate: !!bookId });
 
     // Normalize reviews to display format
     const allReviews = useMemo(() => {
         if (!reviewsData) return [];
+
         const list = Array.isArray(reviewsData) ? reviewsData : [];
+
         const ratingsMap = new Map();
         if (ratingsData && Array.isArray(ratingsData)) {
-            ratingsData.forEach(r => {
+            ratingsData.forEach((r) => {
                 if (r._ownerId) ratingsMap.set(r._ownerId, r.stars || 0);
             });
         }
-        return list.map(r => {
-            const authorName = r.authorInfo?.username || r.authorInfo?.email || "Anonymous";
+
+        return list.map((r) => {
+            const authorName =
+                r.authorInfo?.username ||
+                r.authorInfo?.name ||
+                (r.authorInfo?.email ? r.authorInfo.email.split("@")[0] : null) ||
+                r.authorInfo?.email ||
+                "Anonymous";
+
             return {
                 id: r._id || r.id,
                 initials: getInitials(authorName),
@@ -67,20 +89,28 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
         });
     }, [reviewsData, ratingsData]);
 
-    // Check if user already has a review
-    useEffect(() => {
-        if (user && allReviews.length > 0) {
-            const existing = allReviews.find(r => r._ownerId === user._id);
-            setUserReview(existing || null);
-        } else {
-            setUserReview(null);
+    const { userReview, otherReviews } = useMemo(() => {
+        if (!user) {
+            return { userReview: null, otherReviews: allReviews };
         }
+
+        let found = null;
+        const others = [];
+
+        for (const r of allReviews) {
+            if (!found && r._ownerId === user._id) {
+                found = r;
+            } else {
+                others.push(r);
+            }
+        }
+
+        return { userReview: found, otherReviews: others };
     }, [user, allReviews]);
 
-    // User rating (for modal)
     useEffect(() => {
         if (user && ratingsData && Array.isArray(ratingsData)) {
-            const existing = ratingsData.find(r => r._ownerId === user._id);
+            const existing = ratingsData.find((r) => r._ownerId === user._id);
             if (existing) {
                 setUserRating(existing.stars || 0);
                 setUserRatingId(existing._id || existing.id || null);
@@ -94,28 +124,42 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
         }
     }, [user, ratingsData]);
 
-    // Pagination
-    const totalPages = Math.ceil(allReviews.length / PAGE_SIZE);
+    // Pagination based on "otherReviews" only
+    const totalPages = Math.ceil(otherReviews.length / PAGE_SIZE);
+
     const paginatedReviews = useMemo(() => {
         const start = (page - 1) * PAGE_SIZE;
-        return allReviews.slice(start, start + PAGE_SIZE);
-    }, [allReviews, page]);
+        return otherReviews.slice(start, start + PAGE_SIZE);
+    }, [otherReviews, page]);
 
     const changeRatingHandler = async (stars) => {
         if (!user?.accessToken) return;
+
         try {
             const headers = { "X-Authorization": user.accessToken };
+
             if (userRatingId) {
                 if (stars === 0) {
                     await request(`/data/ratings/${userRatingId}`, "DELETE", null, headers);
                     setUserRatingId(null);
                 } else {
-                    await request(`/data/ratings/${userRatingId}`, "PUT", { bookId, stars }, headers);
+                    await request(
+                        `/data/ratings/${userRatingId}`,
+                        "PUT",
+                        { bookId, stars },
+                        headers
+                    );
                 }
             } else if (stars > 0) {
-                const res = await request("/data/ratings", "POST", { bookId, stars }, headers);
+                const res = await request(
+                    "/data/ratings",
+                    "POST",
+                    { bookId, stars },
+                    headers
+                );
                 setUserRatingId(res._id || res.id || null);
             }
+
             setUserRating(stars);
             refetchRatings?.();
         } catch (err) {
@@ -125,39 +169,35 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
     const saveReviewHandler = async (text) => {
         if (!text.trim()) return;
+
         setSavingReview(true);
+
         try {
             const payload = {
                 bookId,
                 reviewContent: text,
-                helpfulCount: 0,
+                // Keep helpfulCount from existing review on edit, or 0 on new
+                helpfulCount: editingReview ? editingReview.helpfulCount ?? 0 : 0,
             };
 
-            const headers = user?.accessToken ? { "X-Authorization": user.accessToken } : {};
+            const headers = user?.accessToken
+                ? { "X-Authorization": user.accessToken }
+                : {};
 
-            let result;
             if (editingReview) {
-                // Update existing review
-                result = await request(`/data/reviews/${editingReview.id}`, "PUT", payload, headers);
+                await request(
+                    `/data/reviews/${editingReview.id}`,
+                    "PUT",
+                    payload,
+                    headers
+                );
             } else {
-                // Create new review
-                result = await request("/data/reviews", "POST", payload, headers);
+                await request("/data/reviews", "POST", payload, headers);
             }
-
-            // Set as user's review to highlight it
-            const authorName = user?.username || user?.email || "Anonymous";
-            setUserReview({
-                id: result._id || result.id || editingReview?.id,
-                initials: getInitials(authorName),
-                author: authorName,
-                date: editingReview ? userReview?.date : "Today",
-                reviewContent: text,
-                helpfulCount: editingReview ? userReview?.helpfulCount : 0,
-                _ownerId: user?._id,
-            });
 
             setShowReviewModal(false);
             setEditingReview(null);
+
             refetch?.();
         } catch (err) {
             console.error("Failed to save review:", err);
@@ -179,15 +219,26 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
     const deleteReviewHandler = async () => {
         const reviewToDelete = deletingReview;
         if (!reviewToDelete?.id) return;
+
         setDeleting(true);
+
         try {
-            const headers = user?.accessToken ? { "X-Authorization": user.accessToken } : {};
-            await request(`/data/reviews/${reviewToDelete.id}`, "DELETE", null, headers);
-            if (reviewToDelete.id === userReview?.id) {
-                setUserReview(null);
-            }
+            const headers = user?.accessToken
+                ? { "X-Authorization": user.accessToken }
+                : {};
+
+            await request(
+                `/data/reviews/${reviewToDelete.id}`,
+                "DELETE",
+                null,
+                headers
+            );
+
             setShowDeleteConfirm(false);
             setDeletingReview(null);
+
+            // After refetch, allReviews won't contain this review anymore,
+            // so userReview will become null automatically (if it was theirs).
             refetch?.();
         } catch (err) {
             console.error("Failed to delete review:", err);
@@ -196,7 +247,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
         }
     };
 
-    const totalCount = allReviews.length + (userReview && !allReviews.find(r => r.id === userReview.id) ? 1 : 0);
+    const totalCount = allReviews.length;
 
     const openComments = (review) => {
         setCommentsReview(review);
@@ -242,7 +293,10 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                 visible={showReviewModal}
                 initialText={editingReview?.reviewContent || ""}
                 initialRating={userRating}
-                onClose={() => { setShowReviewModal(false); setEditingReview(null); }}
+                onClose={() => {
+                    setShowReviewModal(false);
+                    setEditingReview(null);
+                }}
                 onSave={saveReviewHandler}
                 onRatingChange={changeRatingHandler}
                 saving={savingReview}
@@ -252,30 +306,43 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
             <ConfirmModal
                 open={showDeleteConfirm}
                 title="Delete review"
-                message={`Are you sure you want to delete ${deletingReview?.id === userReview?.id ? 'your' : 'this'} review? This action cannot be undone.`}
+                message={`Are you sure you want to delete ${
+                    deletingReview?.id === userReview?.id ? "your" : "this"
+                } review? This action cannot be undone.`}
                 confirmText={deleting ? "Deleting..." : "Delete"}
                 onConfirm={deleteReviewHandler}
-                onCancel={() => { setShowDeleteConfirm(false); setDeletingReview(null); }}
+                onCancel={() => {
+                    setShowDeleteConfirm(false);
+                    setDeletingReview(null);
+                }}
             />
 
-            {/* Reviews list */}
+            {/* Reviews list (other users' reviews) */}
             <div className="space-y-3">
-                {loading && <p className="text-sm text-slate-400">Loading reviews...</p>}
-                {!loading && paginatedReviews.length === 0 && !userReview && (
-                    <p className="text-sm text-slate-400">No reviews yet. Be the first to share your thoughts!</p>
+                {loading && (
+                    <p className="text-sm text-slate-400">Loading reviews...</p>
                 )}
-                {paginatedReviews
-                    .filter(r => r.id !== userReview?.id)
-                    .map((review) => (
-                        <ReviewCard
-                            key={review.id}
-                            review={review}
-                            isAdmin={isAdmin}
-                            onEdit={isAdmin ? () => editReviewHandler(review) : undefined}
-                            onDelete={isAdmin ? () => confirmDeleteReviewHandler(review) : undefined}
-                            onComment={() => openComments(review)}
-                        />
-                    ))}
+
+                {!loading && otherReviews.length === 0 && !userReview && (
+                    <p className="text-sm text-slate-400">
+                        No reviews yet. Be the first to share your thoughts!
+                    </p>
+                )}
+
+                {paginatedReviews.map((review) => (
+                    <ReviewCard
+                        key={review.id}
+                        review={review}
+                        isAdmin={isAdmin}
+                        onEdit={
+                            isAdmin ? () => editReviewHandler(review) : undefined
+                        }
+                        onDelete={
+                            isAdmin ? () => confirmDeleteReviewHandler(review) : undefined
+                        }
+                        onComment={() => openComments(review)}
+                    />
+                ))}
             </div>
 
             {/* Pagination */}
@@ -283,7 +350,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                 <Pagination
                     page={page}
                     pageSize={PAGE_SIZE}
-                    total={allReviews.length}
+                    total={otherReviews.length}
                     onPageChange={setPage}
                     hidePageSize
                 />

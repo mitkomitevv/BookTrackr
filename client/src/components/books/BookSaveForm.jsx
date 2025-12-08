@@ -75,7 +75,7 @@ export default function BookSaveForm() {
     });
 
     // Populate form when book data arrives (edit mode)
-        useEffect(() => {
+    useEffect(() => {
         if (!isEdit || !book) return;
         const vals = {
             title: book.title ?? "",
@@ -93,15 +93,15 @@ export default function BookSaveForm() {
         reset(vals);
     }, [isEdit, book, reset]);
 
-    const handleCancel = () => navigate(isEdit ? `/catalog/${bookId}/details` : "/catalog");
+    const cancelClickHandler = () => navigate(isEdit ? `/catalog/${bookId}/details` : "/catalog");
 
     if (isEdit && loadingBook) {
         return <div className="flex-1 flex items-center justify-center">Loading...</div>;
-    }
+    };
 
     if (isEdit && bookError) {
         return <div className="flex-1 flex items-center justify-center">Failed to load book for editing</div>;
-    }
+    };
 
     return (
         <main className="flex-1">
@@ -111,7 +111,9 @@ export default function BookSaveForm() {
                         {isEdit ? "Edit book" : "Add a new book"}
                     </h1>
                     <p className="text-sm text-slate-400 max-w-2xl">
-                        {isEdit ? "Update the book details." : "Add a book to your catalog. You can always edit these details later."}
+                        {isEdit
+                            ? "Update the book details."
+                            : "Before adding a new book, please ensure it isn't already in our catalog to avoid duplicates. Duplicates will be removed by our admin team. Any book added here will be visible to all users."}
                     </p>
                 </header>
 
@@ -151,7 +153,7 @@ export default function BookSaveForm() {
                                     <input
                                         type="text"
                                         required
-                                        placeholder="Empire of Silence"
+                                        placeholder="Book Title"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                         {...registerInput("title")}
                                     />
@@ -164,7 +166,7 @@ export default function BookSaveForm() {
                                     <span className="text-slate-200">Series</span>
                                     <input
                                         type="text"
-                                        placeholder="The Sun Eater"
+                                        placeholder="Series Name"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                         {...registerInput("series")}
                                     />
@@ -195,7 +197,7 @@ export default function BookSaveForm() {
                                     <input
                                         type="text"
                                         required
-                                        placeholder="Aya Morrow"
+                                        placeholder="Author Name"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                         {...registerInput("author")}
                                     />
@@ -312,7 +314,7 @@ export default function BookSaveForm() {
                     <div className="flex items-center justify-end gap-3 pt-2">
                         <button
                             type="button"
-                            onClick={handleCancel}
+                            onClick={cancelClickHandler}
                             className="px-4 py-2 rounded-2xl border border-slate-700 text-sm text-slate-200 hover:border-slate-500 hover:text-slate-100 transition"
                         >
                             Cancel

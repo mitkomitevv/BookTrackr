@@ -1,6 +1,13 @@
 import { useRef, useEffect } from 'react';
 
-export default function Pagination({ page = 1, pageSize = 20, total = null, onPageChange = () => { }, onPageSizeChange = () => { }, hidePageSize = false }) {
+export default function Pagination({
+    page = 1,
+    pageSize = 20,
+    total = null,
+    onPageChange = () => {},
+    onPageSizeChange = () => {},
+    hidePageSize = false,
+}) {
     const scrollTimeoutRef = useRef(null);
 
     useEffect(() => {
@@ -57,25 +64,26 @@ export default function Pagination({ page = 1, pageSize = 20, total = null, onPa
 
                 <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap max-w-full px-1">
                     {totalPages ? (
-                        Array.from({ length: Math.min(7, totalPages) }).map((_, i) => {
-                            // center current page in the small pager when possible
-                            let start = Math.max(1, page - 3);
-                            if (start + 6 > totalPages) start = Math.max(1, totalPages - 6);
-                            const pageNum = start + i;
-                            if (pageNum > totalPages) return null;
-                            const isActive = pageNum === page;
-                            return (
-                                <button
-                                    key={pageNum}
-                                    onClick={() => goto(pageNum)}
-                                    className={
-                                        `h-8 w-8 rounded-xl flex-shrink-0 ${isActive ? 'bg-emerald-500 text-slate-950 font-semibold' : 'border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition'}`
-                                    }
-                                >
-                                    {pageNum}
-                                </button>
-                            );
-                        })
+                        Array.from({ length: Math.min(7, totalPages) }).map(
+                            (_, i) => {
+                                // center current page in the small pager when possible
+                                let start = Math.max(1, page - 3);
+                                if (start + 6 > totalPages)
+                                    start = Math.max(1, totalPages - 6);
+                                const pageNum = start + i;
+                                if (pageNum > totalPages) return null;
+                                const isActive = pageNum === page;
+                                return (
+                                    <button
+                                        key={pageNum}
+                                        onClick={() => goto(pageNum)}
+                                        className={`h-8 w-8 rounded-xl flex-shrink-0 ${isActive ? 'bg-emerald-500 text-slate-950 font-semibold' : 'border border-slate-700 text-slate-300 hover:border-emerald-500 hover:text-emerald-300 transition'}`}
+                                    >
+                                        {pageNum}
+                                    </button>
+                                );
+                            },
+                        )
                     ) : (
                         <span className="text-slate-400">Loading pages…</span>
                     )}

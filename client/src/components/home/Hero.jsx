@@ -1,5 +1,5 @@
-import { Link } from "react-router";
-import TrendingCard from "./TrendingCard";
+import { Link } from 'react-router';
+import TrendingCard from './TrendingCard';
 
 export default function Hero() {
     return (
@@ -11,15 +11,19 @@ export default function Hero() {
                         Welcome to BookTrackr
                     </p>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-slate-50">
-                        Discover your next{" "}
+                        Discover your next{' '}
                         <span className="text-emerald-400">favorite book</span>.
                     </h1>
                     <p className="text-sm sm:text-base text-slate-300 max-w-xl">
-                        Track what you’re reading, explore tailored recommendations, and
-                        see what everyone else is loving right now.
+                        Track what you’re reading, explore tailored
+                        recommendations, and see what everyone else is loving
+                        right now.
                     </p>
                     <div className="flex flex-wrap gap-3 pt-2">
-                        <Link to="/catalog" className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition">
+                        <Link
+                            to="/catalog"
+                            className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
+                        >
                             Browse catalog
                             <span className="ml-2 text-lg">→</span>
                         </Link>

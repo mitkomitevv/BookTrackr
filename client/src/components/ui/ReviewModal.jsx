@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import StarRating from "./StarRating";
+import { useEffect, useState } from 'react';
+import StarRating from './StarRating';
 
 export default function ReviewModal({
     visible,
-    initialText = "",
+    initialText = '',
     initialRating = 0,
     onClose,
     onSave,
@@ -16,7 +16,7 @@ export default function ReviewModal({
 
     useEffect(() => {
         if (visible) {
-            setText(initialText ?? "");
+            setText(initialText ?? '');
             setRating(initialRating ?? 0);
         }
     }, [visible, initialText, initialRating]);
@@ -33,12 +33,21 @@ export default function ReviewModal({
             <div className="absolute inset-0 bg-black/50" onClick={onClose} />
             <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-3xl w-full text-slate-100 shadow-lg">
                 <h3 className="text-lg font-semibold mb-2">Add review</h3>
-                <p className="text-sm text-slate-300 mb-4">Add a short review that will appear with the book.</p>
+                <p className="text-sm text-slate-300 mb-4">
+                    Add a short review that will appear with the book.
+                </p>
 
                 {showRating && (
                     <div className="mb-4">
-                        <label className="block text-sm text-slate-300 mb-2">Your rating</label>
-                        <StarRating value={rating} onChange={handleRatingChange} size="xl" showLabel />
+                        <label className="block text-sm text-slate-300 mb-2">
+                            Your rating
+                        </label>
+                        <StarRating
+                            value={rating}
+                            onChange={handleRatingChange}
+                            size="xl"
+                            showLabel
+                        />
                     </div>
                 )}
 
@@ -64,7 +73,7 @@ export default function ReviewModal({
                         disabled={saving || !text.trim()}
                         className="px-3 py-1 rounded-2xl bg-emerald-500 text-sm font-semibold text-slate-950 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
                     >
-                        {saving ? "Saving..." : "Post review"}
+                        {saving ? 'Saving...' : 'Post review'}
                     </button>
                 </div>
             </div>

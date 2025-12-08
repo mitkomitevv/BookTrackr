@@ -1,17 +1,23 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-export const BASE_URL = "http://localhost:3030";
+export const BASE_URL = 'http://localhost:3030';
 // If I want to connect through wifi on mobile
 // export const BASE_URL = "http://192.168.0.102:3030";
 
 // TODO: fix double requests in some pages (Catalog, AdminPanel etc.)
 
-async function jsonRequest(path, method = "GET", body = null, headers = {}, signal) {
+async function jsonRequest(
+    path,
+    method = 'GET',
+    body = null,
+    headers = {},
+    signal,
+) {
     const options = {
         method,
         headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
             ...headers,
         },
     };
@@ -27,7 +33,7 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}, sign
     const response = await fetch(BASE_URL + path, options);
 
     if (!response.ok) {
-        const err = new Error("Request failed");
+        const err = new Error('Request failed');
         err.status = response.status;
         try {
             err.payload = await response.json();
@@ -49,13 +55,12 @@ async function jsonRequest(path, method = "GET", body = null, headers = {}, sign
     return JSON.parse(text);
 }
 
-
 // For actions (login, submit, etc.)
 export function useRequest() {
     const controllerRef = useRef(null);
 
     const request = useCallback(
-        async (path, method = "GET", body = null, headers = {}) => {
+        async (path, method = 'GET', body = null, headers = {}) => {
             // Abort any in-flight request from this hook instance
             controllerRef.current?.abort();
 
@@ -63,17 +68,23 @@ export function useRequest() {
             controllerRef.current = controller;
 
             try {
-                return await jsonRequest(path, method, body, headers, controller.signal);
+                return await jsonRequest(
+                    path,
+                    method,
+                    body,
+                    headers,
+                    controller.signal,
+                );
             } catch (err) {
                 if (controller.signal.aborted) {
-                    console.debug("Request aborted:", path);
+                    console.debug('Request aborted:', path);
                     return;
                 }
 
                 throw err;
             }
         },
-        []
+        [],
     );
 
     // Abort on unmount
@@ -104,7 +115,13 @@ export function useFetch(path, { immediate = true, headers = {} } = {}) {
         setError(null);
 
         try {
-            const result = await jsonRequest(path, "GET", null, headers, controller.signal);
+            const result = await jsonRequest(
+                path,
+                'GET',
+                null,
+                headers,
+                controller.signal,
+            );
             if (!controller.signal.aborted) {
                 setData(result);
             }

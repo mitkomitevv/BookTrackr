@@ -1,74 +1,110 @@
-import { useContext, useMemo, useState } from "react";
-import { useFetch } from "../../hooks/useRequest";
-import { useShelfManagement } from "../../hooks/useShelfManagement";
-import { Link } from "react-router";
-import UserContext from "../../contexts/UserContext";
-import ShelfModal from "../ui/ShelfModal";
+import { useContext, useMemo, useState } from 'react';
+import { useFetch } from '../../hooks/useRequest';
+import { useShelfManagement } from '../../hooks/useShelfManagement';
+import { Link } from 'react-router';
+import UserContext from '../../contexts/UserContext';
+import ShelfModal from '../ui/ShelfModal';
 
 export default function PickOfMonth() {
     const { user } = useContext(UserContext);
     const [showShelfModal, setShowShelfModal] = useState(false);
-    const { data: settings, loading: settingsLoading, error: settingsError } = useFetch('/data/settings/home');
+    const {
+        data: settings,
+        loading: settingsLoading,
+        error: settingsError,
+    } = useFetch('/data/settings/home');
 
     const bookId = useMemo(() => settings?.pickOfMonth || null, [settings]);
-    const review = useMemo(() => settings?.pickOfMonthReview || null, [settings]);
+    const review = useMemo(
+        () => settings?.pickOfMonthReview || null,
+        [settings],
+    );
 
     const bookPath = useMemo(() => {
         if (!bookId) return null;
         return `/data/books?where=${encodeURIComponent(`_id = "${bookId.replace(/"/g, '\\"')}"`)}`;
     }, [bookId]);
 
-    const { data: bookData, loading: bookDataLoading, error: bookDataError } = useFetch(bookPath, { immediate: Boolean(bookPath) });
+    const {
+        data: bookData,
+        loading: bookDataLoading,
+        error: bookDataError,
+    } = useFetch(bookPath, { immediate: Boolean(bookPath) });
     const pickBook = useMemo(() => {
         if (Array.isArray(bookData) && bookData.length > 0) {
             return bookData[0];
         }
     }, [bookData]);
 
-    const { data: ratingsData, loading: ratingsLoading } = useFetch('/data/ratings', { immediate: Boolean(bookId) });
+    const { data: ratingsData, loading: ratingsLoading } = useFetch(
+        '/data/ratings',
+        { immediate: Boolean(bookId) },
+    );
     const bookRatings = useMemo(() => {
         if (!Array.isArray(ratingsData)) {
             return [];
-        };
+        }
 
-        return Object.values(ratingsData).filter(rating => rating.bookId === bookId);
+        return Object.values(ratingsData).filter(
+            (rating) => rating.bookId === bookId,
+        );
     }, [ratingsData, bookId]);
 
-    const { data: reviewsData, loading: reviewsLoading } = useFetch('/data/reviews', { immediate: Boolean(bookId) });
+    const { data: reviewsData, loading: reviewsLoading } = useFetch(
+        '/data/reviews',
+        { immediate: Boolean(bookId) },
+    );
     const bookReviews = useMemo(() => {
         if (!Array.isArray(reviewsData)) {
             return [];
-        };
+        }
 
-        return Object.values(reviewsData).filter(review => review.bookId === bookId);
+        return Object.values(reviewsData).filter(
+            (review) => review.bookId === bookId,
+        );
     }, [reviewsData, bookId]);
 
     const averageRating = useMemo(() => {
         if (bookRatings.length === 0) {
             return 0;
-        };
+        }
 
         const sum = bookRatings.reduce((acc, rating) => acc + rating.stars, 0);
         return (sum / bookRatings.length).toFixed(2);
     }, [bookRatings]);
 
-    const loading = settingsLoading || bookDataLoading || ratingsLoading || reviewsLoading;
+    const loading =
+        settingsLoading || bookDataLoading || ratingsLoading || reviewsLoading;
     const error = settingsError || bookDataError;
 
     // Use shelf management hook
-    const { shelves, bookShelves, toggleShelf, removeFromAllShelves } = useShelfManagement(bookId, user);
+    const { shelves, bookShelves, toggleShelf, removeFromAllShelves } =
+        useShelfManagement(bookId, user);
 
     return (
         <section className="mt-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8">
-            {loading && <div className="text-sm text-slate-400">Loading Pick of the Month...</div>}
-            {error && <div className="text-sm text-red-400">Failed to load Pick of the Month</div>}
+            {loading && (
+                <div className="text-sm text-slate-400">
+                    Loading Pick of the Month...
+                </div>
+            )}
+            {error && (
+                <div className="text-sm text-red-400">
+                    Failed to load Pick of the Month
+                </div>
+            )}
 
             {!loading && !pickBook ? (
-                <div className="text-sm text-slate-400">No Pick of the Month set.</div>
+                <div className="text-sm text-slate-400">
+                    No Pick of the Month set.
+                </div>
             ) : (
                 <>
                     {/* Book cover */}
-                    <Link to={`/catalog/${pickBook?._id}/details`} className="w-full md:w-48 flex-shrink-0 flex items-center justify-center">
+                    <Link
+                        to={`/catalog/${pickBook?._id}/details`}
+                        className="w-full md:w-48 flex-shrink-0 flex items-center justify-center"
+                    >
                         {pickBook?.coverUrl ? (
                             <img
                                 src={pickBook.coverUrl}
@@ -85,7 +121,9 @@ export default function PickOfMonth() {
                                     <h3 className="text-sm font-semibold text-slate-50">
                                         {pickBook?.title || 'Loading...'}
                                     </h3>
-                                    <p className="text-[11px] text-slate-200">{pickBook?.author || ''}</p>
+                                    <p className="text-[11px] text-slate-200">
+                                        {pickBook?.author || ''}
+                                    </p>
                                 </div>
                             </div>
                         )}
@@ -103,11 +141,18 @@ export default function PickOfMonth() {
                         </div>
 
                         <div className="space-y-2">
-                            <Link to={`/catalog/${pickBook?._id}/details`} className="text-xl sm:text-2xl font-semibold text-slate-50">
+                            <Link
+                                to={`/catalog/${pickBook?._id}/details`}
+                                className="text-xl sm:text-2xl font-semibold text-slate-50"
+                            >
                                 {pickBook?.title || 'Loading...'}
                                 {pickBook?.series && (
                                     <span className="text-xl text-slate-400 font-normal ml-2">
-                                        ({pickBook.series}{pickBook.numberInSeries ? `, #${pickBook.numberInSeries}` : ""})
+                                        ({pickBook.series}
+                                        {pickBook.numberInSeries
+                                            ? `, #${pickBook.numberInSeries}`
+                                            : ''}
+                                        )
                                     </span>
                                 )}
                             </Link>
@@ -126,7 +171,10 @@ export default function PickOfMonth() {
                                     ★ {averageRating}
                                 </div>
                                 <span className="h-3 w-px bg-slate-700" />
-                                <span className="text-slate-400">{bookRatings.length} ratings · {bookReviews.length} reviews</span>
+                                <span className="text-slate-400">
+                                    {bookRatings.length} ratings ·{' '}
+                                    {bookReviews.length} reviews
+                                </span>
                             </div>
                         </div>
 
@@ -147,16 +195,16 @@ export default function PickOfMonth() {
 
                         {/* CTA buttons */}
                         <div className="flex flex-wrap gap-3 pt-2">
-                            <button 
+                            <button
                                 onClick={() => setShowShelfModal(true)}
                                 disabled={!user}
                                 className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {!user 
-                                    ? 'Log in to add' 
-                                    : bookShelves.length > 0 
-                                        ? bookShelves[0] 
-                                        : 'Add to Shelf'}
+                                {!user
+                                    ? 'Log in to add'
+                                    : bookShelves.length > 0
+                                      ? bookShelves[0]
+                                      : 'Add to Shelf'}
                             </button>
                         </div>
                     </div>

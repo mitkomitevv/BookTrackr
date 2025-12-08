@@ -1,13 +1,20 @@
-import { useFetch } from "../../hooks/useRequest";
-import { Link } from "react-router";
-import BookCard from "../book-card/BookCard";
+import { useFetch } from '../../hooks/useRequest';
+import { Link } from 'react-router';
+import BookCard from '../book-card/BookCard';
 
-export default function ShelfPreview({ title, description, bookIds, onViewAll }) {
+export default function ShelfPreview({
+    title,
+    description,
+    bookIds,
+    onViewAll,
+}) {
     const booksToFetch = bookIds?.slice(0, 3) || [];
     const inClause = booksToFetch.length
-        ? `_id IN (${booksToFetch.map(id => `"${id}"`).join(',')})`
-        : "";
-    const path = inClause ? `/data/books?where=${encodeURIComponent(inClause)}` : null;
+        ? `_id IN (${booksToFetch.map((id) => `"${id}"`).join(',')})`
+        : '';
+    const path = inClause
+        ? `/data/books?where=${encodeURIComponent(inClause)}`
+        : null;
 
     const { data: books = [], loading, error } = useFetch(path);
 
@@ -16,7 +23,9 @@ export default function ShelfPreview({ title, description, bookIds, onViewAll })
             <section className="space-y-4">
                 <div className="flex items-center justify-between gap-3">
                     <div>
-                        <h2 className="text-xl font-semibold text-slate-50">{title}</h2>
+                        <h2 className="text-xl font-semibold text-slate-50">
+                            {title}
+                        </h2>
                         <p className="text-sm text-slate-400">{description}</p>
                     </div>
                 </div>
@@ -30,11 +39,15 @@ export default function ShelfPreview({ title, description, bookIds, onViewAll })
             <section className="space-y-4">
                 <div className="flex items-center justify-between gap-3">
                     <div>
-                        <h2 className="text-xl font-semibold text-slate-50">{title}</h2>
+                        <h2 className="text-xl font-semibold text-slate-50">
+                            {title}
+                        </h2>
                         <p className="text-sm text-slate-400">{description}</p>
                     </div>
                 </div>
-                <p className="text-sm text-red-400">Failed to load shelf books.</p>
+                <p className="text-sm text-red-400">
+                    Failed to load shelf books.
+                </p>
             </section>
         );
     }
@@ -43,7 +56,9 @@ export default function ShelfPreview({ title, description, bookIds, onViewAll })
         <section className="space-y-4">
             <div className="flex items-center justify-between gap-3">
                 <div>
-                    <h2 className="text-xl font-semibold text-slate-50">{title}</h2>
+                    <h2 className="text-xl font-semibold text-slate-50">
+                        {title}
+                    </h2>
                     <p className="text-sm text-slate-400">{description}</p>
                 </div>
                 {bookIds.length > 0 && (
@@ -72,7 +87,9 @@ export default function ShelfPreview({ title, description, bookIds, onViewAll })
                     ))}
                 </div>
             ) : (
-                <p className="text-slate-400 text-sm">No books in this shelf yet.</p>
+                <p className="text-slate-400 text-sm">
+                    No books in this shelf yet.
+                </p>
             )}
         </section>
     );

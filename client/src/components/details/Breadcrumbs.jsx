@@ -1,11 +1,9 @@
-import { Link } from "react-router";
+import { Link } from 'react-router';
 
-export default function Breadcrumbs({
-    title
-}) {
+export default function Breadcrumbs({ title }) {
     return (
         <nav className="text-xs text-slate-400 flex items-center gap-1">
-            <Link to='/catalog' className="hover:text-emerald-400">
+            <Link to="/catalog" className="hover:text-emerald-400">
                 Browse
             </Link>
             <span>/</span>

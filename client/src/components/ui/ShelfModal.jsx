@@ -1,6 +1,14 @@
 import { createPortal } from 'react-dom';
 
-export default function ShelfModal({ isOpen, onClose, bookTitle, bookId, shelves, onToggleShelf, onRemoveFromAll }) {
+export default function ShelfModal({
+    isOpen,
+    onClose,
+    bookTitle,
+    bookId,
+    shelves,
+    onToggleShelf,
+    onRemoveFromAll,
+}) {
     if (!isOpen || !shelves) return null;
 
     const bookShelves = [];
@@ -9,9 +17,9 @@ export default function ShelfModal({ isOpen, onClose, bookTitle, bookId, shelves
         'to-read': 'To Read',
         read: 'Read',
         favoriteBooks: 'Favorites',
-        dnf: 'Did Not Finish'
+        dnf: 'Did Not Finish',
     };
-    
+
     Object.entries(shelfMap).forEach(([key, label]) => {
         if (shelves[key]?.includes(bookId)) {
             bookShelves.push(label);
@@ -34,9 +42,7 @@ export default function ShelfModal({ isOpen, onClose, bookTitle, bookId, shelves
                 <h3 className="text-lg font-semibold text-slate-50 mb-2">
                     {bookShelves.length > 0 ? 'Manage Shelves' : 'Add to Shelf'}
                 </h3>
-                <p className="text-sm text-slate-400 mb-6">
-                    {bookTitle}
-                </p>
+                <p className="text-sm text-slate-400 mb-6">{bookTitle}</p>
 
                 <div className="space-y-3">
                     <ShelfButton

@@ -1,17 +1,17 @@
-import { useState, useContext, useEffect, useMemo } from "react";
-import ReviewCard from "./ReviewCard";
-import ReviewModal from "../ui/ReviewModal";
-import ConfirmModal from "../ui/ConfirmModal";
-import Pagination from "../ui/Pagination";
-import CommentModal from "./CommentModal";
-import { useRequest, useFetch } from "../../hooks/useRequest";
-import UserContext from "../../contexts/UserContext";
-import { formatDate } from "../../utils/formatDate";
+import { useState, useContext, useEffect, useMemo } from 'react';
+import ReviewCard from './ReviewCard';
+import ReviewModal from '../ui/ReviewModal';
+import ConfirmModal from '../ui/ConfirmModal';
+import Pagination from '../ui/Pagination';
+import CommentModal from './CommentModal';
+import { useRequest, useFetch } from '../../hooks/useRequest';
+import UserContext from '../../contexts/UserContext';
+import { formatDate } from '../../utils/formatDate';
 
 const PAGE_SIZE = 10;
 
 function getInitials(name) {
-    if (!name) return "??";
+    if (!name) return '??';
     const parts = name.trim().split(/\s+/);
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
@@ -34,7 +34,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
     const reviewsPath = bookId
         ? `/data/reviews?where=${encodeURIComponent(`bookId="${bookId}"`)}&load=${encodeURIComponent(
-              "authorInfo=_ownerId:users"
+              'authorInfo=_ownerId:users',
           )}`
         : null;
 
@@ -49,10 +49,12 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
         ? `/data/ratings?where=${encodeURIComponent(`bookId="${bookId}"`)}`
         : null;
 
-    const {
-        data: ratingsData,
-        refetch: refetchRatings,
-    } = useFetch(ratingsPath, { immediate: !!bookId });
+    const { data: ratingsData, refetch: refetchRatings } = useFetch(
+        ratingsPath,
+        {
+            immediate: !!bookId,
+        },
+    );
 
     // Normalize reviews to display format
     const allReviews = useMemo(() => {
@@ -71,16 +73,18 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
             const authorName =
                 r.authorInfo?.username ||
                 r.authorInfo?.name ||
-                (r.authorInfo?.email ? r.authorInfo.email.split("@")[0] : null) ||
+                (r.authorInfo?.email
+                    ? r.authorInfo.email.split('@')[0]
+                    : null) ||
                 r.authorInfo?.email ||
-                "Anonymous";
+                'Anonymous';
 
             return {
                 id: r._id || r.id,
                 initials: getInitials(authorName),
                 author: authorName,
                 date: formatDate(r._createdOn || r.createdAt),
-                reviewContent: r.reviewContent || "",
+                reviewContent: r.reviewContent || '',
                 helpfulCount: r.helpfulCount ?? 0,
                 variant: r.variant,
                 _ownerId: r._ownerId,
@@ -136,26 +140,31 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
         if (!user?.accessToken) return;
 
         try {
-            const headers = { "X-Authorization": user.accessToken };
+            const headers = { 'X-Authorization': user.accessToken };
 
             if (userRatingId) {
                 if (stars === 0) {
-                    await request(`/data/ratings/${userRatingId}`, "DELETE", null, headers);
+                    await request(
+                        `/data/ratings/${userRatingId}`,
+                        'DELETE',
+                        null,
+                        headers,
+                    );
                     setUserRatingId(null);
                 } else {
                     await request(
                         `/data/ratings/${userRatingId}`,
-                        "PUT",
+                        'PUT',
                         { bookId, stars },
-                        headers
+                        headers,
                     );
                 }
             } else if (stars > 0) {
                 const res = await request(
-                    "/data/ratings",
-                    "POST",
+                    '/data/ratings',
+                    'POST',
                     { bookId, stars },
-                    headers
+                    headers,
                 );
                 setUserRatingId(res._id || res.id || null);
             }
@@ -163,7 +172,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
             setUserRating(stars);
             refetchRatings?.();
         } catch (err) {
-            console.error("Failed to save rating:", err);
+            console.error('Failed to save rating:', err);
         }
     };
 
@@ -177,22 +186,24 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                 bookId,
                 reviewContent: text,
                 // Keep helpfulCount from existing review on edit, or 0 on new
-                helpfulCount: editingReview ? editingReview.helpfulCount ?? 0 : 0,
+                helpfulCount: editingReview
+                    ? (editingReview.helpfulCount ?? 0)
+                    : 0,
             };
 
             const headers = user?.accessToken
-                ? { "X-Authorization": user.accessToken }
+                ? { 'X-Authorization': user.accessToken }
                 : {};
 
             if (editingReview) {
                 await request(
                     `/data/reviews/${editingReview.id}`,
-                    "PUT",
+                    'PUT',
                     payload,
-                    headers
+                    headers,
                 );
             } else {
-                await request("/data/reviews", "POST", payload, headers);
+                await request('/data/reviews', 'POST', payload, headers);
             }
 
             setShowReviewModal(false);
@@ -200,7 +211,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
             refetch?.();
         } catch (err) {
-            console.error("Failed to save review:", err);
+            console.error('Failed to save review:', err);
         } finally {
             setSavingReview(false);
         }
@@ -224,14 +235,14 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
         try {
             const headers = user?.accessToken
-                ? { "X-Authorization": user.accessToken }
+                ? { 'X-Authorization': user.accessToken }
                 : {};
 
             await request(
                 `/data/reviews/${reviewToDelete.id}`,
-                "DELETE",
+                'DELETE',
                 null,
-                headers
+                headers,
             );
 
             setShowDeleteConfirm(false);
@@ -241,7 +252,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
             // so userReview will become null automatically (if it was theirs).
             refetch?.();
         } catch (err) {
-            console.error("Failed to delete review:", err);
+            console.error('Failed to delete review:', err);
         } finally {
             setDeleting(false);
         }
@@ -274,10 +285,12 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
             ) : (
                 <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-950/60 p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
                     <div className="space-y-1">
-                        <p className="text-slate-200 font-medium">What did you think?</p>
+                        <p className="text-slate-200 font-medium">
+                            What did you think?
+                        </p>
                         <p className="text-slate-400">
-                            Share a quick reaction or a full review — it helps other readers
-                            decide if this is for them.
+                            Share a quick reaction or a full review — it helps
+                            other readers decide if this is for them.
                         </p>
                     </div>
                     <button
@@ -291,7 +304,7 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
 
             <ReviewModal
                 visible={showReviewModal}
-                initialText={editingReview?.reviewContent || ""}
+                initialText={editingReview?.reviewContent || ''}
                 initialRating={userRating}
                 onClose={() => {
                     setShowReviewModal(false);
@@ -307,9 +320,9 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                 open={showDeleteConfirm}
                 title="Delete review"
                 message={`Are you sure you want to delete ${
-                    deletingReview?.id === userReview?.id ? "your" : "this"
+                    deletingReview?.id === userReview?.id ? 'your' : 'this'
                 } review? This action cannot be undone.`}
-                confirmText={deleting ? "Deleting..." : "Delete"}
+                confirmText={deleting ? 'Deleting...' : 'Delete'}
                 onConfirm={deleteReviewHandler}
                 onCancel={() => {
                     setShowDeleteConfirm(false);
@@ -335,10 +348,14 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                         review={review}
                         isAdmin={isAdmin}
                         onEdit={
-                            isAdmin ? () => editReviewHandler(review) : undefined
+                            isAdmin
+                                ? () => editReviewHandler(review)
+                                : undefined
                         }
                         onDelete={
-                            isAdmin ? () => confirmDeleteReviewHandler(review) : undefined
+                            isAdmin
+                                ? () => confirmDeleteReviewHandler(review)
+                                : undefined
                         }
                         onComment={() => openComments(review)}
                     />

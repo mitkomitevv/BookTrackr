@@ -1,12 +1,12 @@
 // pages/Login.jsx
-import { useNavigate, Link } from "react-router";
-import { useForm } from "../../hooks/useForm";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
+import { useNavigate, Link } from 'react-router';
+import { useForm } from '../../hooks/useForm';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
 
 const initialValues = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
 };
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
         initialValues,
         onSubmit: async ({ email, password }) => {
             await loginHandler(email, password);
-            navigate("/");
+            navigate('/');
         },
     });
 
@@ -29,16 +29,22 @@ export default function Login() {
                         <p className="text-xs uppercase tracking-[0.25em] text-emerald-300">
                             Welcome back
                         </p>
-                        <h1 className="text-2xl font-semibold text-slate-50">Log in</h1>
+                        <h1 className="text-2xl font-semibold text-slate-50">
+                            Log in
+                        </h1>
                         <p className="text-sm text-slate-400">
-                            Continue tracking your reading and discover new favorites.
+                            Continue tracking your reading and discover new
+                            favorites.
                         </p>
                     </header>
 
                     <form {...formProps} className="space-y-4">
                         {/* Email */}
                         <div className="space-y-1 text-sm">
-                            <label htmlFor="email" className="block text-slate-200 text-left">
+                            <label
+                                htmlFor="email"
+                                className="block text-slate-200 text-left"
+                            >
                                 Email
                             </label>
                             <input
@@ -48,7 +54,7 @@ export default function Login() {
                                 autoComplete="email"
                                 placeholder="you@example.com"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("email")}
+                                {...registerInput('email')}
                             />
                         </div>
 
@@ -74,7 +80,7 @@ export default function Login() {
                                 required
                                 autoComplete="current-password"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("password")}
+                                {...registerInput('password')}
                             />
                         </div>
 
@@ -105,7 +111,7 @@ export default function Login() {
                     </div>
 
                     <p className="text-xs text-slate-400 text-center">
-                        Don&apos;t have an account yet?{" "}
+                        Don&apos;t have an account yet?{' '}
                         <Link
                             to="/register"
                             className="text-emerald-400 hover:text-emerald-300 font-medium"

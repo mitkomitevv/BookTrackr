@@ -1,11 +1,11 @@
-import { useFetch } from "../../hooks/useRequest";
-import BookCard from "../book-card/BookCard";
-import CurrentlyReadingCard from "../my-library/CurrentlyReadingCard";
-import Pagination from "../ui/Pagination";
-import { useState, useEffect, useContext } from "react";
-import { useSearchParams } from "react-router";
-import useSearchQuery from "../../hooks/useSearchQuery";
-import UserContext from "../../contexts/UserContext";
+import { useFetch } from '../../hooks/useRequest';
+import BookCard from '../book-card/BookCard';
+import CurrentlyReadingCard from '../my-library/CurrentlyReadingCard';
+import Pagination from '../ui/Pagination';
+import { useState, useEffect, useContext } from 'react';
+import { useSearchParams } from 'react-router';
+import useSearchQuery from '../../hooks/useSearchQuery';
+import UserContext from '../../contexts/UserContext';
 
 export default function Catalog() {
     const { user } = useContext(UserContext);
@@ -13,28 +13,36 @@ export default function Catalog() {
     const [pageSize, setPageSize] = useState(20);
     const [total, setTotal] = useState(null);
     const [searchParams] = useSearchParams();
-    const authorParam = searchParams.get("author");
-    const shelfParam = searchParams.get("shelf");
-    const shelfKey = shelfParam === 'favorites'
-        ? 'favoriteBooks'
-        : shelfParam === 'currentlyReading'
-            ? 'currentlyReading'
-            : shelfParam;
+    const authorParam = searchParams.get('author');
+    const shelfParam = searchParams.get('shelf');
+    const shelfKey =
+        shelfParam === 'favorites'
+            ? 'favoriteBooks'
+            : shelfParam === 'currentlyReading'
+              ? 'currentlyReading'
+              : shelfParam;
 
-    const q = authorParam ?? (searchParams.get("q") || "");
+    const q = authorParam ?? (searchParams.get('q') || '');
 
     const offset = (page - 1) * pageSize;
 
     // Fetch user's shelf when comming from my-library
-    const shelfPath = shelfKey && user ? `/data/shelves?where=_ownerId%3D%22${user._id}%22` : null;
-    const { data: shelvesData} = useFetch(shelfPath, {
-        headers: user?.accessToken ? { "X-Authorization": user.accessToken } : {},
+    const shelfPath =
+        shelfKey && user
+            ? `/data/shelves?where=_ownerId%3D%22${user._id}%22`
+            : null;
+    const { data: shelvesData } = useFetch(shelfPath, {
+        headers: user?.accessToken
+            ? { 'X-Authorization': user.accessToken }
+            : {},
     });
 
     const shelfBooks = shelvesData?.[0]?.[shelfKey] || [];
 
     const whereClause = useSearchQuery(q, ['title', 'author']);
-    const whereQuery = whereClause ? `&where=${encodeURIComponent(whereClause)}` : "";
+    const whereQuery = whereClause
+        ? `&where=${encodeURIComponent(whereClause)}`
+        : '';
 
     // If shelf parameter is present, filter by shelf books
     let path;
@@ -43,8 +51,8 @@ export default function Catalog() {
     if (shelfKey && shelvesData) {
         // Build expression WHERE clause using IN for shelf books
         const inClause = shelfBooks.length
-            ? `_id IN (${shelfBooks.map(id => `"${id}"`).join(',')})`
-            : "";
+            ? `_id IN (${shelfBooks.map((id) => `"${id}"`).join(',')})`
+            : '';
 
         if (inClause) {
             const shelfWhereQuery = `&where=${encodeURIComponent(inClause)}`;
@@ -84,18 +92,18 @@ export default function Catalog() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-semibold text-slate-50">
-                            {shelfParam === 'currentlyReading' 
-                                ? 'Currently reading' 
-                                : shelfParam 
-                                    ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books` 
-                                    : 'Browse books'}
+                            {shelfParam === 'currentlyReading'
+                                ? 'Currently reading'
+                                : shelfParam
+                                  ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books`
+                                  : 'Browse books'}
                         </h1>
                         <p className="text-sm text-slate-400">
-                            {shelfParam === 'currentlyReading' 
-                                ? 'Your currently reading shelf.' 
-                                : shelfParam 
-                                    ? `Your ${shelfParam} shelf.` 
-                                    : 'Explore our library.'}
+                            {shelfParam === 'currentlyReading'
+                                ? 'Your currently reading shelf.'
+                                : shelfParam
+                                  ? `Your ${shelfParam} shelf.`
+                                  : 'Explore our library.'}
                         </p>
                     </div>
                 </div>
@@ -106,21 +114,28 @@ export default function Catalog() {
                 )}
                 {error && (
                     <p className="text-sm text-red-400">
-                        {error.payload?.message || "Failed to load books."}
+                        {error.payload?.message || 'Failed to load books.'}
                     </p>
                 )}
 
                 {/* Grid */}
                 {books && books.length > 0 && (
-                    <div className={shelfParam === 'currentlyReading' 
-                        ? "grid gap-4 md:grid-cols-2 grid-cols-1"
-                        : "grid gap-4 sm:gap-5 md:grid-cols-2 grid-cols-1"}>
-                        {books.map((book) => 
+                    <div
+                        className={
+                            shelfParam === 'currentlyReading'
+                                ? 'grid gap-4 md:grid-cols-2 grid-cols-1'
+                                : 'grid gap-4 sm:gap-5 md:grid-cols-2 grid-cols-1'
+                        }
+                    >
+                        {books.map((book) =>
                             shelfParam === 'currentlyReading' ? (
-                                <CurrentlyReadingCard key={book._id} book={book} />
+                                <CurrentlyReadingCard
+                                    key={book._id}
+                                    book={book}
+                                />
                             ) : (
                                 <BookCard key={book._id} {...book} />
-                            )
+                            ),
                         )}
                     </div>
                 )}

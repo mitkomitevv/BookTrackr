@@ -1,6 +1,6 @@
-import Hero from "./Hero";
-import StaffRecommendations from "./StaffRecommendations";
-import PickOfMonth from "./PickOfMonth";
+import Hero from './Hero';
+import StaffRecommendations from './StaffRecommendations';
+import PickOfMonth from './PickOfMonth';
 
 export default function Home() {
     return (

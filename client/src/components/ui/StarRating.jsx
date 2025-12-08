@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const STAR_OPTIONS = [1, 2, 3, 4, 5];
 
@@ -6,16 +6,16 @@ export default function StarRating({
     value = 0,
     onChange,
     readonly = false,
-    size = "md",
+    size = 'md',
     showLabel = false,
 }) {
     const [hoverRating, setHoverRating] = useState(0);
     const displayRating = hoverRating || value;
 
     const sizeClasses = {
-        sm: "text-lg",
-        md: "text-2xl",
-        lg: "text-3xl",
+        sm: 'text-lg',
+        md: 'text-2xl',
+        lg: 'text-3xl',
     };
 
     const starClass = sizeClasses[size] || sizeClasses.md;
@@ -25,11 +25,13 @@ export default function StarRating({
             <div className="flex items-center gap-0.5">
                 {STAR_OPTIONS.map((star) => (
                     <span key={star} className={`${starClass} text-amber-400`}>
-                        {star <= value ? "★" : "☆"}
+                        {star <= value ? '★' : '☆'}
                     </span>
                 ))}
                 {showLabel && value > 0 && (
-                    <span className="ml-2 text-sm text-slate-400">{value}/5</span>
+                    <span className="ml-2 text-sm text-slate-400">
+                        {value}/5
+                    </span>
                 )}
             </div>
         );
@@ -46,7 +48,7 @@ export default function StarRating({
                     onMouseLeave={() => setHoverRating(0)}
                     className={`${starClass} text-amber-400 transition hover:scale-110 focus:outline-none`}
                 >
-                    {star <= displayRating ? "★" : "☆"}
+                    {star <= displayRating ? '★' : '☆'}
                 </button>
             ))}
             {showLabel && value > 0 && (

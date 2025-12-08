@@ -1,13 +1,13 @@
-import { Link, useNavigate } from "react-router";
-import { useForm } from "../../hooks/useForm";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
+import { Link, useNavigate } from 'react-router';
+import { useForm } from '../../hooks/useForm';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
 
 const initialValues = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
 };
 
 export default function Register() {
@@ -19,12 +19,12 @@ export default function Register() {
         onSubmit: async ({ email, password, confirmPassword, name }) => {
             if (password !== confirmPassword) {
                 // TODO: show some UI error instead
-                alert("Passwords do not match");
+                alert('Passwords do not match');
                 return;
             }
 
             await registerHandler(email, password, name);
-            navigate("/");
+            navigate('/');
         },
     });
 
@@ -41,7 +41,8 @@ export default function Register() {
                             Create an account
                         </h1>
                         <p className="text-sm text-slate-400">
-                            Track your reading, rate books, and build your own library.
+                            Track your reading, rate books, and build your own
+                            library.
                         </p>
                     </header>
 
@@ -60,13 +61,16 @@ export default function Register() {
                                 required
                                 placeholder="First and last name"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("name")}
+                                {...registerInput('name')}
                             />
                         </div>
 
                         {/* Email */}
                         <div className="space-y-1 text-sm">
-                            <label htmlFor="email" className="block text-slate-200 text-left">
+                            <label
+                                htmlFor="email"
+                                className="block text-slate-200 text-left"
+                            >
                                 Email
                             </label>
                             <input
@@ -76,7 +80,7 @@ export default function Register() {
                                 autoComplete="email"
                                 placeholder="you@example.com"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("email")}
+                                {...registerInput('email')}
                             />
                         </div>
 
@@ -94,7 +98,7 @@ export default function Register() {
                                 required
                                 autoComplete="new-password"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("password")}
+                                {...registerInput('password')}
                             />
                         </div>
 
@@ -112,7 +116,7 @@ export default function Register() {
                                 required
                                 autoComplete="new-password"
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                {...registerInput("confirmPassword")}
+                                {...registerInput('confirmPassword')}
                             />
                         </div>
 
@@ -126,14 +130,14 @@ export default function Register() {
                                 className="mt-0.5 h-3.5 w-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
                             />
                             <label htmlFor="terms">
-                                I agree to the{" "}
+                                I agree to the{' '}
                                 <button
                                     type="button"
                                     className="text-emerald-400 hover:text-emerald-300 underline-offset-2 hover:underline"
                                 >
                                     Terms of Service
-                                </button>{" "}
-                                and{" "}
+                                </button>{' '}
+                                and{' '}
                                 <button
                                     type="button"
                                     className="text-emerald-400 hover:text-emerald-300 underline-offset-2 hover:underline"
@@ -159,13 +163,13 @@ export default function Register() {
                     </div>
 
                     <p className="text-xs text-slate-400 text-center">
-                        Already have an account?{" "}
-                            <Link
-                                to="/login"
-                                className="text-emerald-400 hover:text-emerald-300 font-medium"
-                            >
-                                Log in
-                            </Link>
+                        Already have an account?{' '}
+                        <Link
+                            to="/login"
+                            className="text-emerald-400 hover:text-emerald-300 font-medium"
+                        >
+                            Log in
+                        </Link>
                     </p>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from 'react';
 
 export function useForm({ initialValues = {}, onSubmit } = {}) {
     const [values, setValues] = useState(initialValues);
@@ -7,18 +7,18 @@ export function useForm({ initialValues = {}, onSubmit } = {}) {
         const { name, type, checked, value } = e.target;
         setValues((prev) => ({
             ...prev,
-            [name]: type === "checkbox" ? checked : value,
+            [name]: type === 'checkbox' ? checked : value,
         }));
     }, []);
 
     const registerInput = useCallback(
         (name, extraProps = {}) => ({
             name,
-            value: values[name] ?? "",
+            value: values[name] ?? '',
             onChange: handleChange,
             ...extraProps,
         }),
-        [values, handleChange]
+        [values, handleChange],
     );
 
     const handleSubmit = useCallback(
@@ -26,17 +26,17 @@ export function useForm({ initialValues = {}, onSubmit } = {}) {
             e?.preventDefault?.();
             await onSubmit?.(values);
         },
-        [values, onSubmit]
+        [values, onSubmit],
     );
 
     const reset = useCallback(
         (nextValues) => setValues(nextValues ?? initialValues),
-        [initialValues]
+        [initialValues],
     );
 
     const formProps = useMemo(
         () => ({ onSubmit: handleSubmit }),
-        [handleSubmit]
+        [handleSubmit],
     );
 
     return {

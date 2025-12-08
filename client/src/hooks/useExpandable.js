@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from 'react';
 
 export function useExpandable(content) {
     const [expanded, setExpanded] = useState(false);

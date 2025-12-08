@@ -1,67 +1,69 @@
-import { useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router";
-import { useFormRequest } from "../../hooks/useFormRequest";
-import { useFetch } from "../../hooks/useRequest";
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { useFormRequest } from '../../hooks/useFormRequest';
+import { useFetch } from '../../hooks/useRequest';
 
 export default function BookSaveForm() {
     const navigate = useNavigate();
     const { bookId } = useParams();
     const isEdit = Boolean(bookId);
 
-    const { data: book, loading: loadingBook, error: bookError } = useFetch(
-        isEdit ? `/data/books/${bookId}` : null,
-        { immediate: isEdit }
-    );
+    const {
+        data: book,
+        loading: loadingBook,
+        error: bookError,
+    } = useFetch(isEdit ? `/data/books/${bookId}` : null, {
+        immediate: isEdit,
+    });
 
     const initialValues = useMemo(() => {
         if (isEdit && book) {
             return {
-                title: book.title ?? "",
-                author: book.author ?? "",
-                genre: book.genre ?? "",
-                isbn: book.isbn ?? "",
-                pages: book.pages ?? "",
-                year: book.year ?? "",
-                coverUrl: book.coverUrl ?? "",
-                tags: book.tags ? book.tags.join(", ") : "",
-                description: book.description ?? "",
-                numberInSeries: book.numberInSeries ?? "",
-                series: book.series ?? "",
+                title: book.title ?? '',
+                author: book.author ?? '',
+                genre: book.genre ?? '',
+                isbn: book.isbn ?? '',
+                pages: book.pages ?? '',
+                year: book.year ?? '',
+                coverUrl: book.coverUrl ?? '',
+                tags: book.tags ? book.tags.join(', ') : '',
+                description: book.description ?? '',
+                numberInSeries: book.numberInSeries ?? '',
+                series: book.series ?? '',
             };
         }
         return {
-            title: "",
-            author: "",
-            genre: "",
-            isbn: "",
-            pages: "",
-            year: "",
-            coverUrl: "",
-            tags: "",
-            description: "",
-            numberInSeries: "",
-            series: "",
+            title: '',
+            author: '',
+            genre: '',
+            isbn: '',
+            pages: '',
+            year: '',
+            coverUrl: '',
+            tags: '',
+            description: '',
+            numberInSeries: '',
+            series: '',
         };
     }, [isEdit, book]);
 
-    const {
-        registerInput,
-        formProps,
-        loading,
-        error,
-        reset,
-    } = useFormRequest({
-        path: isEdit ? `/data/books/${bookId}` : "/data/books",
-        method: isEdit ? "PUT" : "POST",
+    const { registerInput, formProps, loading, error, reset } = useFormRequest({
+        path: isEdit ? `/data/books/${bookId}` : '/data/books',
+        method: isEdit ? 'PUT' : 'POST',
         initialValues,
         withAuth: true,
         mapValues: (values) => ({
             ...values,
             pages: values.pages ? Number(values.pages) : undefined,
             year: values.year ? Number(values.year) : undefined,
-            numberInSeries: values.numberInSeries ? Number(values.numberInSeries) : undefined,
+            numberInSeries: values.numberInSeries
+                ? Number(values.numberInSeries)
+                : undefined,
             tags: values.tags
-                ? values.tags.split(",").map(t => t.trim()).filter(Boolean)
+                ? values.tags
+                      .split(',')
+                      .map((t) => t.trim())
+                      .filter(Boolean)
                 : [],
         }),
         onSuccess: (data, reset) => {
@@ -69,7 +71,7 @@ export default function BookSaveForm() {
             if (isEdit) {
                 navigate(`/catalog/${bookId}/details`);
             } else {
-                navigate("/catalog");
+                navigate('/catalog');
             }
         },
     });
@@ -78,54 +80,62 @@ export default function BookSaveForm() {
     useEffect(() => {
         if (!isEdit || !book) return;
         const vals = {
-            title: book.title ?? "",
-            author: book.author ?? "",
-            genre: book.genre ?? "",
-            isbn: book.isbn ?? "",
-            pages: book.pages ?? "",
-            year: book.year ?? "",
-            coverUrl: book.coverUrl ?? "",
-            tags: book.tags ? book.tags.join(", ") : "",
-            description: book.description ?? "",
-            numberInSeries: book.numberInSeries ?? "",
-            series: book.series ?? "",
+            title: book.title ?? '',
+            author: book.author ?? '',
+            genre: book.genre ?? '',
+            isbn: book.isbn ?? '',
+            pages: book.pages ?? '',
+            year: book.year ?? '',
+            coverUrl: book.coverUrl ?? '',
+            tags: book.tags ? book.tags.join(', ') : '',
+            description: book.description ?? '',
+            numberInSeries: book.numberInSeries ?? '',
+            series: book.series ?? '',
         };
         reset(vals);
     }, [isEdit, book, reset]);
 
-    const cancelClickHandler = () => navigate(isEdit ? `/catalog/${bookId}/details` : "/catalog");
+    const cancelClickHandler = () =>
+        navigate(isEdit ? `/catalog/${bookId}/details` : '/catalog');
 
     if (isEdit && loadingBook) {
-        return <div className="flex-1 flex items-center justify-center">Loading...</div>;
-    };
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                Loading...
+            </div>
+        );
+    }
 
     if (isEdit && bookError) {
-        return <div className="flex-1 flex items-center justify-center">Failed to load book for editing</div>;
-    };
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                Failed to load book for editing
+            </div>
+        );
+    }
 
     return (
         <main className="flex-1">
             <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
                 <header className="space-y-2">
                     <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-                        {isEdit ? "Edit book" : "Add a new book"}
+                        {isEdit ? 'Edit book' : 'Add a new book'}
                     </h1>
                     <p className="text-sm text-slate-400 max-w-2xl">
                         {isEdit
-                            ? "Update the book details."
+                            ? 'Update the book details.'
                             : "Before adding a new book, please ensure it isn't already in our catalog to avoid duplicates. Duplicates will be removed by our admin team. Any book added here will be visible to all users."}
                     </p>
                 </header>
 
                 {error && (
                     <p className="text-sm text-red-400">
-                        {error.message || "Something went wrong while saving the book."}
+                        {error.message ||
+                            'Something went wrong while saving the book.'}
                     </p>
                 )}
                 {loading && (
-                    <p className="text-sm text-slate-400">
-                        Saving book…
-                    </p>
+                    <p className="text-sm text-slate-400">Saving book…</p>
                 )}
 
                 <form
@@ -139,7 +149,8 @@ export default function BookSaveForm() {
                                 Basic information
                             </h2>
                             <span className="text-[11px] text-slate-500">
-                                <span className="text-emerald-400">*</span> Required fields
+                                <span className="text-emerald-400">*</span>{' '}
+                                Required fields
                             </span>
                         </div>
 
@@ -148,14 +159,17 @@ export default function BookSaveForm() {
                             <div className="sm:col-span-2">
                                 <label className="flex flex-col gap-1 text-sm">
                                     <span className="text-slate-200">
-                                        Title <span className="text-emerald-400">*</span>
+                                        Title{' '}
+                                        <span className="text-emerald-400">
+                                            *
+                                        </span>
                                     </span>
                                     <input
                                         type="text"
                                         required
                                         placeholder="Book Title"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("title")}
+                                        {...registerInput('title')}
                                     />
                                 </label>
                             </div>
@@ -163,12 +177,14 @@ export default function BookSaveForm() {
                             {/* Series */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Series</span>
+                                    <span className="text-slate-200">
+                                        Series
+                                    </span>
                                     <input
                                         type="text"
                                         placeholder="Series Name"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("series")}
+                                        {...registerInput('series')}
                                     />
                                 </label>
                             </div>
@@ -176,30 +192,34 @@ export default function BookSaveForm() {
                             {/* Number in series */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Number in series</span>
+                                    <span className="text-slate-200">
+                                        Number in series
+                                    </span>
                                     <input
                                         type="number"
                                         min="1"
                                         placeholder="1"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("numberInSeries")}
+                                        {...registerInput('numberInSeries')}
                                     />
                                 </label>
                             </div>
-
 
                             {/* Author */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
                                     <span className="text-slate-200">
-                                        Author <span className="text-emerald-400">*</span>
+                                        Author{' '}
+                                        <span className="text-emerald-400">
+                                            *
+                                        </span>
                                     </span>
                                     <input
                                         type="text"
                                         required
                                         placeholder="Author Name"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("author")}
+                                        {...registerInput('author')}
                                     />
                                 </label>
                             </div>
@@ -207,10 +227,12 @@ export default function BookSaveForm() {
                             {/* Genre */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Genre</span>
+                                    <span className="text-slate-200">
+                                        Genre
+                                    </span>
                                     <select
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("genre")}
+                                        {...registerInput('genre')}
                                     >
                                         <option value="">Select a genre</option>
                                         <option>Fantasy</option>
@@ -226,13 +248,15 @@ export default function BookSaveForm() {
                             {/* Page count */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Page count</span>
+                                    <span className="text-slate-200">
+                                        Page count
+                                    </span>
                                     <input
                                         type="number"
                                         min="1"
                                         placeholder="384"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("pages")}
+                                        {...registerInput('pages')}
                                     />
                                 </label>
                             </div>
@@ -240,12 +264,14 @@ export default function BookSaveForm() {
                             {/* Published year */}
                             <div>
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Published year</span>
+                                    <span className="text-slate-200">
+                                        Published year
+                                    </span>
                                     <input
                                         type="number"
                                         placeholder="2024"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("year")}
+                                        {...registerInput('year')}
                                     />
                                 </label>
                             </div>
@@ -262,16 +288,19 @@ export default function BookSaveForm() {
                             {/* Cover URL */}
                             <div className="sm:col-span-2">
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Cover image URL</span>
+                                    <span className="text-slate-200">
+                                        Cover image URL
+                                    </span>
                                     <input
                                         type="url"
                                         placeholder="https://example.com/cover.jpg"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("coverUrl")}
+                                        {...registerInput('coverUrl')}
                                     />
                                     <span className="text-[11px] text-slate-500">
-                                        You can host images in your backend later — this is just a
-                                        placeholder for now.
+                                        You can host images in your backend
+                                        later — this is just a placeholder for
+                                        now.
                                     </span>
                                 </label>
                             </div>
@@ -279,15 +308,18 @@ export default function BookSaveForm() {
                             {/* Tags / moods */}
                             <div className="sm:col-span-2">
                                 <label className="flex flex-col gap-1 text-sm">
-                                    <span className="text-slate-200">Tags / moods</span>
+                                    <span className="text-slate-200">
+                                        Tags / moods
+                                    </span>
                                     <input
                                         type="text"
                                         placeholder="cozy, bittersweet, slow burn"
                                         className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        {...registerInput("tags")}
+                                        {...registerInput('tags')}
                                     />
                                     <span className="text-[11px] text-slate-500">
-                                        Comma-separated for now (you can parse them into chips later).
+                                        Comma-separated for now (you can parse
+                                        them into chips later).
                                     </span>
                                 </label>
                             </div>
@@ -305,7 +337,7 @@ export default function BookSaveForm() {
                                 rows={5}
                                 placeholder="Short description or blurb for this book..."
                                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-y"
-                                {...registerInput("description")}
+                                {...registerInput('description')}
                             />
                         </label>
                     </section>
@@ -324,7 +356,7 @@ export default function BookSaveForm() {
                             disabled={loading}
                             className="px-4 py-2 rounded-2xl bg-emerald-500 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
                         >
-                            {loading ? "Saving..." : "Save book"}
+                            {loading ? 'Saving...' : 'Save book'}
                         </button>
                     </div>
                 </form>

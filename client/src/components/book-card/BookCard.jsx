@@ -1,6 +1,6 @@
-import { Link } from "react-router";
-import { useMemo } from "react";
-import { useFetch } from "../../hooks/useRequest";
+import { Link } from 'react-router';
+import { useMemo } from 'react';
+import { useFetch } from '../../hooks/useRequest';
 
 export default function BookCard({
     _id,
@@ -19,16 +19,19 @@ export default function BookCard({
             return { calculatedRating: null, calculatedCount: null };
         }
 
-        const bookRatings = ratingsData.filter(r => r.bookId === _id);
+        const bookRatings = ratingsData.filter((r) => r.bookId === _id);
 
         if (bookRatings.length === 0) {
             return { calculatedRating: null, calculatedCount: null };
         }
 
-        const avgRating = (bookRatings.reduce((sum, r) => sum + r.stars, 0) / bookRatings.length).toFixed(2);
+        const avgRating = (
+            bookRatings.reduce((sum, r) => sum + r.stars, 0) /
+            bookRatings.length
+        ).toFixed(2);
         return {
             calculatedRating: parseFloat(avgRating),
-            calculatedCount: bookRatings.length
+            calculatedCount: bookRatings.length,
         };
     }, [_id, ratingsData]);
 
@@ -61,7 +64,11 @@ export default function BookCard({
                                 {title}
                                 {series && (
                                     <span className="text-sm text-slate-400 font-normal ml-2">
-                                        ({series}{numberInSeries ? `, #${numberInSeries}` : ""})
+                                        ({series}
+                                        {numberInSeries
+                                            ? `, #${numberInSeries}`
+                                            : ''}
+                                        )
                                     </span>
                                 )}
                             </h3>
@@ -75,7 +82,9 @@ export default function BookCard({
                                 {author}
                             </Link>
                         ) : (
-                            <p className="text-xs text-slate-400">Unknown author</p>
+                            <p className="text-xs text-slate-400">
+                                Unknown author
+                            </p>
                         )}
                     </header>
 
@@ -92,11 +101,15 @@ export default function BookCard({
                             <div className="flex items-center gap-1 text-amber-300">
                                 ★ {calculatedRating}
                                 {calculatedCount && (
-                                    <span className="text-slate-500">· {calculatedCount} ratings</span>
+                                    <span className="text-slate-500">
+                                        · {calculatedCount} ratings
+                                    </span>
                                 )}
                             </div>
                         ) : (
-                            <div className="text-slate-500 italic">Not yet rated</div>
+                            <div className="text-slate-500 italic">
+                                Not yet rated
+                            </div>
                         )}
 
                         <Link

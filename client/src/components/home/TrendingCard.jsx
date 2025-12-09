@@ -147,7 +147,7 @@ export default function TrendingCard() {
                     className="text-emerald-400 hover:text-emerald-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {!user
-                        ? 'Log in'
+                        ? 'Log in to add to your library'
                         : bookShelves.length > 0
                           ? bookShelves[0]
                           : 'Add to shelf'}

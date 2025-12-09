@@ -66,6 +66,9 @@ export default function ShelfModal({
                         shelves={shelves}
                         onToggle={onToggleShelf}
                     />
+
+                    <div className="border-t border-slate-700 my-2"></div>
+
                     <ShelfButton
                         label="Favorites"
                         shelfKey="favoriteBooks"

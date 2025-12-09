@@ -31,12 +31,25 @@ export function UserProvider({ children }) {
         return result;
     };
 
-    const loginHandler = async (email, password) => {
+    const loginHandler = async (email, password, rememberMe = false) => {
         const result = await request('/users/login', 'POST', {
             email,
             password,
         });
-        setUser(result);
+        
+        // Store with rememberMe flag
+        const userWithRememberFlag = { ...result, rememberMe };
+        setUser(userWithRememberFlag);
+        
+        // If rememberMe is false, also store in sessionStorage as backup
+        if (!rememberMe) {
+            try {
+                sessionStorage.setItem('auth-session', JSON.stringify(result));
+            } catch (err) {
+                console.warn('Failed to set session storage', err);
+            }
+        }
+        
         return result;
     };
 

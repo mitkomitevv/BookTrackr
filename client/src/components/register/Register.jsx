@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router';
 import { useForm } from '../../hooks/useForm';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import UserContext from '../../contexts/UserContext';
 
 const initialValues = {
@@ -13,18 +13,129 @@ const initialValues = {
 export default function Register() {
     const navigate = useNavigate();
     const { registerHandler } = useContext(UserContext);
+    const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState(null);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const hasMinLength = password.length >= 6;
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        return hasMinLength && hasLetter && hasNumber;
+    };
+
+    const validateForm = ({ name, email, password, confirmPassword }) => {
+        const newErrors = {};
+
+        if (!name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+
+        if (!email) {
+            newErrors.email = 'Email is required';
+        } else if (!validateEmail(email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (!password) {
+            newErrors.password = 'Password is required';
+        } else if (!validatePassword(password)) {
+            newErrors.password =
+                'Password must be at least 6 characters with a letter and number';
+        }
+
+        if (!confirmPassword) {
+            newErrors.confirmPassword = 'Please confirm your password';
+        } else if (password !== confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
+        }
+
+        return newErrors;
+    };
+
+    const handleBlur = (fieldName, value) => {
+        let fieldError = null;
+
+        if (fieldName === 'name') {
+            if (!value.trim()) {
+                fieldError = 'Name is required';
+            }
+        }
+
+        if (fieldName === 'email') {
+            if (!value) {
+                fieldError = 'Email is required';
+            } else if (!validateEmail(value)) {
+                fieldError = 'Please enter a valid email address';
+            }
+        }
+
+        if (fieldName === 'password') {
+            if (!value) {
+                fieldError = 'Password is required';
+            } else if (!validatePassword(value)) {
+                fieldError =
+                    'Password must be at least 6 characters with a letter and number';
+            }
+        }
+
+        if (fieldName === 'confirmPassword') {
+            const passwordValue =
+                document.getElementById('password')?.value || '';
+            if (!value) {
+                fieldError = 'Please confirm your password';
+            } else if (value !== passwordValue) {
+                fieldError = 'Passwords do not match';
+            }
+        }
+
+        setErrors((prev) => {
+            const newErrors = { ...prev };
+            if (fieldError) {
+                newErrors[fieldName] = fieldError;
+            } else {
+                delete newErrors[fieldName];
+            }
+            return newErrors;
+        });
+    };
 
     const { registerInput, formProps } = useForm({
         initialValues,
-        onSubmit: async ({ email, password, confirmPassword, name }) => {
-            if (password !== confirmPassword) {
-                // TODO: show some UI error instead
-                alert('Passwords do not match');
+        onSubmit: async (values) => {
+            const validationErrors = validateForm(values);
+
+            if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
                 return;
             }
 
-            await registerHandler(email, password, name);
-            navigate('/');
+            setErrors({});
+            setServerError(null);
+
+            try {
+                await registerHandler(
+                    values.email,
+                    values.password,
+                    values.name,
+                );
+                navigate('/');
+            } catch (err) {
+                if (err.status === 409) {
+                    setServerError(
+                        'This email is already registered. Please use a different email or log in.',
+                    );
+                } else {
+                    setServerError(
+                        err.payload?.message ||
+                            'Registration failed. Please try again.',
+                    );
+                }
+            }
         },
     });
 
@@ -47,6 +158,15 @@ export default function Register() {
                     </header>
 
                     <form {...formProps} className="space-y-4">
+                        {/* Server Error */}
+                        {serverError && (
+                            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                                <p className="text-sm text-red-400">
+                                    {serverError}
+                                </p>
+                            </div>
+                        )}
+
                         {/* Name */}
                         <div className="space-y-1 text-sm">
                             <label
@@ -60,9 +180,17 @@ export default function Register() {
                                 type="text"
                                 required
                                 placeholder="First and last name"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.name ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.name ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('name')}
+                                onBlur={(e) =>
+                                    handleBlur('name', e.target.value)
+                                }
                             />
+                            {errors.name && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.name}
+                                </p>
+                            )}
                         </div>
 
                         {/* Email */}
@@ -79,9 +207,17 @@ export default function Register() {
                                 required
                                 autoComplete="email"
                                 placeholder="you@example.com"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.email ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.email ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('email')}
+                                onBlur={(e) =>
+                                    handleBlur('email', e.target.value)
+                                }
                             />
+                            {errors.email && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         {/* Password */}
@@ -97,9 +233,17 @@ export default function Register() {
                                 type="password"
                                 required
                                 autoComplete="new-password"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.password ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.password ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('password')}
+                                onBlur={(e) =>
+                                    handleBlur('password', e.target.value)
+                                }
                             />
+                            {errors.password && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
                         {/* Confirm password */}
@@ -115,9 +259,20 @@ export default function Register() {
                                 type="password"
                                 required
                                 autoComplete="new-password"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('confirmPassword')}
+                                onBlur={(e) =>
+                                    handleBlur(
+                                        'confirmPassword',
+                                        e.target.value,
+                                    )
+                                }
                             />
+                            {errors.confirmPassword && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.confirmPassword}
+                                </p>
+                            )}
                         </div>
 
                         {/* Terms – visual only */}
@@ -131,19 +286,19 @@ export default function Register() {
                             />
                             <label htmlFor="terms">
                                 I agree to the{' '}
-                                <button
+                                <span
                                     type="button"
-                                    className="text-emerald-400 hover:text-emerald-300 underline-offset-2 hover:underline"
+                                    className="text-emerald-400 hover:text-emerald-300"
                                 >
                                     Terms of Service
-                                </button>{' '}
+                                </span>{' '}
                                 and{' '}
-                                <button
+                                <span
                                     type="button"
-                                    className="text-emerald-400 hover:text-emerald-300 underline-offset-2 hover:underline"
+                                    className="text-emerald-400 hover:text-emerald-300"
                                 >
                                     Privacy Policy
-                                </button>
+                                </span>
                                 .
                             </label>
                         </div>

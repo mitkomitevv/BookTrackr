@@ -15,6 +15,7 @@ export default function Catalog() {
     const [searchParams] = useSearchParams();
     const authorParam = searchParams.get('author');
     const shelfParam = searchParams.get('shelf');
+    const addedByParam = searchParams.get('addedBy');
     const shelfKey =
         shelfParam === 'favorites'
             ? 'favoriteBooks'
@@ -48,7 +49,12 @@ export default function Catalog() {
     let path;
     let countPath;
 
-    if (shelfKey && shelvesData) {
+    if (addedByParam === 'me' && user) {
+        // Filter books added by current user
+        const ownerWhereQuery = `&where=${encodeURIComponent(`_ownerId="${user._id}"`)}${whereQuery ? `&${whereQuery.slice(1)}` : ''}`;
+        path = `/data/books?offset=${offset}&pageSize=${pageSize}${ownerWhereQuery}`;
+        countPath = `/data/books?count=true${ownerWhereQuery}`;
+    } else if (shelfKey && shelvesData) {
         // Build expression WHERE clause using IN for shelf books
         const inClause = shelfBooks.length
             ? `_id IN (${shelfBooks.map((id) => `"${id}"`).join(',')})`
@@ -62,7 +68,7 @@ export default function Catalog() {
             path = null;
             countPath = null;
         }
-    } else if (!shelfParam) {
+    } else if (!shelfParam && !addedByParam) {
         path = `/data/books?offset=${offset}&pageSize=${pageSize}${whereQuery}`;
         countPath = `/data/books?count=true${whereQuery}`;
     } else {
@@ -79,11 +85,11 @@ export default function Catalog() {
 
     useEffect(() => {
         refetchCount?.();
-    }, [pageSize, refetchCount, shelfParam]);
+    }, [pageSize, refetchCount, shelfParam, addedByParam]);
 
     useEffect(() => {
         setPage(1);
-    }, [q, shelfParam]);
+    }, [q, shelfParam, addedByParam]);
 
     return (
         <main className="flex-1">
@@ -92,14 +98,18 @@ export default function Catalog() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-semibold text-slate-50">
-                            {shelfParam === 'currentlyReading'
+                            {addedByParam === 'me'
+                                ? "Books you've added"
+                                : shelfParam === 'currentlyReading'
                                 ? 'Currently reading'
                                 : shelfParam
                                   ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books`
                                   : 'Browse books'}
                         </h1>
                         <p className="text-sm text-slate-400">
-                            {shelfParam === 'currentlyReading'
+                            {addedByParam === 'me'
+                                ? "Books you've contributed to the catalog."
+                                : shelfParam === 'currentlyReading'
                                 ? 'Your currently reading shelf.'
                                 : shelfParam
                                   ? `Your ${shelfParam} shelf.`

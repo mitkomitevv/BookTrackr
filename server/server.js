@@ -1467,16 +1467,12 @@
     var seedData = {
         "settings": {
             home: {
-                pickOfMonth: "101b4a2f-fd3d-4552-a2de-026a73cf8e5e",
-                pickOfMonthReview: `There are stories, dear reader, and then there are myths.....
-
-There are myths, dear reader, and there are Legends...Legends that transcend time and space and leave a forever impact.
-
-THIS. MUST. BE.`,
+                pickOfMonth: "8bee0f72-6877-4e06-9a2a-027a0b151a61",
+                pickOfMonthReview: `He came like the wind, like the wind touched everything, and like the wind was gone.`,
                 staffRecommendations: [
                     "fcd39f63-7e0b-423c-8aec-1838b29a162e",
                     "17935d4a-9ca4-478d-bdf5-86a3906d41a9",
-                    "952d7634-53b9-48c6-ab9b-3f7ef52c39e1"
+                    "277dfec1-7cea-4eab-9aa2-5456eb68eb6f"
                 ]
             }
         },
@@ -1736,6 +1732,7 @@ THIS. MUST. BE.`,
                 "author": "Pierce Brown",
                 "genre": "Science Fiction",
                 "year": 2026,
+                "coverUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAK9WZiWmfdDs6DpjZtXlANjjUHcayTMMhwsGDCe-Wsw&s",
                 "tags": [
                     "adult",
                     "dystopia",
@@ -2462,6 +2459,34 @@ THIS. MUST. BE.`,
                 "_id": "d3a3974f-da4b-49c7-b506-babda3123cf7"
             },
             {
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "reviewContent": "This is genuinely one of the most ambitious and satisfying conclusions to a series I've ever experienced. Ruocchio doesn't just close plot threads; he deconstructs them in ways that recontextualize everything that came before. The characters feel fully realized, their arcs complete yet open-ended in the best way. The philosophical depth rivals anything in the genre. If you love epic sci-fi that respects your intelligence, this is mandatory reading.",
+                "_createdOn": 1764964000000,
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "_id": "review-shadow-peter-1"
+            },
+            {
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "reviewContent": "I was absolutely blown away. Every page feels like it matters. The prose is absolutely gorgeous—Ruocchio's description of the cosmos and the metaphysical concepts is just breathtaking. This book made me cry, made me think, and made me want to immediately start the series over. An absolute masterpiece that deserves far more recognition than it gets.",
+                "_createdOn": 1764965000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-shadow-user-1"
+            },
+            {
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "reviewContent": "The way Ruocchio weaves together multiple timelines and perspectives is just mind-blowing. The Hadrian POV sequences are transcendent. The lore dump chapters had me pausing every paragraph to absorb what I was reading. The epilogue perfectly ties everything together while leaving room for future exploration. This is what peak fantasy/sci-fi looks like.",
+                "_createdOn": 1764966000000,
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "_id": "review-shadow-elena-1"
+            },
+            {
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "reviewContent": "I've read this book three times now and it's different every time. The depth of the worldbuilding means there are always new connections to make. Ruocchio has crafted something truly timeless. The character development of Hadrian across the series is unparalleled—watching his journey come to completion is both cathartic and heartbreaking.",
+                "_createdOn": 1764967000000,
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "_id": "review-shadow-mitko-2"
+            },
+            {
                 "bookId": "82107d6e-81c6-4f34-81e3-e9dcb97984bc",
                 "reviewContent": "Empire of Silence is a stunning debut that combines the epic scale of Dune with the character-driven narrative of The Name of the Wind. Hadrian Marlowe is a compelling protagonist whose journey from aristocrat to gladiator to soldier is both tragic and inspiring. Ruocchio's prose is beautiful and evocative, painting vivid pictures of alien worlds and ancient civilizations. The worldbuilding is incredibly rich, blending science fiction and fantasy elements seamlessly. My only criticism is the pacing in the middle section, which drags a bit, but the payoff is absolutely worth it. Can't wait to continue the series!",
                 "_createdOn": 1764965000000,
@@ -2530,6 +2555,20 @@ THIS. MUST. BE.`,
                 "_createdOn": 1764978400000,
                 "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
                 "_id": "review-elena-1"
+            },
+            {
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "reviewContent": "A Memory of Light is the perfect conclusion to the Wheel of Time. While Robert Jordan's passing left a gap, Brandon Sanderson filled it brilliantly. The ending feels both earned and satisfying—it wraps up fourteen books of intricate storytelling without compromising the characters we've come to love. The pacing is excellent, the action sequences are thrilling, and the final chapters will leave you emotionally devastated in the best possible way. This is how you end an epic fantasy series.",
+                "_createdOn": 1764980000000,
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "_id": "review-admin-3"
+            },
+            {
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "reviewContent": "Sanderson absolutely nailed the landing. After waiting so long for this ending, I was worried it couldn't possibly live up to expectations, but A Memory of Light exceeded them. The dual POV with Mat and Perrin fighting while Rand does his thing creates such dynamic tension. The epilogue perfectly balances closure with hope for the future.",
+                "_createdOn": 1764981000000,
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "_id": "review-memory-user-1"
             },
             {
                 "bookId": "277dfec1-7cea-4eab-9aa2-5456eb68eb6f", // Gardens of the Moon
@@ -2667,6 +2706,34 @@ THIS. MUST. BE.`,
                 "_id": "rating-mitko-3"
             },
             {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "stars": 5,
+                "_createdOn": 1764964200000,
+                "_id": "rating-shadow-peter-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "stars": 5,
+                "_createdOn": 1764965200000,
+                "_id": "rating-shadow-user-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "stars": 5,
+                "_createdOn": 1764966200000,
+                "_id": "rating-shadow-elena-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "101b4a2f-fd3d-4552-a2de-026a73cf8e5e", // Shadows Upon Time
+                "stars": 5,
+                "_createdOn": 1764963600000,
+                "_id": "rating-shadow-admin-1"
+            },
+            {
                 "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
                 "bookId": "2d172481-4848-47fe-bf71-9c1e51b98773", // Light Bringer
                 "stars": 5,
@@ -2721,6 +2788,34 @@ THIS. MUST. BE.`,
                 "stars": 4,
                 "_createdOn": 1764978900000,
                 "_id": "rating-ivan-4"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "stars": 5,
+                "_createdOn": 1764980500000,
+                "_id": "rating-admin-5"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "stars": 5,
+                "_createdOn": 1764981500000,
+                "_id": "rating-memory-user-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "stars": 5,
+                "_createdOn": 1764982500000,
+                "_id": "rating-memory-peter-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "bookId": "8bee0f72-6877-4e06-9a2a-027a0b151a61", // A Memory of Light
+                "stars": 4,
+                "_createdOn": 1764983500000,
+                "_id": "rating-memory-elena-1"
             }
         ],
         comments: [
@@ -2795,6 +2890,69 @@ THIS. MUST. BE.`,
                 "_id": "comment-mitko-2"
             },
             {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-shadow-peter-1",
+                "content": "Absolutely agree! The way Ruocchio deconstructs his own narrative is brilliant. It reframes everything we thought we understood.",
+                "_createdOn": 1764964100000,
+                "_id": "comment-shadow-admin-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-shadow-peter-1",
+                "content": "This is the review that made me finally pick up the series. So glad I listened to you!",
+                "_createdOn": 1764964500000,
+                "_id": "comment-shadow-user-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-shadow-user-1",
+                "content": "The prose in this book is genuinely some of the best I've read. Ruocchio really outdid himself.",
+                "_createdOn": 1764965500000,
+                "_id": "comment-shadow-elena-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-shadow-user-1",
+                "content": "Completely agree on the emotional impact. That ending absolutely destroyed me in the best way.",
+                "_createdOn": 1764965800000,
+                "_id": "comment-shadow-peter-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-shadow-elena-1",
+                "content": "The timeline weaving in this book is exceptional. You really need to pay attention but it's so rewarding!",
+                "_createdOn": 1764966300000,
+                "_id": "comment-shadow-admin-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-shadow-elena-1",
+                "content": "Those lore chapters had me doing the same thing—pausing constantly. The density of information is incredible.",
+                "_createdOn": 1764966500000,
+                "_id": "comment-shadow-mitko-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-shadow-mitko-2",
+                "content": "Three reads! That's the mark of a truly great book. The reread value is insane on this series.",
+                "_createdOn": 1764967300000,
+                "_id": "comment-shadow-user-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-shadow-mitko-2",
+                "content": "Hadrian's arc is truly one of the best character journeys in fiction. Every book builds on what came before perfectly.",
+                "_createdOn": 1764967500000,
+                "_id": "comment-shadow-peter-2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-shadow-mitko-2",
+                "content": "I need to do a reread myself. Your comment about discovering new connections is exactly what I felt on my first pass.",
+                "_createdOn": 1764967700000,
+                "_id": "comment-shadow-elena-2"
+            },
+            {
                 "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
                 "reviewId": "review-peter-2",
                 "content": "Dark Age is pure suffering but I loved every second. That ending still haunts me.",
@@ -2842,6 +3000,34 @@ THIS. MUST. BE.`,
                 "content": "Love that you highlighted how Red Rising stands on its own even if you only read book one.",
                 "_createdOn": 1764979250000,
                 "_id": "comment-ivan-3"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-admin-3",
+                "content": "Finally! Someone who gets why this ending worked so perfectly. I was terrified Sanderson would mess it up but he totally nailed it.",
+                "_createdOn": 1764980300000,
+                "_id": "comment-memory-user-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-admin-3",
+                "content": "The way you describe the pacing and character wrap-ups is exactly what I experienced. What a satisfying conclusion to the series.",
+                "_createdOn": 1764980400000,
+                "_id": "comment-memory-peter-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-memory-user-1",
+                "content": "The epilogue really is perfect—it gives you closure without making the world feel small. That's such a hard balance to strike.",
+                "_createdOn": 1764981200000,
+                "_id": "comment-memory-elena-1"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-memory-user-1",
+                "content": "Couldn't agree more about the Mat and Perrin sequences. They're the emotional heart of these final battles.",
+                "_createdOn": 1764981300000,
+                "_id": "comment-memory-mitko-1"
             }
         ],
         reviewLikes: [
@@ -2982,6 +3168,126 @@ THIS. MUST. BE.`,
                 "reviewId": "review-elena-1",
                 "_createdOn": 1764979650000,
                 "_id": "like-ivan-4"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-shadow-peter-1",
+                "_createdOn": 1764964300000,
+                "_id": "like-shadow-user-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-shadow-peter-1",
+                "_createdOn": 1764964400000,
+                "_id": "like-shadow-elena-1"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-shadow-peter-1",
+                "_createdOn": 1764964600000,
+                "_id": "like-shadow-mitko-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-shadow-user-1",
+                "_createdOn": 1764965300000,
+                "_id": "like-shadow-admin-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-shadow-user-1",
+                "_createdOn": 1764965400000,
+                "_id": "like-shadow-peter-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-shadow-user-1",
+                "_createdOn": 1764965600000,
+                "_id": "like-shadow-elena-2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-shadow-elena-1",
+                "_createdOn": 1764966400000,
+                "_id": "like-shadow-admin-2"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-shadow-elena-1",
+                "_createdOn": 1764966500000,
+                "_id": "like-shadow-peter-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-shadow-elena-1",
+                "_createdOn": 1764966700000,
+                "_id": "like-shadow-mitko-2"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-shadow-mitko-2",
+                "_createdOn": 1764967400000,
+                "_id": "like-shadow-user-2"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-shadow-mitko-2",
+                "_createdOn": 1764967600000,
+                "_id": "like-shadow-admin-3"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-shadow-mitko-2",
+                "_createdOn": 1764967700000,
+                "_id": "like-shadow-peter-3"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-shadow-mitko-2",
+                "_createdOn": 1764967800000,
+                "_id": "like-shadow-elena-3"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-admin-3",
+                "_createdOn": 1764980600000,
+                "_id": "like-memory-peter-1"
+            },
+            {
+                "_ownerId": "847ec027-f659-4086-8032-5173e2f9c93a",
+                "reviewId": "review-admin-3",
+                "_createdOn": 1764980700000,
+                "_id": "like-memory-user-1"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-admin-3",
+                "_createdOn": 1764980800000,
+                "_id": "like-memory-elena-1"
+            },
+            {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "reviewId": "review-memory-user-1",
+                "_createdOn": 1764981700000,
+                "_id": "like-memory-admin-1"
+            },
+            {
+                "_ownerId": "60f0cf0b-34b0-4abd-9769-8c42f830dffc",
+                "reviewId": "review-memory-user-1",
+                "_createdOn": 1764981800000,
+                "_id": "like-memory-peter-2"
+            },
+            {
+                "_ownerId": "9e3c6a2d-8bf0-4c91-92f4-1234567890ab",
+                "reviewId": "review-memory-user-1",
+                "_createdOn": 1764981900000,
+                "_id": "like-memory-elena-2"
+            },
+            {
+                "_ownerId": "5a7d1234-9af0-4b30-9e21-b38484f6c1ab",
+                "reviewId": "review-memory-user-1",
+                "_createdOn": 1764982000000,
+                "_id": "like-memory-mitko-1"
             },
         ],
         shelves: [

@@ -39,6 +39,16 @@ export default function MyLibrary() {
     );
     const currentlyReadingBooks = currentlyReadingData || [];
 
+    const addedBooksCountPath = user
+        ? `/data/books?count=true&where=${encodeURIComponent(`_ownerId="${user._id}"`)}`
+        : null;
+    const { data: addedBooksCountData } = useFetch(addedBooksCountPath, {
+        headers: user?.accessToken
+            ? { 'X-Authorization': user.accessToken }
+            : {},
+    });
+    const addedBooksCount = addedBooksCountData != null ? Number(addedBooksCountData) : 0;
+
     if (shelvesLoading || (currentlyReadingPath && crLoading)) {
         return (
             <main className="flex-1">
@@ -62,6 +72,7 @@ export default function MyLibrary() {
     const canToRead = shelfHasBooks(shelves?.['to-read']);
     const canFavorites = shelfHasBooks(shelves?.favoriteBooks);
     const canDnf = shelfHasBooks(shelves?.dnf);
+    const canAddedBooks = addedBooksCount > 0;
     const pillClasses = (enabled) =>
         enabled
             ? 'rounded-full bg-slate-900 border border-slate-700 text-slate-200 px-4 py-1.5 hover:border-emerald-500 hover:text-emerald-300'
@@ -116,7 +127,7 @@ export default function MyLibrary() {
                             aria-disabled={!canCurrentlyReading}
                             className={pillClasses(canCurrentlyReading)}
                         >
-                            Currently reading
+                            Currently Reading
                         </Link>
                         <Link
                             to={'/catalog?shelf=read'}
@@ -145,6 +156,16 @@ export default function MyLibrary() {
                             className={pillClasses(canDnf)}
                         >
                             DNF
+                        </Link>
+                        
+                        <div className="h-9 w-px bg-slate-800"></div>
+                        
+                        <Link
+                            to={'/catalog?addedBy=me'}
+                            aria-disabled={!canAddedBooks}
+                            className={pillClasses(canAddedBooks)}
+                        >
+                            Your Contributions ({addedBooksCount})
                         </Link>
                     </div>
                 </section>

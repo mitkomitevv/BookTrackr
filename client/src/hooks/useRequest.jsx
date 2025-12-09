@@ -4,8 +4,6 @@ export const BASE_URL = 'http://localhost:3030';
 // If I want to connect through wifi on mobile
 // export const BASE_URL = "http://192.168.0.102:3030";
 
-// TODO: fix double requests in some pages (Catalog, AdminPanel etc.)
-
 async function jsonRequest(
     path,
     method = 'GET',

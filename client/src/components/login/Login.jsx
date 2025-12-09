@@ -1,23 +1,95 @@
-// pages/Login.jsx
 import { useNavigate, Link } from 'react-router';
 import { useForm } from '../../hooks/useForm';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import UserContext from '../../contexts/UserContext';
 
 const initialValues = {
     email: '',
     password: '',
+    rememberMe: false,
 };
 
 export default function Login() {
     const navigate = useNavigate();
     const { loginHandler } = useContext(UserContext);
+    const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState(null);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validateForm = ({ email, password }) => {
+        const newErrors = {};
+
+        if (!email) {
+            newErrors.email = 'Email is required';
+        } else if (!validateEmail(email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (!password) {
+            newErrors.password = 'Password is required';
+        }
+
+        return newErrors;
+    };
+
+    const handleBlur = (fieldName, value) => {
+        let fieldError = null;
+
+        if (fieldName === 'email') {
+            if (!value) {
+                fieldError = 'Email is required';
+            } else if (!validateEmail(value)) {
+                fieldError = 'Please enter a valid email address';
+            }
+        }
+
+        if (fieldName === 'password' && !value) {
+            fieldError = 'Password is required';
+        }
+
+        setErrors((prev) => {
+            const newErrors = { ...prev };
+            if (fieldError) {
+                newErrors[fieldName] = fieldError;
+            } else {
+                delete newErrors[fieldName];
+            }
+            return newErrors;
+        });
+    };
 
     const { registerInput, formProps } = useForm({
         initialValues,
-        onSubmit: async ({ email, password }) => {
-            await loginHandler(email, password);
-            navigate('/');
+        onSubmit: async (values) => {
+            const validationErrors = validateForm(values);
+
+            if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+                return;
+            }
+
+            setErrors({});
+            setServerError(null);
+
+            try {
+                await loginHandler(values.email, values.password, values.rememberMe);
+                navigate('/');
+            } catch (err) {
+                if (err.status === 401) {
+                    setServerError(
+                        'Invalid email or password. Please try again.',
+                    );
+                } else {
+                    setServerError(
+                        err.payload?.message ||
+                            'Login failed. Please try again.',
+                    );
+                }
+            }
         },
     });
 
@@ -39,6 +111,15 @@ export default function Login() {
                     </header>
 
                     <form {...formProps} className="space-y-4">
+                        {/* Server Error */}
+                        {serverError && (
+                            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                                <p className="text-sm text-red-400">
+                                    {serverError}
+                                </p>
+                            </div>
+                        )}
+
                         {/* Email */}
                         <div className="space-y-1 text-sm">
                             <label
@@ -53,9 +134,17 @@ export default function Login() {
                                 required
                                 autoComplete="email"
                                 placeholder="you@example.com"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.email ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.email ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('email')}
+                                onBlur={(e) =>
+                                    handleBlur('email', e.target.value)
+                                }
                             />
+                            {errors.email && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         {/* Password */}
@@ -79,18 +168,26 @@ export default function Login() {
                                 type="password"
                                 required
                                 autoComplete="current-password"
-                                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className={`w-full rounded-2xl border ${errors.password ? 'border-red-500' : 'border-slate-700'} bg-slate-900/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 ${errors.password ? 'focus:ring-red-500 focus:border-red-500' : 'focus:ring-emerald-500 focus:border-emerald-500'}`}
                                 {...registerInput('password')}
+                                onBlur={(e) =>
+                                    handleBlur('password', e.target.value)
+                                }
                             />
+                            {errors.password && (
+                                <p className="text-xs text-red-400 mt-1">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
-                        {/* Remember me – still visual */}
+                        {/* Remember me */}
                         <div className="flex items-center justify-between text-xs">
                             <label className="flex items-center gap-2 text-slate-300">
                                 <input
                                     type="checkbox"
-                                    name="remember"
                                     className="h-3.5 w-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
+                                    {...registerInput('rememberMe')}
                                 />
                                 <span>Keep me logged in</span>
                             </label>

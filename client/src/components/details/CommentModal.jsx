@@ -153,6 +153,7 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
                     {comments.map((c) => {
                         const authorName =
                             c.authorInfo?.username ||
+                            c.authorInfo?.name ||
                             c.authorInfo?.email ||
                             'Anonymous';
                         const isEditing = editingId === c._id;

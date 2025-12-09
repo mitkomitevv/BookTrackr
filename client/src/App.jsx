@@ -11,29 +11,28 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import Logout from './components/logout/Logout';
 import AdminPanel from './components/admin-panel/AdminPanel';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 export default function App() {
-    // TODO: form validation, better error handling
     return (
         <div className="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
             <Header />
 
-            {/* TODO: Route Guards */}
             <Routes>
-                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />
                 <Route path="/" element={<Home />} />
 
                 <Route path="/catalog" element={<CatalogLayout />}>
                     <Route index element={<Catalog />} />
                     <Route path=":bookId/details" element={<BookDetails />} />
-                    <Route path=":bookId/edit" element={<BookSaveForm />} />
-                    <Route path="add-book" element={<BookSaveForm />} />
+                    <Route path=":bookId/edit" element={<ProtectedRoute><BookSaveForm /></ProtectedRoute>} />
+                    <Route path="add-book" element={<ProtectedRoute><BookSaveForm /></ProtectedRoute>} />
                 </Route>
 
-                <Route path="/library" element={<MyLibrary />} />
+                <Route path="/library" element={<ProtectedRoute><MyLibrary /></ProtectedRoute>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
+                <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
             </Routes>
 
             <Footer />

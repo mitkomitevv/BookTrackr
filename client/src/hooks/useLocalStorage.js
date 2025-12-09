@@ -13,7 +13,20 @@ export default function useLocalStorage(initialState, key) {
         }
         try {
             const stored = localStorage.getItem(key);
-            return stored ? JSON.parse(stored) : init;
+            const parsed = stored ? JSON.parse(stored) : null;
+            
+            // If rememberMe was false, check if sessionStorage still has the auth
+            if (parsed && parsed.rememberMe === false) {
+                try {
+                    const sessionAuth = sessionStorage.getItem('auth-session');
+                    return sessionAuth ? JSON.parse(sessionAuth) : init;
+                } catch (err) {
+                    console.warn(`useLocalStorage: session read error for key ${key}`, err);
+                    return init;
+                }
+            }
+            
+            return parsed || init;
         } catch (err) {
             console.warn(`useLocalStorage: read error for key ${key}`, err);
             return init;

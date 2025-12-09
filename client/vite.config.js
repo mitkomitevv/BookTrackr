@@ -8,6 +8,16 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: [
+      './src/tests/setupTests.js'
+    ],
+    coverage: {
+      provider: 'istanbul'
+    }
+  }
   // server: {
   //   // If I want to connect through wifi on mobile
   //   host: true

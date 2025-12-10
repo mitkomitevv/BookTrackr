@@ -175,17 +175,13 @@ export default function AdminPanel() {
         let mounted = true;
         (async () => {
             try {
-                const all = await request('/data/books');
+                const count = await request('/data/books?count=true');
                 if (!mounted) return;
-                if (Array.isArray(all)) {
-                    setTotal(all.length);
-                } else if (
-                    all &&
-                    typeof all === 'object' &&
-                    Array.isArray(all.data)
-                ) {
-                    setTotal(all.data.length);
-                } else setTotal(null);
+                if (typeof count === 'number') {
+                    setTotal(count);
+                } else {
+                    setTotal(null);
+                }
             } catch {
                 if (!mounted) return;
                 setTotal(null);

@@ -18,8 +18,4 @@ export default defineConfig({
       provider: 'istanbul'
     }
   }
-  // server: {
-  //   // If I want to connect through wifi on mobile
-  //   host: true
-  // },
 })

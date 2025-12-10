@@ -14,7 +14,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "server": "firebase emulators:start --only functions",
-    "deploy:server": "firebase deploy --only functions"
+    "deploy:server": "firebase deploy --only functions",
+    "deploy:client": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "react": "^19.2.0",

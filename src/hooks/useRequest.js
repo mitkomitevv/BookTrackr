@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-export const BASE_URL = 'http://localhost:3030';
-// If I want to connect through wifi on mobile
-// export const BASE_URL = "http://192.168.0.102:3030";
+export const BASE_URL = import.meta.env.VITE_APP_SERVER_URL;
 
 async function jsonRequest(
     path,

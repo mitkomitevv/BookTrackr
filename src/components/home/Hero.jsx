@@ -1,14 +1,20 @@
 import { Link } from 'react-router';
 import TrendingCard from './TrendingCard';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
 
 export default function Hero() {
+    const { user, isAuthenticated } = useContext(UserContext);
+
     return (
         <section className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 px-6 py-8 sm:px-10 sm:py-10">
             <div className="absolute inset-y-0 -right-32 w-72 bg-emerald-500/10 blur-3xl" />
             <div className="relative flex flex-col md:flex-row gap-8 md:items-center">
                 <div className="flex-1 space-y-4">
                     <p className="text-xs uppercase tracking-[0.25em] text-emerald-300">
-                        Welcome to BookTrackr
+                        {isAuthenticated && user
+                            ? `Welcome back, ${user.name || user.username || user.email}`
+                            : 'Welcome to BookTrackr'}
                     </p>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-slate-50">
                         Discover your next{' '}

@@ -58,13 +58,21 @@ Follow these steps to set up BookTrackr locally:
    npm install
    ```
 
-3. **Start the development server:**
+3. **Install backend dependencies:**
+
+   ```bash
+   cd functions
+   npm install
+   cd ..
+   ```
+
+4. **Start the development server:**
 
    ```bash
    npm run dev
    ```
 
-4. **Start the backend server (in a separate terminal):**
+5. **Start the backend server (in a separate terminal):**
 
    ```bash
    npm run server
@@ -72,7 +80,7 @@ Follow these steps to set up BookTrackr locally:
 
    > Note: This requires Firebase CLI to be installed (`npm install -g firebase-tools`)
 
-5. **Open in browser:**
+6. **Open in browser:**
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 

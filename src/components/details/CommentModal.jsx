@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useContext } from 'react';
+import { Link } from 'react-router';
 import { useFetch, useRequest } from '../../hooks/useRequest';
 import UserContext from '../../contexts/UserContext';
 import { formatDate } from '../../utils/formatDate';
@@ -111,7 +112,7 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-            <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-2xl w-full text-slate-100 shadow-lg space-y-4">
+            <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] text-slate-100 shadow-lg space-y-4 flex flex-col">
                 <div className="flex items-start justify-between gap-3">
                     <div>
                         <h3 className="text-lg font-semibold">Comments</h3>
@@ -139,7 +140,7 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
                     </button>
                 </div>
 
-                <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                <div className="space-y-2 flex-1 overflow-y-auto pr-1">
                     {loading && (
                         <p className="text-sm text-slate-400">
                             Loading comments...
@@ -235,25 +236,34 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
                     })}
                 </div>
 
-                <div className="space-y-2">
-                    <textarea
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        rows={3}
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100"
-                        placeholder="Write a comment..."
-                    />
-                    <div className="flex justify-end">
-                        <button
-                            type="button"
-                            onClick={commentSubmitHandler}
-                            disabled={posting || !text.trim()}
-                            className="px-4 py-2 rounded-2xl bg-emerald-500 text-sm font-semibold text-slate-950 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
-                        >
-                            {posting ? 'Posting...' : 'Post comment'}
-                        </button>
+                {user ? (
+                    <div className="space-y-2">
+                        <textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            rows={3}
+                            className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100"
+                            placeholder="Write a comment..."
+                        />
+                        <div className="flex justify-end">
+                            <button
+                                type="button"
+                                onClick={commentSubmitHandler}
+                                disabled={posting || !text.trim()}
+                                className="px-4 py-2 rounded-2xl bg-emerald-500 text-sm font-semibold text-slate-950 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
+                            >
+                                {posting ? 'Posting...' : 'Post comment'}
+                            </button>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <p className="text-sm text-slate-400 text-center py-2">
+                        <Link to="/login" className="text-emerald-400 hover:text-emerald-300 transition">
+                            Log in
+                        </Link>{' '}
+                        to post a comment
+                    </p>
+                )}
             </div>
             {deleteConfirm && (
                 <ConfirmModal

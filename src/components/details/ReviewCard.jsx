@@ -156,7 +156,7 @@ export default function ReviewCard({
                         {onEdit && (
                             <button
                                 onClick={onEdit}
-                                className="text-[13px] text-slate-400 hover:text-emerald-300 transition"
+                                className="px-3 py-1 rounded-xl text-xs font-medium text-slate-300 border border-slate-700 hover:border-emerald-500 hover:text-emerald-300 transition"
                             >
                                 Edit
                             </button>
@@ -164,7 +164,7 @@ export default function ReviewCard({
                         {onDelete && (
                             <button
                                 onClick={onDelete}
-                                className="text-[13px] text-slate-400 hover:text-red-400 transition"
+                                className="px-3 py-1 rounded-xl text-xs font-medium text-slate-300 border border-slate-700 hover:border-red-500 hover:text-red-400 transition"
                             >
                                 Delete
                             </button>

@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useMemo } from 'react';
+import { Link } from 'react-router';
 import ReviewCard from './ReviewCard';
 import ReviewModal from '../ui/ReviewModal';
 import ConfirmModal from '../ui/ConfirmModal';
@@ -293,12 +294,21 @@ export default function BookReviewsSection({ bookId, bookTitle }) {
                             other readers decide if this is for them.
                         </p>
                     </div>
-                    <button
-                        onClick={() => setShowReviewModal(true)}
-                        className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
-                    >
-                        Write a review
-                    </button>
+                    {user ? (
+                        <button
+                            onClick={() => setShowReviewModal(true)}
+                            className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
+                        >
+                            Write a review
+                        </button>
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
+                        >
+                            Log in to write a review
+                        </Link>
+                    )}
                 </div>
             )}
 

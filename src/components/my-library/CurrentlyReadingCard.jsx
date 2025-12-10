@@ -3,7 +3,7 @@ import UserContext from '../../contexts/UserContext';
 import { Link } from 'react-router';
 import { useFetch, useRequest } from '../../hooks/useRequest';
 
-export default function CurrentlyReadingCard({ book }) {
+export default function CurrentlyReadingCard({ book, isOwnLibrary = true }) {
     const { user } = useContext(UserContext);
     const [isUpdating, setIsUpdating] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -152,12 +152,14 @@ export default function CurrentlyReadingCard({ book }) {
                             <span>
                                 Page {currentPage} of {totalPages}
                             </span>
-                            <button
-                                onClick={openModal}
-                                className="text-emerald-400 hover:text-emerald-300 font-medium"
-                            >
-                                Update progress
-                            </button>
+                            {isOwnLibrary && (
+                                <button
+                                    onClick={openModal}
+                                    className="text-emerald-400 hover:text-emerald-300 font-medium"
+                                >
+                                    Update progress
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

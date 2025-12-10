@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from 'react';
+import { Link } from 'react-router';
 import StarRating from '../ui/StarRating';
 import { useExpandable } from '../../hooks/useExpandable';
 import { useRequest } from '../../hooks/useRequest';
@@ -128,7 +129,12 @@ export default function ReviewCard({
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-slate-100">
-                                {review.author}
+                                <Link
+                                    to={`/library/${review._ownerId}`}
+                                    className="hover:text-emerald-400 transition"
+                                >
+                                    {review.author}
+                                </Link>
                                 {highlighted && (
                                     <span className="ml-2 text-[10px] text-emerald-400 font-normal">
                                         Your review

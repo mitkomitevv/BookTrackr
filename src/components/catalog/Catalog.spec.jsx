@@ -37,7 +37,7 @@ const renderCatalog = (contextValue = {}, route = '/catalog') => {
             <UserContext.Provider value={defaultContext}>
                 <Catalog />
             </UserContext.Provider>
-        </MemoryRouter>
+        </MemoryRouter>,
     );
 };
 
@@ -47,7 +47,12 @@ describe('Catalog Component', () => {
     });
 
     it('shows loading state', () => {
-        mockUseFetch.mockReturnValue({ data: null, loading: true, error: null, refetch: vi.fn() });
+        mockUseFetch.mockReturnValue({
+            data: null,
+            loading: true,
+            error: null,
+            refetch: vi.fn(),
+        });
 
         renderCatalog();
 
@@ -64,7 +69,9 @@ describe('Catalog Component', () => {
 
         renderCatalog();
 
-        expect(screen.getByText(/server error|failed to load/i)).toBeInTheDocument();
+        expect(
+            screen.getByText(/server error|failed to load/i),
+        ).toBeInTheDocument();
     });
 
     it('renders book cards when data loads', () => {
@@ -85,13 +92,20 @@ describe('Catalog Component', () => {
 
         renderCatalog();
 
-        expect(screen.getByRole('heading', { name: /browse books/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /browse books/i }),
+        ).toBeInTheDocument();
         expect(screen.getAllByTestId('book-card')).toHaveLength(2);
         expect(screen.getByTestId('pagination')).toBeInTheDocument();
     });
 
     it('shows empty grid when no books', () => {
-        mockUseFetch.mockReturnValue({ data: [], loading: false, error: null, refetch: vi.fn() });
+        mockUseFetch.mockReturnValue({
+            data: [],
+            loading: false,
+            error: null,
+            refetch: vi.fn(),
+        });
 
         renderCatalog();
 

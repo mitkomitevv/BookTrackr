@@ -29,7 +29,7 @@ const renderLogin = (contextValue = {}) => {
                 <UserContext.Provider value={defaultContext}>
                     <Login />
                 </UserContext.Provider>
-            </MemoryRouter>
+            </MemoryRouter>,
         ),
         loginHandler: defaultContext.loginHandler,
     };
@@ -43,10 +43,14 @@ describe('Login Component', () => {
     it('renders the basic form elements', () => {
         renderLogin();
 
-        expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /log in/i }),
+        ).toBeInTheDocument();
         expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: /log in/i }),
+        ).toBeInTheDocument();
     });
 
     it('submits valid credentials and navigates home', async () => {
@@ -59,7 +63,11 @@ describe('Login Component', () => {
         await user.click(screen.getByRole('button', { name: /log in/i }));
 
         await waitFor(() => {
-            expect(loginHandler).toHaveBeenCalledWith('test@example.com', 'password123', false);
+            expect(loginHandler).toHaveBeenCalledWith(
+                'test@example.com',
+                'password123',
+                false,
+            );
             expect(mockNavigate).toHaveBeenCalledWith('/');
         });
     });
@@ -73,8 +81,12 @@ describe('Login Component', () => {
 
         await user.click(screen.getByRole('button', { name: /log in/i }));
 
-        expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/email is required/i),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(/password is required/i),
+        ).toBeInTheDocument();
     });
 
     it('shows server error for invalid credentials (401)', async () => {
@@ -86,6 +98,8 @@ describe('Login Component', () => {
         await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
         await user.click(screen.getByRole('button', { name: /log in/i }));
 
-        expect(await screen.findByText(/invalid email or password/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/invalid email or password/i),
+        ).toBeInTheDocument();
     });
 });

@@ -44,7 +44,7 @@ const renderBookSaveForm = (contextValue = {}) => {
             <UserContext.Provider value={defaultContext}>
                 <BookSaveForm />
             </UserContext.Provider>
-        </MemoryRouter>
+        </MemoryRouter>,
     );
 };
 
@@ -56,10 +56,14 @@ describe('BookSaveForm Component', () => {
     it('renders the add book form with required fields', () => {
         renderBookSaveForm();
 
-        expect(screen.getByRole('heading', { name: /add a new book/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /add a new book/i }),
+        ).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/book title/i)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/author name/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /save book/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: /save book/i }),
+        ).toBeInTheDocument();
     });
 
     it('shows cancel button that navigates back', async () => {
@@ -80,6 +84,8 @@ describe('BookSaveForm Component', () => {
         await user.click(titleInput);
         await user.tab();
 
-        expect(await screen.findByText(/title is required/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/title is required/i),
+        ).toBeInTheDocument();
     });
 });

@@ -5,7 +5,9 @@ import Header from './Header';
 import UserContext from '../../contexts/UserContext';
 
 vi.mock('../search/Search', () => ({
-    default: ({ placeholder }) => <input data-testid="search" placeholder={placeholder} />,
+    default: ({ placeholder }) => (
+        <input data-testid="search" placeholder={placeholder} />
+    ),
 }));
 
 const renderHeader = (contextValue = {}) => {
@@ -21,7 +23,7 @@ const renderHeader = (contextValue = {}) => {
             <UserContext.Provider value={defaultContext}>
                 <Header />
             </UserContext.Provider>
-        </MemoryRouter>
+        </MemoryRouter>,
     );
 };
 
@@ -35,35 +37,66 @@ describe('Header Component', () => {
 
         expect(screen.getByText('BookTrackr')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /browse/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /browse/i }),
+        ).toBeInTheDocument();
     });
 
     it('shows login/signup when not authenticated', () => {
         renderHeader({ isAuthenticated: false });
 
-        expect(screen.getByRole('link', { name: /log in/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: /my library/i })).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /log in/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /sign up/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('link', { name: /my library/i }),
+        ).not.toBeInTheDocument();
     });
 
     it('shows user links when authenticated', () => {
-        renderHeader({ isAuthenticated: true, user: { _id: '1', accessToken: 'tok' } });
+        renderHeader({
+            isAuthenticated: true,
+            user: { _id: '1', accessToken: 'tok' },
+        });
 
-        expect(screen.getByRole('link', { name: /my library/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /add book/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /sign out/i })).toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: /log in/i })).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /my library/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /add book/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /sign out/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('link', { name: /log in/i }),
+        ).not.toBeInTheDocument();
     });
 
     it('shows admin link when user is admin', () => {
-        renderHeader({ isAuthenticated: true, isAdmin: true, user: { _id: '1' } });
+        renderHeader({
+            isAuthenticated: true,
+            isAdmin: true,
+            user: { _id: '1' },
+        });
 
-        expect(screen.getByRole('link', { name: /admin/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', { name: /admin/i }),
+        ).toBeInTheDocument();
     });
 
     it('hides admin link for non-admin users', () => {
-        renderHeader({ isAuthenticated: true, isAdmin: false, user: { _id: '1' } });
+        renderHeader({
+            isAuthenticated: true,
+            isAdmin: false,
+            user: { _id: '1' },
+        });
 
-        expect(screen.queryByRole('link', { name: /admin/i })).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('link', { name: /admin/i }),
+        ).not.toBeInTheDocument();
     });
 });

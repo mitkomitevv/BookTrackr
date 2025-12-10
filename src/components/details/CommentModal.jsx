@@ -165,7 +165,12 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
                                 className="rounded-xl border border-slate-800 bg-slate-900/80 p-3 text-sm space-y-1"
                             >
                                 <div className="flex items-center justify-between text-xs text-slate-400">
-                                    <span>{authorName}</span>
+                                    <Link
+                                        to={`/library/${c._ownerId}`}
+                                        className="hover:text-emerald-400 transition"
+                                    >
+                                        {authorName}
+                                    </Link>
                                     <div className="flex items-center gap-2">
                                         <span>{formatDate(c._createdOn)}</span>
                                         {canEdit && (
@@ -258,7 +263,10 @@ export default function CommentModal({ visible, review, bookTitle, onClose }) {
                     </div>
                 ) : (
                     <p className="text-sm text-slate-400 text-center py-2">
-                        <Link to="/login" className="text-emerald-400 hover:text-emerald-300 transition">
+                        <Link
+                            to="/login"
+                            className="text-emerald-400 hover:text-emerald-300 transition"
+                        >
                             Log in
                         </Link>{' '}
                         to post a comment

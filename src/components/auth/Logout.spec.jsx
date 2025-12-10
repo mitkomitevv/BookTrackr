@@ -28,7 +28,7 @@ const renderLogout = (contextValue = {}) => {
                 <UserContext.Provider value={defaultContext}>
                     <Logout />
                 </UserContext.Provider>
-            </MemoryRouter>
+            </MemoryRouter>,
         ),
         logoutHandler: defaultContext.logoutHandler,
     };
@@ -50,8 +50,12 @@ describe('Logout Component', () => {
     });
 
     it('shows alert and still navigates home on failure', async () => {
-        const logoutHandler = vi.fn().mockRejectedValue(new Error('Logout failed'));
-        const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+        const logoutHandler = vi
+            .fn()
+            .mockRejectedValue(new Error('Logout failed'));
+        const alertMock = vi
+            .spyOn(window, 'alert')
+            .mockImplementation(() => {});
 
         renderLogout({ logoutHandler });
 

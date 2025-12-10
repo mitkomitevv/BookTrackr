@@ -76,7 +76,11 @@ export default function Login() {
             setServerError(null);
 
             try {
-                await loginHandler(values.email, values.password, values.rememberMe);
+                await loginHandler(
+                    values.email,
+                    values.password,
+                    values.rememberMe,
+                );
                 navigate('/');
             } catch (err) {
                 if (err.status === 401) {

@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
+import { useParams } from 'react-router';
 import CurrentlyReadingCard from './CurrentlyReadingCard';
 import ShelfPreview from '../shelf-preview/ShelfPreview';
 import UserContext from '../../contexts/UserContext';
@@ -7,19 +8,36 @@ import { Link } from 'react-router';
 
 export default function MyLibrary() {
     const { user } = useContext(UserContext);
+    const { userId: routeUserId } = useParams();
 
-    const shelvesPath = user
-        ? `/data/shelves?where=_ownerId%3D%22${user._id}%22`
+    // Determine if viewing own library or another user's
+    const isOwnLibrary = !routeUserId || (user && routeUserId === user._id);
+    const targetUserId = routeUserId || user?._id;
+
+    const shelvesPath = targetUserId
+        ? `/data/shelves?where=${encodeURIComponent(`_ownerId="${targetUserId}"`)}&load=${encodeURIComponent('ownerInfo=_ownerId:users')}`
         : null;
     const { data: shelvesData, loading: shelvesLoading } = useFetch(
         shelvesPath,
         {
-            headers: user?.accessToken
-                ? { 'X-Authorization': user.accessToken }
-                : {},
+            headers:
+                isOwnLibrary && user?.accessToken
+                    ? { 'X-Authorization': user.accessToken }
+                    : {},
         },
     );
     const shelves = shelvesData?.[0] || null;
+
+    const viewedUsername = useMemo(() => {
+        if (isOwnLibrary) return null;
+        const ownerInfo = shelves?.ownerInfo;
+        return (
+            ownerInfo?.username ||
+            ownerInfo?.name ||
+            ownerInfo?.email?.split('@')[0] ||
+            'User'
+        );
+    }, [isOwnLibrary, shelves]);
 
     const currentlyReadingIds = shelves?.currentlyReading || [];
     const crClause = currentlyReadingIds.length
@@ -32,28 +50,35 @@ export default function MyLibrary() {
     const { data: currentlyReadingData, loading: crLoading } = useFetch(
         currentlyReadingPath,
         {
-            headers: user?.accessToken
-                ? { 'X-Authorization': user.accessToken }
-                : {},
+            headers:
+                isOwnLibrary && user?.accessToken
+                    ? { 'X-Authorization': user.accessToken }
+                    : {},
         },
     );
     const currentlyReadingBooks = currentlyReadingData || [];
 
-    const addedBooksCountPath = user
-        ? `/data/books?count=true&where=${encodeURIComponent(`_ownerId="${user._id}"`)}`
+    const addedBooksCountPath = targetUserId
+        ? `/data/books?count=true&where=${encodeURIComponent(`_ownerId="${targetUserId}"`)}`
         : null;
     const { data: addedBooksCountData } = useFetch(addedBooksCountPath, {
-        headers: user?.accessToken
-            ? { 'X-Authorization': user.accessToken }
-            : {},
+        headers:
+            isOwnLibrary && user?.accessToken
+                ? { 'X-Authorization': user.accessToken }
+                : {},
     });
-    const addedBooksCount = addedBooksCountData != null ? Number(addedBooksCountData) : 0;
+    const addedBooksCount =
+        addedBooksCountData != null ? Number(addedBooksCountData) : 0;
 
     if (shelvesLoading || (currentlyReadingPath && crLoading)) {
         return (
             <main className="flex-1">
                 <div className="max-w-6xl mx-auto px-4 py-8">
-                    <p className="text-slate-400">Loading your library...</p>
+                    <p className="text-slate-400">
+                        {isOwnLibrary
+                            ? 'Loading your library...'
+                            : 'Loading library...'}
+                    </p>
                 </div>
             </main>
         );
@@ -78,6 +103,12 @@ export default function MyLibrary() {
             ? 'rounded-full bg-slate-900 border border-slate-700 text-slate-200 px-4 py-1.5 hover:border-emerald-500 hover:text-emerald-300'
             : 'rounded-full bg-slate-900 border border-slate-800 text-slate-500 px-4 py-1.5 cursor-not-allowed opacity-60 pointer-events-none';
 
+    // Helper to build shelf URLs with user ID for other users' libraries
+    const shelfUrl = (shelfName) => {
+        const base = `/catalog?shelf=${shelfName}`;
+        return isOwnLibrary ? base : `${base}&userId=${targetUserId}`;
+    };
+
     return (
         <main className="flex-1">
             <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
@@ -85,12 +116,14 @@ export default function MyLibrary() {
                 <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="space-y-2">
                         <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-                            My Library
+                            {isOwnLibrary
+                                ? 'My Library'
+                                : `${viewedUsername}'s Library`}
                         </h1>
                         <p className="text-sm text-slate-400 max-w-xl">
-                            All your shelves in one place. Track what
-                            you&apos;re reading now, what&apos;s next, and what
-                            you&apos;ve already finished.
+                            {isOwnLibrary
+                                ? "All your shelves in one place. Track what you're reading now, what's next, and what you've already finished."
+                                : `See what ${viewedUsername} is reading and has on their shelves.`}
                         </p>
                     </div>
 
@@ -123,50 +156,55 @@ export default function MyLibrary() {
                 <section className="space-y-4">
                     <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
                         <Link
-                            to={'/catalog?shelf=currentlyReading'}
+                            to={shelfUrl('currentlyReading')}
                             aria-disabled={!canCurrentlyReading}
                             className={pillClasses(canCurrentlyReading)}
                         >
-                            Currently Reading
+                            Currently Reading (
+                            {shelves?.currentlyReading?.length || 0})
                         </Link>
                         <Link
-                            to={'/catalog?shelf=read'}
+                            to={shelfUrl('read')}
                             aria-disabled={!canRead}
                             className={pillClasses(canRead)}
                         >
-                            Read
+                            Read ({shelves?.read?.length || 0})
                         </Link>
                         <Link
-                            to={'/catalog?shelf=to-read'}
+                            to={shelfUrl('to-read')}
                             aria-disabled={!canToRead}
                             className={pillClasses(canToRead)}
                         >
-                            To Read
+                            To Read ({shelves?.['to-read']?.length || 0})
                         </Link>
                         <Link
-                            to={'/catalog?shelf=favorites'}
+                            to={shelfUrl('favorites')}
                             aria-disabled={!canFavorites}
                             className={pillClasses(canFavorites)}
                         >
-                            Favorites
+                            Favorites ({shelves?.favoriteBooks?.length || 0})
                         </Link>
                         <Link
-                            to={'/catalog?shelf=dnf'}
+                            to={shelfUrl('dnf')}
                             aria-disabled={!canDnf}
                             className={pillClasses(canDnf)}
                         >
-                            DNF
+                            DNF ({shelves?.dnf?.length || 0})
                         </Link>
-                        
-                        <div className="h-9 w-px bg-slate-800"></div>
-                        
-                        <Link
-                            to={'/catalog?addedBy=me'}
-                            aria-disabled={!canAddedBooks}
-                            className={pillClasses(canAddedBooks)}
-                        >
-                            Your Contributions ({addedBooksCount})
-                        </Link>
+
+                        {isOwnLibrary && (
+                            <>
+                                <div className="h-9 w-px bg-slate-800"></div>
+
+                                <Link
+                                    to={'/catalog?addedBy=me'}
+                                    aria-disabled={!canAddedBooks}
+                                    className={pillClasses(canAddedBooks)}
+                                >
+                                    Your Contributions ({addedBooksCount})
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </section>
 
@@ -183,7 +221,7 @@ export default function MyLibrary() {
                         </div>
                         {currentlyReadingBooks.length > 0 && (
                             <Link
-                                to="/catalog?shelf=currentlyReading"
+                                to={shelfUrl('currentlyReading')}
                                 className="text-xs sm:text-sm text-emerald-400 hover:text-emerald-300 font-medium"
                             >
                                 View all
@@ -197,24 +235,31 @@ export default function MyLibrary() {
                                 <CurrentlyReadingCard
                                     key={book._id}
                                     book={book}
+                                    isOwnLibrary={isOwnLibrary}
                                 />
                             ))}
                         </div>
                     ) : (
                         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-8 text-center space-y-3">
                             <p className="text-slate-300">
-                                You're not reading anything right now.
+                                {isOwnLibrary
+                                    ? "You're not reading anything right now."
+                                    : `${viewedUsername} isn't reading anything right now.`}
                             </p>
-                            <p className="text-sm text-slate-400">
-                                Browse the catalog and start your next
-                                adventure!
-                            </p>
-                            <Link
-                                to="/catalog"
-                                className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
-                            >
-                                Browse Catalog
-                            </Link>
+                            {isOwnLibrary && (
+                                <>
+                                    <p className="text-sm text-slate-400">
+                                        Browse the catalog and start your next
+                                        adventure!
+                                    </p>
+                                    <Link
+                                        to="/catalog"
+                                        className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
+                                    >
+                                        Browse Catalog
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     )}
                 </section>
@@ -222,20 +267,23 @@ export default function MyLibrary() {
                 {!hasAnyBooks && (
                     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-8 text-center space-y-4">
                         <h3 className="text-xl font-semibold text-slate-50">
-                            Your library is empty
+                            {isOwnLibrary
+                                ? 'Your library is empty'
+                                : 'This library is empty'}
                         </h3>
                         <p className="text-slate-400 max-w-md mx-auto">
-                            Start building your personal library by adding books
-                            to your shelves. Track what you're reading, plan
-                            your next reads, and keep a record of everything
-                            you've finished.
+                            {isOwnLibrary
+                                ? "Start building your personal library by adding books to your shelves. Track what you're reading, plan your next reads, and keep a record of everything you've finished."
+                                : `${viewedUsername} hasn't added any books to their library yet.`}
                         </p>
-                        <Link
-                            to="/catalog"
-                            className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
-                        >
-                            Explore Books
-                        </Link>
+                        {isOwnLibrary && (
+                            <Link
+                                to="/catalog"
+                                className="inline-flex items-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow hover:bg-emerald-400 transition"
+                            >
+                                Explore Books
+                            </Link>
+                        )}
                     </div>
                 )}
 
@@ -244,10 +292,14 @@ export default function MyLibrary() {
                         {shelves.read && shelves.read.length > 0 && (
                             <ShelfPreview
                                 title="Read"
-                                description="Your completed reads."
+                                description={
+                                    isOwnLibrary
+                                        ? 'Your completed reads.'
+                                        : `${viewedUsername}'s completed reads.`
+                                }
                                 shelfName="read"
                                 bookIds={shelves.read}
-                                onViewAll="/catalog?shelf=read"
+                                onViewAll={shelfUrl('read')}
                             />
                         )}
 
@@ -255,10 +307,14 @@ export default function MyLibrary() {
                             shelves['to-read'].length > 0 && (
                                 <ShelfPreview
                                     title="To Read"
-                                    description="Books on your reading list."
+                                    description={
+                                        isOwnLibrary
+                                            ? 'Books on your reading list.'
+                                            : `Books on ${viewedUsername}'s reading list.`
+                                    }
                                     shelfName="to-read"
                                     bookIds={shelves['to-read']}
-                                    onViewAll="/catalog?shelf=to-read"
+                                    onViewAll={shelfUrl('to-read')}
                                 />
                             )}
 
@@ -266,20 +322,28 @@ export default function MyLibrary() {
                             shelves.favoriteBooks.length > 0 && (
                                 <ShelfPreview
                                     title="Favorites"
-                                    description="Your favorite books."
+                                    description={
+                                        isOwnLibrary
+                                            ? 'Your favorite books.'
+                                            : `${viewedUsername}'s favorite books.`
+                                    }
                                     shelfName="favoriteBooks"
                                     bookIds={shelves.favoriteBooks}
-                                    onViewAll="/catalog?shelf=favorites"
+                                    onViewAll={shelfUrl('favorites')}
                                 />
                             )}
 
                         {shelves.dnf && shelves.dnf.length > 0 && (
                             <ShelfPreview
                                 title="DNF (Did Not Finish)"
-                                description="Books you didn't finish."
+                                description={
+                                    isOwnLibrary
+                                        ? "Books you didn't finish."
+                                        : `Books ${viewedUsername} didn't finish.`
+                                }
                                 shelfName="dnf"
                                 bookIds={shelves.dnf}
-                                onViewAll="/catalog?shelf=dnf"
+                                onViewAll={shelfUrl('dnf')}
                             />
                         )}
                     </>

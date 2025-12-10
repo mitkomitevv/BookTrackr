@@ -29,7 +29,7 @@ const renderRegister = (contextValue = {}) => {
                 <UserContext.Provider value={defaultContext}>
                     <Register />
                 </UserContext.Provider>
-            </MemoryRouter>
+            </MemoryRouter>,
         ),
         registerHandler: defaultContext.registerHandler,
     };
@@ -43,12 +43,16 @@ describe('Register Component', () => {
     it('renders the registration form essentials', () => {
         renderRegister();
 
-        expect(screen.getByRole('heading', { name: /create an account/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /create an account/i }),
+        ).toBeInTheDocument();
         expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: /create account/i }),
+        ).toBeInTheDocument();
     });
 
     it('validates required fields and matching passwords on submit', async () => {
@@ -58,12 +62,22 @@ describe('Register Component', () => {
         // Disable native form validation so React validation runs in tests
         document.querySelector('form')?.setAttribute('noValidate', 'true');
 
-        await user.click(screen.getByRole('button', { name: /create account/i }));
+        await user.click(
+            screen.getByRole('button', { name: /create account/i }),
+        );
 
-        expect(await screen.findByText(/name is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/please confirm your password/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/name is required/i),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(/email is required/i),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(/password is required/i),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(/please confirm your password/i),
+        ).toBeInTheDocument();
     });
 
     it('submits valid data and navigates home', async () => {
@@ -74,12 +88,21 @@ describe('Register Component', () => {
         await user.type(screen.getByLabelText(/full name/i), 'Jane Smith');
         await user.type(screen.getByLabelText(/email/i), 'jane@example.com');
         await user.type(screen.getByLabelText(/^password$/i), 'password123');
-        await user.type(screen.getByLabelText(/confirm password/i), 'password123');
+        await user.type(
+            screen.getByLabelText(/confirm password/i),
+            'password123',
+        );
         await user.click(screen.getByRole('checkbox'));
-        await user.click(screen.getByRole('button', { name: /create account/i }));
+        await user.click(
+            screen.getByRole('button', { name: /create account/i }),
+        );
 
         await waitFor(() => {
-            expect(registerHandler).toHaveBeenCalledWith('jane@example.com', 'password123', 'Jane Smith');
+            expect(registerHandler).toHaveBeenCalledWith(
+                'jane@example.com',
+                'password123',
+                'Jane Smith',
+            );
             expect(mockNavigate).toHaveBeenCalledWith('/');
         });
     });
@@ -92,10 +115,17 @@ describe('Register Component', () => {
         await user.type(screen.getByLabelText(/full name/i), 'Jane Smith');
         await user.type(screen.getByLabelText(/email/i), 'jane@example.com');
         await user.type(screen.getByLabelText(/^password$/i), 'password123');
-        await user.type(screen.getByLabelText(/confirm password/i), 'password123');
+        await user.type(
+            screen.getByLabelText(/confirm password/i),
+            'password123',
+        );
         await user.click(screen.getByRole('checkbox'));
-        await user.click(screen.getByRole('button', { name: /create account/i }));
+        await user.click(
+            screen.getByRole('button', { name: /create account/i }),
+        );
 
-        expect(await screen.findByText(/this email is already registered/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/this email is already registered/i),
+        ).toBeInTheDocument();
     });
 });

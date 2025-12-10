@@ -19,20 +19,56 @@ export default function App() {
             <Header />
 
             <Routes>
-                <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />
+                <Route
+                    path="/admin"
+                    element={
+                        <ProtectedRoute adminOnly>
+                            <AdminPanel />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path="/" element={<Home />} />
 
                 <Route path="/catalog" element={<CatalogLayout />}>
                     <Route index element={<Catalog />} />
                     <Route path=":bookId/details" element={<BookDetails />} />
-                    <Route path=":bookId/edit" element={<ProtectedRoute><BookSaveForm /></ProtectedRoute>} />
-                    <Route path="add-book" element={<ProtectedRoute><BookSaveForm /></ProtectedRoute>} />
+                    <Route
+                        path=":bookId/edit"
+                        element={
+                            <ProtectedRoute>
+                                <BookSaveForm />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="add-book"
+                        element={
+                            <ProtectedRoute>
+                                <BookSaveForm />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Route>
 
-                <Route path="/library" element={<ProtectedRoute><MyLibrary /></ProtectedRoute>} />
+                <Route
+                    path="/library"
+                    element={
+                        <ProtectedRoute>
+                            <MyLibrary />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/library/:userId" element={<MyLibrary />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
+                <Route
+                    path="/logout"
+                    element={
+                        <ProtectedRoute>
+                            <Logout />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
 
             <Footer />

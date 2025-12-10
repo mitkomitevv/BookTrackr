@@ -22,7 +22,7 @@ const renderMyLibrary = (contextValue = {}) => {
             <UserContext.Provider value={defaultContext}>
                 <MyLibrary />
             </UserContext.Provider>
-        </MemoryRouter>
+        </MemoryRouter>,
     );
 };
 
@@ -44,12 +44,21 @@ describe('MyLibrary Component', () => {
         mockUseFetch.mockImplementation((path) => {
             if (path?.includes('/data/shelves')) {
                 return {
-                    data: [{ read: ['b1'], currentlyReading: ['b2'], 'to-read': ['b3'] }],
+                    data: [
+                        {
+                            read: ['b1'],
+                            currentlyReading: ['b2'],
+                            'to-read': ['b3'],
+                        },
+                    ],
                     loading: false,
                 };
             }
             if (path?.includes('/data/books')) {
-                return { data: [{ _id: 'b2', title: 'Test Book' }], loading: false };
+                return {
+                    data: [{ _id: 'b2', title: 'Test Book' }],
+                    loading: false,
+                };
             }
             if (path?.includes('count=true')) {
                 return { data: 2, loading: false };
@@ -59,14 +68,19 @@ describe('MyLibrary Component', () => {
 
         renderMyLibrary();
 
-        expect(screen.getByRole('heading', { name: /my library/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /my library/i }),
+        ).toBeInTheDocument();
         expect(screen.getByText(/total books/i)).toBeInTheDocument();
     });
 
     it('shows empty state when no books in shelves', () => {
         mockUseFetch.mockImplementation((path) => {
             if (path?.includes('/data/shelves')) {
-                return { data: [{ read: [], currentlyReading: [], 'to-read': [] }], loading: false };
+                return {
+                    data: [{ read: [], currentlyReading: [], 'to-read': [] }],
+                    loading: false,
+                };
             }
             if (path?.includes('count=true')) {
                 return { data: 0, loading: false };
@@ -76,6 +90,8 @@ describe('MyLibrary Component', () => {
 
         renderMyLibrary();
 
-        expect(screen.getByRole('heading', { name: /my library/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /my library/i }),
+        ).toBeInTheDocument();
     });
 });

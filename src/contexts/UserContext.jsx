@@ -36,11 +36,11 @@ export function UserProvider({ children }) {
             email,
             password,
         });
-        
+
         // Store with rememberMe flag
         const userWithRememberFlag = { ...result, rememberMe };
         setUser(userWithRememberFlag);
-        
+
         // If rememberMe is false, also store in sessionStorage as backup
         if (!rememberMe) {
             try {
@@ -49,7 +49,7 @@ export function UserProvider({ children }) {
                 console.warn('Failed to set session storage', err);
             }
         }
-        
+
         return result;
     };
 

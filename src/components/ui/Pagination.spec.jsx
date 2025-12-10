@@ -33,7 +33,14 @@ describe('Pagination Component', () => {
     it('calls onPageChange when clicking a page number', async () => {
         const onPageChange = vi.fn();
 
-        render(<Pagination page={1} total={100} pageSize={20} onPageChange={onPageChange} />);
+        render(
+            <Pagination
+                page={1}
+                total={100}
+                pageSize={20}
+                onPageChange={onPageChange}
+            />,
+        );
 
         // The component uses setTimeout, so we just verify the button exists and is clickable
         const pageButton = screen.getByRole('button', { name: '3' });

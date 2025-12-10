@@ -16,6 +16,12 @@ export default function Catalog() {
     const authorParam = searchParams.get('author');
     const shelfParam = searchParams.get('shelf');
     const addedByParam = searchParams.get('addedBy');
+    const userIdParam = searchParams.get('userId');
+
+    // Use userIdParam if provided (viewing another user's shelf), otherwise current user
+    const targetUserId = userIdParam || user?._id;
+    const isOwnShelf = !userIdParam || (user && userIdParam === user._id);
+
     const shelfKey =
         shelfParam === 'favorites'
             ? 'favoriteBooks'
@@ -27,15 +33,16 @@ export default function Catalog() {
 
     const offset = (page - 1) * pageSize;
 
-    // Fetch user's shelf when comming from my-library
+    // Fetch user's shelf when coming from my-library (or another user's library)
     const shelfPath =
-        shelfKey && user
-            ? `/data/shelves?where=_ownerId%3D%22${user._id}%22`
+        shelfKey && targetUserId
+            ? `/data/shelves?where=${encodeURIComponent(`_ownerId="${targetUserId}"`)}`
             : null;
     const { data: shelvesData } = useFetch(shelfPath, {
-        headers: user?.accessToken
-            ? { 'X-Authorization': user.accessToken }
-            : {},
+        headers:
+            isOwnShelf && user?.accessToken
+                ? { 'X-Authorization': user.accessToken }
+                : {},
     });
 
     const shelfBooks = shelvesData?.[0]?.[shelfKey] || [];
@@ -101,19 +108,19 @@ export default function Catalog() {
                             {addedByParam === 'me'
                                 ? "Books you've added"
                                 : shelfParam === 'currentlyReading'
-                                ? 'Currently reading'
-                                : shelfParam
-                                  ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books`
-                                  : 'Browse books'}
+                                  ? 'Currently reading'
+                                  : shelfParam
+                                    ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books`
+                                    : 'Browse books'}
                         </h1>
                         <p className="text-sm text-slate-400">
                             {addedByParam === 'me'
                                 ? "Books you've contributed to the catalog."
                                 : shelfParam === 'currentlyReading'
-                                ? 'Your currently reading shelf.'
-                                : shelfParam
-                                  ? `Your ${shelfParam} shelf.`
-                                  : 'Explore our library.'}
+                                  ? 'Your currently reading shelf.'
+                                  : shelfParam
+                                    ? `Your ${shelfParam} shelf.`
+                                    : 'Explore our library.'}
                         </p>
                     </div>
                 </div>

@@ -178,14 +178,15 @@
             .filter(s => s != '')
             .map(x => x.split('='))
             .reduce((p, [k, v]) => Object.assign(p, { [k]: decodeURIComponent(v.replace(/\+/g, " ")) }), {});
+        const body = req.body;
 
-        let body;
-        // If req stream has ended body has been parsed
-        if (req.readableEnded) {
-            body = req.body;
-        } else {
-            body = await parseBody(req);
-        }
+        // let body;
+        // // If req stream has ended body has been parsed
+        // if (req.readableEnded) {
+        //     body = req.body;
+        // } else {
+        //     body = await parseBody(req);
+        // }
 
         return {
             serviceName,
@@ -195,19 +196,19 @@
         };
     }
 
-    function parseBody(req) {
-        return new Promise((resolve, reject) => {
-            let body = '';
-            req.on('data', (chunk) => body += chunk.toString());
-            req.on('end', () => {
-                try {
-                    resolve(JSON.parse(body));
-                } catch (err) {
-                    resolve(body);
-                }
-            });
-        });
-    }
+    // function parseBody(req) {
+    //     return new Promise((resolve, reject) => {
+    //         let body = '';
+    //         req.on('data', (chunk) => body += chunk.toString());
+    //         req.on('end', () => {
+    //             try {
+    //                 resolve(JSON.parse(body));
+    //             } catch (err) {
+    //                 resolve(body);
+    //             }
+    //         });
+    //     });
+    // }
 
     var requestHandler = createHandler;
 
@@ -3548,17 +3549,16 @@
 
     const server = http__default['default'].createServer(requestHandler(plugins, services));
 
-    const port = 3030;
+    // const port = 3030;
 
-    server.listen(port);
     // If I want to connect through wifi on mobile
     // server.listen(port, '0.0.0.0');
+    // server.listen(port);
+    // console.log(`Server started on port ${port}. You can make requests to http://localhost:${port}/`);
+    // console.log(`Admin panel located at http://localhost:${port}/admin`);
 
-    console.log(`Server started on port ${port}. You can make requests to http://localhost:${port}/`);
-    console.log(`Admin panel located at http://localhost:${port}/admin`);
+    // var softuniPracticeServer = server;
 
-    var softuniPracticeServer = server;
-
-    return softuniPracticeServer;
+    return server;
 
 })));

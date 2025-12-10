@@ -111,7 +111,9 @@ export default function Catalog() {
                                   ? 'Currently reading'
                                   : shelfParam
                                     ? `${shelfParam.charAt(0).toUpperCase() + shelfParam.slice(1)} books`
-                                    : 'Browse books'}
+                                    : q
+                                      ? `Search results for "${q}"`
+                                      : 'Browse books'}
                         </h1>
                         <p className="text-sm text-slate-400">
                             {addedByParam === 'me'
@@ -120,7 +122,9 @@ export default function Catalog() {
                                   ? 'Your currently reading shelf.'
                                   : shelfParam
                                     ? `Your ${shelfParam} shelf.`
-                                    : 'Explore our library.'}
+                                    : q
+                                      ? `Showing books matching "${q}".`
+                                      : 'Explore our library.'}
                         </p>
                     </div>
                 </div>
